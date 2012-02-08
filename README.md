@@ -1,5 +1,5 @@
 # LaTeX BoX
-_This is mirrored on http://www.vim.org/scripts/script.php?script_id=3109 _
+![LaTeX-BoX](https://raw.github.com/LaTeX-Box-Team/LaTeX-Box/master/doc/LaTeX-BoX.png)
 
 ## This plugin provides:
 - Background compilation using latexmk;
@@ -15,6 +15,7 @@ _This is mirrored on http://www.vim.org/scripts/script.php?script_id=3109 _
 See ":help latex-box" for more details.
 
 This plugins aims at being lightweight and simple. For more fully-fledged plugins, see:
+
 - LaTeX-Suite: vimscript#475
 - AutomaticTexPlugin: vimscript#2945
 
@@ -28,3 +29,11 @@ Add `Bundle 'LaTeX-Box-Team/LaTeX-Box'` to your ~/.vimrc and run
 ### Without a plugin manager
 
 Copy the directories to your `.vim/` folder.
+
+## Mirror information
+
+This is mirrored on 
+
+- http://www.vim.org/scripts/script.php?script_id=3109
+- http://www.vim.org/scripts/script.php?script_id=3109
+- https://launchpad.net/~vim-latex-box
