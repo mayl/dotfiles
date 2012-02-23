@@ -3,7 +3,7 @@
 " Email: mungerd@gmail.com
 " Version: 0.9.6
 
-if has('*fnameescape')
+if exists('*fnameescape')
 	function! s:FNameEscape(s)
 		return fnameescape(a:s)
 	endfunction
