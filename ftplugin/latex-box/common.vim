@@ -7,7 +7,7 @@
 " g:vim_program {{{
 if !exists('g:vim_program')
 
-	if match(&shell, '/bash$') >= 0
+	if match(&shell, '/\(bash\|zsh\)$') >= 0
 		let ppid = '$PPID'
 	else
 		let ppid = '$$'
