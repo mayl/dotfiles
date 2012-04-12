@@ -19,12 +19,28 @@ function! LatexBox_Complete(findstart, base)
 	if a:findstart
 		" return the starting position of the word
 		let line = getline('.')
+
+		let pos2 = col('.') - 1
 		let pos = col('.') - 1
-		while pos > 0 && line[pos - 1] !~ '\\\|{'
+
+		while pos > 0 && line[pos - 1] !~ '\\\|{' 
 			let pos -= 1
 		endwhile
-
 		let line_start = line[:pos-1]
+
+		"{{{
+		" for inline-equation completion, 2012-04-11
+"		while pos2 > 0 && line[pos2 - 1] !~ '$' 
+"			let pos2 -= 1
+"		endwhile
+		let line_start2 = line[:pos2-1]
+		let cursor_dollar_pair = 0
+		while matchend(line_start2, '\$[^$]\+\$', cursor_dollar_pair) >= 0
+			let cursor_dollar_pair = matchend(line_start2, '\$[^$]\+\$', cursor_dollar_pair)
+		endwhile
+		let cursor_single_dollar = matchend(line_start2, '\$', cursor_dollar_pair)
+		"}}}
+
 		if line_start =~ '\C\\begin\_\s*{$'
 			let s:completion_type = 'begin'
 		elseif line_start =~ '\C\\end\_\s*{$'
@@ -38,6 +54,11 @@ function! LatexBox_Complete(findstart, base)
 			while pos > 0 && line[pos - 1] !~ '{\|,'
 				let pos -= 1
 			endwhile
+		elseif cursor_single_dollar >= 0
+			" add inline-equation completion, Hongying, 2012-04-11
+
+			let s:completion_type = 'inline-equation'
+			let pos = cursor_single_dollar
 		else
 			let s:completion_type = 'command'
 			if line[pos - 1] == '\'
@@ -88,6 +109,8 @@ function! LatexBox_Complete(findstart, base)
 		elseif s:completion_type == 'bib'
 			" suggest BibTeX entries
 			let suggestions = LatexBox_BibComplete(a:base)
+		elseif s:completion_type == 'inline-equation'
+			let suggestions = s:CompleteInlineEquations(a:base)
 		endif
 		if !has('gui_running')
 			redraw!
@@ -242,8 +265,6 @@ function! s:CompleteLabels(regex, ...)
 	" search for the target equation number
 	for line in filter(readfile(file), 'v:val =~ ''^\\newlabel{\|^\\@input{''')
 
-		echomsg "matching line: " . line
-
 		" search for matching label
 		let matches = matchlist(line, '^\\newlabel{\(' . a:regex . '[^}]*\)}{{\([^}]*\)}{\([^}]*\)}.*}')
 
@@ -285,6 +306,55 @@ function! s:CompleteLabels(regex, ...)
 
 	return suggestions
 
+endfunction
+" }}}
+
+
+" Complete inline euqation{{{ 
+" 2012-04-11, add by Hongying
+" the optional argument is the file name to be searched
+function! s:CompleteInlineEquations(regex, ...)
+
+	if a:0 == 0
+		let file = LatexBox_GetMainTexFile()
+	else
+		let file = a:1
+	endif
+
+	if empty(glob(file, 1))
+		return ''
+	endif
+
+ 	let suggestions = []
+	for line in filter(readfile(file), 'v:val =~  ''\$[^$]\+\$''')
+
+		" search for matching inline equations
+		" additional space between $ and cursor is allowed before c-x c-o are pressed, but removed in 'matches'
+ 		let matches = matchlist(line, '\$\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '[^$]*\)\$') 
+
+ 		if !empty(matches)
+ 			let entry = {'word': matches[1]}
+ 			if g:LatexBox_completion_close_braces && !s:NextCharsMatch('^\s\{,3}\$')
+ 				" add trailing '$'
+				" If there are less than 3 '\s', '$' will not be added"
+
+ 				let entry = copy(entry)
+ 				let entry.abbr = entry.word
+ 				let entry.word = entry.word . '$'
+ 			endif
+ 			call add(suggestions, entry)
+ 		endif
+ 
+ 		" search for included files
+ 		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
+ 		if included_file != ''
+ 			let included_file = LatexBox_kpsewhich(included_file)
+ 			call extend(suggestions, s:CompleteInlineEquations(a:regex, included_file))
+ 		endif
+ 	endfor
+
+ 	return suggestions
+ 
 endfunction
 " }}}
 
