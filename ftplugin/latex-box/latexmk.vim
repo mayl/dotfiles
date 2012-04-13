@@ -201,7 +201,13 @@ function! LatexBox_LatexErrors(jump, ...)
 		let log = LatexBox_GetLogFile()
 	endif
 
-	execute 'cd ' . LatexBox_GetTexRoot()
+	if getcwd() !=# LatexBox_GetTexRoot()
+		redraw
+		echohl WarningMsg
+		echomsg 'Changing directory to TeX root: ' . LatexBox_GetTexRoot() . ' to support error log parsing'
+		echohl None
+		execute 'cd ' . LatexBox_GetTexRoot()
+	endif
 
 	if (a:jump)
 		execute 'cfile ' . fnameescape(log)
