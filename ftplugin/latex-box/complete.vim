@@ -10,8 +10,8 @@ function! s:SIDWrap(func)
 endfunction
 " }}}
 
-
 " Omni Completion {{{
+
 
 let s:completion_type = ''
 
@@ -21,6 +21,7 @@ function! LatexBox_Complete(findstart, base)
 		let line = getline('.')
 
 		let pos_initial = col('.') - 1
+		let line_pos = line(".") " for inline2numbered 
 
 		let pos = col('.') - 1
 		while pos > 0 && line[pos - 1] !~ '\\\|{'
@@ -55,9 +56,39 @@ function! LatexBox_Complete(findstart, base)
 				let pos -= 1
 			endwhile
 		elseif cursor_single_dollar >= 0
-			" add inline-equation completion, Hongying, 2012-04-11
-			let s:completion_type = 'inline-equation'
-			let pos = cursor_single_dollar
+			" complete inline eq in numbered env by ASSUMING \begin eq and \end eq are in diff lines
+
+			let inline0numbered1 = 0
+			while line_pos > 0
+				let line = getline(line_pos)
+
+				if line =~ g:LatexBox_doc_structure_pattern . '\|' . g:LatexBox_numbered_eq_end_pattern
+					echomsg 'meet doc pattern or eq at line' . 'set inline completion mode'
+					echomsg line_pos . line
+
+					let inline0numbered1 = 0
+					break
+				elseif line =~ g:LatexBox_numbered_eq_begin_pattern
+					echomsg 'meet start of eq, set inline2numbered mode'
+					echomsg line_pos . line
+					
+					let inline0numbered1 = 1
+					break
+				endif
+
+				let line_pos -= 1
+			endwhile
+
+			if inline0numbered1 == 0
+				" inline-equation completion, 
+				let s:completion_type = 'inline-equation'
+				let pos = cursor_single_dollar
+			elseif inline0numbered1 == 1
+				" Start with $ to write inline eq in numbered env, 
+				" but leave eq without $ after completion.
+				let s:completion_type = 'inline2numbered-equation'
+				let pos = cursor_single_dollar-1
+			endif
 		else
 			let s:completion_type = 'command'
 			if line[pos - 1] == '\'
@@ -110,6 +141,8 @@ function! LatexBox_Complete(findstart, base)
 			let suggestions = LatexBox_BibComplete(a:base)
 		elseif s:completion_type == 'inline-equation'
 			let suggestions = s:CompleteInlineEquations(a:base)
+		elseif s:completion_type == 'inline2numbered-equation'
+			let suggestions = s:CompleteInline2numberedEquations(a:base)
 		endif
 		if !has('gui_running')
 			redraw!
@@ -118,7 +151,6 @@ function! LatexBox_Complete(findstart, base)
 	endif
 endfunction
 " }}}
-
 
 " BibTeX search {{{
 
@@ -308,7 +340,6 @@ function! s:CompleteLabels(regex, ...)
 endfunction
 " }}}
 
-
 " Complete inline euqation{{{ 
 " 2012-04-11, Hongying
 " the optional argument is the file name to be searched
@@ -356,6 +387,47 @@ function! s:CompleteInlineEquations(regex, ...)
 endfunction
 " }}}
 
+" Complete 'inline' eq in a numbered env {{{
+" 2012-04-13, Hongying
+" just another CompleteInlineEquations without adding '$' on both side
+function! s:CompleteInline2numberedEquations(regex, ...)
+
+	if a:0 == 0
+		let file = LatexBox_GetMainTexFile()
+	else
+		let file = a:1
+	endif
+
+	if empty(glob(file, 1))
+		return ''
+	endif
+
+ 	let suggestions = []
+	for line in filter(readfile(file), 'v:val =~  ''\$[^$]\+\$''')
+
+		" search for matching inline equations
+		" additional space between $ and cursor is allowed before c-x c-o are pressed, but removed in 'matches'
+		" a little different from CompleteInlineEquations: a:regex[1:], to remove $
+ 		let matches = matchlist(line, '\$\s*\(' . escape(substitute(a:regex[1:], '^\s\+', '', ""), '\.*^') . '[^$]*\)\$') 
+
+ 		if !empty(matches)
+ 			let entry = {'word': matches[1]}
+			" no '$' added
+ 			call add(suggestions, entry)
+ 		endif
+ 
+ 		" search for included files
+ 		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
+ 		if included_file != ''
+ 			let included_file = LatexBox_kpsewhich(included_file)
+ 			call extend(suggestions, s:CompleteInlineEquations(a:regex, included_file))
+ 		endif
+ 	endfor
+
+ 	return suggestions
+ 
+endfunction
+" }}}
 
 " Close Current Environment {{{
 function! s:CloseCurEnv()

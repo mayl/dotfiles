@@ -65,6 +65,59 @@ if !exists('g:LatexBox_ref_pattern')
 	let g:LatexBox_ref_pattern = '\C\\v\?\(eq\|page\)\?ref\*\?\_\s*{'
 endif
 
+" These three vars are just for completion of inline eq in numbered eq env.
+" g:LatexBox_doc_structure_pattern
+" g:LatexBox_numbered_eq_end_pattern
+" g:LatexBox_numbered_eq_begin_pattern 
+if !exists('g:LatexBox_doc_structure_pattern')
+	let g:LatexBox_doc_structure_pattern = '
+				\\\begin\s*{\s*document\s*}\|
+				\\\chapter\s*{\|
+				\\\section\s*{\|
+				\\\subsection\s*{\|
+				\\\subsubsection\s*{\|
+				\\\chapter\*\s*{\|
+				\\\section\*\s*{\|
+				\\\subsection\*\s*{\|
+				\\\subsubsection\*\s*{\|
+				\\\paragraph\|
+				\\\subparagraph'
+endif
+if !exists('g:LatexBox_numbered_eq_begin_pattern')
+	let g:LatexBox_numbered_eq_begin_pattern = '
+				\\\begin\s*{\s*equation\s*}\|
+				\\\begin\s*{\s*gather\s*}\|
+				\\\begin\s*{\s*multiline\s*}\|
+				\\\begin\s*{\s*align\s*}\|
+				\\\begin\s*{\s*flalign\s*}\|
+				\\\begin\s*{\s*alignat\s*}\|
+				\\\begin\s*{\s*eqnarray\s*}\|
+				\\\begin\s*{\s*equation\*\s*}\|
+				\\\begin\s*{\s*gather\*\s*}\|
+				\\\begin\s*{\s*multiline\*\s*}\|
+				\\\begin\s*{\s*align\*\s*}\|
+				\\\begin\s*{\s*flalign\*\s*}\|
+				\\\begin\s*{\s*alignat\*\s*}\|
+				\\\begin\s*{\s*eqnarray\*\s*}'
+endif
+if !exists('g:LatexBox_numbered_eq_end_pattern')
+	let g:LatexBox_numbered_eq_end_pattern = '
+				\\\end\s*{\s*equation\s*}\|
+				\\\end\s*{\s*gather\s*}\|
+				\\\end\s*{\s*multiline\s*}\|
+				\\\end\s*{\s*align\s*}\|
+				\\\end\s*{\s*flalign\s*}\|
+				\\\end\s*{\s*alignat\s*}\|
+				\\\end\s*{\s*eqnarray\s*}\|
+				\\\end\s*{\s*equation\*\s*}\|
+				\\\end\s*{\s*gather\*\s*}\|
+				\\\end\s*{\s*multiline\*\s*}\|
+				\\\end\s*{\s*align\*\s*}\|
+				\\\end\s*{\s*flalign\*\s*}\|
+				\\\end\s*{\s*alignat\*\s*}\|
+				\\\end\s*{\s*eqnarray\*\s*}'
+endif
+
 if !exists('g:LatexBox_completion_environments')
 	let g:LatexBox_completion_environments = [
 		\ {'word': 'itemize',		'menu': 'bullet list' },
@@ -87,6 +140,7 @@ if !exists('g:LatexBox_completion_commands')
 		\ {'word': '\end{' },
 		\ {'word': '\item' },
 		\ {'word': '\label{' },
+		\ {'word': '\caption{' },
 		\ {'word': '\ref{' },
 		\ {'word': '\eqref{eq:' },
 		\ {'word': '\cite{' },
