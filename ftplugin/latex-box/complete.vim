@@ -20,25 +20,25 @@ function! LatexBox_Complete(findstart, base)
 		" return the starting position of the word
 		let line = getline('.')
 
-		let pos2 = col('.') - 1
-		let pos = col('.') - 1
+		let pos_initial = col('.') - 1
 
-		while pos > 0 && line[pos - 1] !~ '\\\|{' 
+		let pos = col('.') - 1
+		while pos > 0 && line[pos - 1] !~ '\\\|{'
 			let pos -= 1
 		endwhile
 		let line_start = line[:pos-1]
 
+		" for inline-equation completion, 2012-04-11, Hongying
+		" determine whether there is a single "\$" before pos_initial
 		"{{{
-		" for inline-equation completion, 2012-04-11
-"		while pos2 > 0 && line[pos2 - 1] !~ '$' 
-"			let pos2 -= 1
-"		endwhile
-		let line_start2 = line[:pos2-1]
+		let line_start2pos_initial = line[:pos_initial-1]
 		let cursor_dollar_pair = 0
-		while matchend(line_start2, '\$[^$]\+\$', cursor_dollar_pair) >= 0
-			let cursor_dollar_pair = matchend(line_start2, '\$[^$]\+\$', cursor_dollar_pair)
+		while matchend(line_start2pos_initial, '\$[^$]\+\$', cursor_dollar_pair) >= 0
+			" find the end of dollar pair
+			let cursor_dollar_pair = matchend(line_start2pos_initial, '\$[^$]\+\$', cursor_dollar_pair)
 		endwhile
-		let cursor_single_dollar = matchend(line_start2, '\$', cursor_dollar_pair)
+		" find single '\$' after cursor_dollar_pair
+		let cursor_single_dollar = matchend(line_start2pos_initial, '\$', cursor_dollar_pair)
 		"}}}
 
 		if line_start =~ '\C\\begin\_\s*{$'
@@ -56,7 +56,6 @@ function! LatexBox_Complete(findstart, base)
 			endwhile
 		elseif cursor_single_dollar >= 0
 			" add inline-equation completion, Hongying, 2012-04-11
-
 			let s:completion_type = 'inline-equation'
 			let pos = cursor_single_dollar
 		else
@@ -311,7 +310,7 @@ endfunction
 
 
 " Complete inline euqation{{{ 
-" 2012-04-11, add by Hongying
+" 2012-04-11, Hongying
 " the optional argument is the file name to be searched
 function! s:CompleteInlineEquations(regex, ...)
 
@@ -335,8 +334,7 @@ function! s:CompleteInlineEquations(regex, ...)
  		if !empty(matches)
  			let entry = {'word': matches[1]}
  			if g:LatexBox_completion_close_braces && !s:NextCharsMatch('^\s\{,3}\$')
- 				" add trailing '$'
-				" If there are less than 3 '\s', '$' will not be added"
+ 				" add trailing '$' if there is no '$' in '\s\{,3}' away
 
  				let entry = copy(entry)
  				let entry.abbr = entry.word
