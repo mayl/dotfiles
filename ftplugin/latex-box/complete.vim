@@ -29,7 +29,7 @@ function! LatexBox_Complete(findstart, base)
 		endwhile
 		let line_start = line[:pos-1]
 
-		" for inline-equation completion, 2012-04-11, Hongying
+		" for inline-equation completion
 		" determine whether there is a single "\$" before pos_initial
 		"{{{
 		let line_start2pos_initial = line[:pos_initial-1]
@@ -63,14 +63,14 @@ function! LatexBox_Complete(findstart, base)
 				let line = getline(line_pos)
 
 				if line =~ g:LatexBox_doc_structure_pattern . '\|' . g:LatexBox_numbered_eq_end_pattern
-					echomsg 'meet doc pattern or eq at line' . 'set inline completion mode'
-					echomsg line_pos . line
+					echomsg 'meet doc pattern or eq, inline completion'
+					echomsg 'line' . line_pos . ': ' . line
 
 					let inline0numbered1 = 0
 					break
 				elseif line =~ g:LatexBox_numbered_eq_begin_pattern
-					echomsg 'meet start of eq, set inline2numbered mode'
-					echomsg line_pos . line
+					echomsg 'meet start of eq, inline completion in numbered env'
+					echomsg 'line' . line_pos . ': ' . line
 					
 					let inline0numbered1 = 1
 					break
@@ -341,7 +341,6 @@ endfunction
 " }}}
 
 " Complete inline euqation{{{ 
-" 2012-04-11, Hongying
 " the optional argument is the file name to be searched
 function! s:CompleteInlineEquations(regex, ...)
 
@@ -388,8 +387,6 @@ endfunction
 " }}}
 
 " Complete 'inline' eq in a numbered env {{{
-" 2012-04-13, Hongying
-" just another CompleteInlineEquations without adding '$' on both side
 function! s:CompleteInline2numberedEquations(regex, ...)
 
 	if a:0 == 0
