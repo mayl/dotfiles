@@ -381,7 +381,7 @@ function! s:CompleteInlineEquations(regex, ...)
  		endif
  	endfor
 
- 	return suggestions
+ 	return sort(suggestions)
  
 endfunction
 " }}}
@@ -421,7 +421,7 @@ function! s:CompleteInline2numberedEquations(regex, ...)
  		endif
  	endfor
 
- 	return suggestions
+ 	return sort(suggestions)
  
 endfunction
 " }}}
