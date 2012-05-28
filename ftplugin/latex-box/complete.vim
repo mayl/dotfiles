@@ -354,24 +354,38 @@ function! s:CompleteInlineEquations(regex, ...)
 		return ''
 	endif
 
+	let inlinePattern = '\$\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '[^$]*\)\$'
  	let suggestions = []
-	for line in filter(readfile(file), 'v:val =~  ''\$[^$]\+\$''')
+	let lineNum = 0
+	for line in readfile(file)
+		let lineNum = lineNum + 1
 
 		" search for matching inline equations
 		" additional space between $ and cursor is allowed before c-x c-o are pressed, but removed in 'matches'
- 		let matches = matchlist(line, '\$\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '[^$]*\)\$') 
 
- 		if !empty(matches)
- 			let entry = {'word': matches[1]}
- 			if g:LatexBox_completion_close_braces && !s:NextCharsMatch('^\s\{,3}\$')
- 				" add trailing '$' if there is no '$' in '\s\{,3}' away
+		" while loop: find all inline eqs in one line
+		let start = 0
+ 		while 1
+			let matches = matchlist(line, inlinePattern, start)
+ 			if !empty(matches)
 
- 				let entry = copy(entry)
- 				let entry.abbr = entry.word
- 				let entry.word = entry.word . '$'
+ 				" show eq line number
+ 				let entry = {'word': matches[1], 'menu': '(' . lineNum . ')'}
+
+ 				if g:LatexBox_completion_close_braces && !s:NextCharsMatch('^\s\{,3}\$')
+ 					" add trailing '$' if there is no '$' in '\s\{,3}' away
+ 					let entry = copy(entry)
+ 					let entry.abbr = entry.word
+ 					let entry.word = entry.word . '$'
+ 				endif
+ 				call add(suggestions, entry)
+
+				" update start
+				let start = matchend(line, inlinePattern, start)
+			else
+				break
  			endif
- 			call add(suggestions, entry)
- 		endif
+		endwhile
  
  		" search for included files
  		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
@@ -399,20 +413,27 @@ function! s:CompleteInline2numberedEquations(regex, ...)
 		return ''
 	endif
 
+	" a little different from CompleteInlineEquations: a:regex[1:], to remove $
+	let inlinePattern = '\$\s*\(' . escape(substitute(a:regex[1:], '^\s\+', '', ""), '\.*^') . '[^$]*\)\$'
  	let suggestions = []
-	for line in filter(readfile(file), 'v:val =~  ''\$[^$]\+\$''')
+	let lineNum = 0
+	for line in readfile(file)
+		let lineNum = lineNum + 1
 
-		" search for matching inline equations
-		" additional space between $ and cursor is allowed before c-x c-o are pressed, but removed in 'matches'
-		" a little different from CompleteInlineEquations: a:regex[1:], to remove $
- 		let matches = matchlist(line, '\$\s*\(' . escape(substitute(a:regex[1:], '^\s\+', '', ""), '\.*^') . '[^$]*\)\$') 
+		let start = 0
+		while 1
+			let matches = matchlist(line, inlinePattern, start) 
 
- 		if !empty(matches)
- 			let entry = {'word': matches[1]}
-			" no '$' added
- 			call add(suggestions, entry)
- 		endif
- 
+	 		if !empty(matches)
+ 				let entry = {'word': matches[1], 'menu': '(' . lineNum . ')'}
+				" diff from CompleteInlineEquations, no '$' added
+	 			call add(suggestions, entry)
+				let start = matchend(line, inlinePattern, start)
+			else
+				break
+			endif
+		endwhile
+
  		" search for included files
  		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
  		if included_file != ''
