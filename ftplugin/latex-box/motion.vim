@@ -321,6 +321,8 @@ function! s:ReadTOC(auxfile)
 		let text = LatexBox_TreeToTex(tree)
 		let text = s:ConvertBack(text)
 		let text = substitute(text, '^{\+\|}\+$', '', 'g')
+		" substitute stuff like '\IeC{\"u}' (utf-8 umlauts in section heading) to plain 'u'
+		let text = substitute(text, '\v\\IeC\{\\"(.)\}', '\1', 'g')
 
 		" add TOC entry
 		call add(toc, {'file': bufname('%'),
