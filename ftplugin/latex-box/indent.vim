@@ -72,12 +72,6 @@ function! LatexBox_TexIndent()
 		let n -= 1
 	endif
 
-	let end_here = getline(v:lnum) =~ '^\s*\\end'
-	let begin_item_above = getline(lnum_prev) =~ '\\begin{\%(' . join(s:itemize_envs, '\|') . '\)}'
-	if end_here && (begin_item_above || item_above)
-		let n -= 1
-	endif
-
 	return indent(lnum_prev) + n * &sw
 endfunction
 " }}}
