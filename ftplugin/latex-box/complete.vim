@@ -192,13 +192,16 @@ function! s:FindBibData(...)
 				\ map(filter(copy(lines), 'v:val =~ ''\C\\bibliography\s*{[^}]\+}'''),
 				\ 'matchstr(v:val, ''\C\\bibliography\s*{\zs[^}]\+\ze}'')')
 
-	let bibdata_list +=
-				\ map(filter(copy(lines), 'v:val =~ ''\C\\\%(input\|include\)\s*{[^}]\+}'''),
-				\ 's:FindBibData(LatexBox_kpsewhich(matchstr(v:val, ''\C\\\%(input\|include\)\s*{\zs[^}]\+\ze}'')))')
+
+				"\ map(filter(copy(lines), 'v:val =~ ''\C\\\%(input\|include\)\s*{[^}]\+}'''),
 
 	let bibdata_list +=
-				\ map(filter(copy(lines), 'v:val =~ ''\C\\\%(input\|include\)\s\+\S\+'''),
-				\ 's:FindBibData(LatexBox_kpsewhich(matchstr(v:val, ''\C\\\%(input\|include\)\s\+\zs\S\+\ze'')))')
+				\ map(filter(copy(lines), 'v:val =~ ''\C\\\%(input\|include\)\s*{' . g:LatexBox_input_filename_pattern . '}'''),
+				\ 's:FindBibData(LatexBox_kpsewhich(matchstr(v:val, ''\C\\\%(input\|include\)\s*{\zs[^}]\+\ze}'')))')
+
+"	let bibdata_list +=
+"				\ map(filter(copy(lines), 'v:val =~ ''\C\\\%(input\|include\)\s\+\S\+'''),
+"				\ 's:FindBibData(LatexBox_kpsewhich(matchstr(v:val, ''\C\\\%(input\|include\)\s\+\zs\S\+\ze'')))')
 
 	let bibdata = join(bibdata_list, ',')
 
@@ -328,7 +331,8 @@ function! s:CompleteLabels(regex, ...)
 		endif
 
 		" search for included files
-		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
+"		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
+		let included_file = matchstr(line, '^\\@input{\zs' . g:LatexBox_input_filename_pattern . '\ze}')
 		if included_file != ''
 			let included_file = LatexBox_kpsewhich(included_file)
 			call extend(suggestions, s:CompleteLabels(a:regex, included_file))
@@ -388,7 +392,8 @@ function! s:CompleteInlineEquations(regex, ...)
 		endwhile
  
  		" search for included files
- 		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
+ 		let included_file = matchstr(line, '^\\@input{\zs' . g:LatexBox_input_filename_pattern . '\ze}')
+" 		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
  		if included_file != ''
  			let included_file = LatexBox_kpsewhich(included_file)
  			call extend(suggestions, s:CompleteInlineEquations(a:regex, included_file))
@@ -435,7 +440,8 @@ function! s:CompleteInline2numberedEquations(regex, ...)
 		endwhile
 
  		" search for included files
- 		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
+" 		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
+		let included_file = matchstr(line, '^\\@input{\zs' . g:LatexBox_input_filename_pattern . '\ze}')
  		if included_file != ''
  			let included_file = LatexBox_kpsewhich(included_file)
  			call extend(suggestions, s:CompleteInlineEquations(a:regex, included_file))

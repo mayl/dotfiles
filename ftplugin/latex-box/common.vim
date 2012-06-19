@@ -65,6 +65,12 @@ if !exists('g:LatexBox_ref_pattern')
 	let g:LatexBox_ref_pattern = '\C\\v\?\(eq\|page\)\?ref\*\?\_\s*{'
 endif
 
+" only accept tex file when in completion searching
+if !exists('g:LatexBox_input_filename_pattern')
+	let g:LatexBox_input_filename_pattern = '
+				\[^}]*\.tex'
+endif
+
 " These three vars are just for completion of inline eq in numbered eq env.
 " g:LatexBox_doc_structure_pattern
 " g:LatexBox_numbered_eq_end_pattern
