@@ -410,7 +410,7 @@ FOLDING						*latex-box-folding*
 LatexBox can fold texts according to LaTeX structure (part, chapter, section
 and subsection).
 
-*g:LatexBox_folding*		Default: undefined
+*g:LatexBox_Folding*		Default: undefined
 
 	Set to yes to activate LaTeX structure folding. Please note that any
 	modeline that would set |foldmethod| to something else than
