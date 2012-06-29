@@ -2,4 +2,4 @@
 ###############
 
 git submodule init
-git subomdule update
+git submodule update
