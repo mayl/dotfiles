@@ -4,7 +4,7 @@
 # This script creates symlinks from the home directory to any desired dotfiles in ~/dotfiles
 ############################
 
-#shamelessy copied from michaeljsmalley by mayl
+#shamelessly copied from michaeljsmalley by mayl
 
 ########## Variables
 
@@ -13,6 +13,10 @@ olddir=~/dotfiles_old             # old dotfiles backup directory
 files="bashrc vimrc vim zshrc oh-my-zsh private scrotwm.conf Xresources"    # list of files/folders to symlink in homedir
 
 ##########
+
+# populate submodules
+git submodule init
+git submodule update
 
 # create dotfiles_old in homedir
 echo "Creating $olddir for backup of any existing dotfiles in ~"
