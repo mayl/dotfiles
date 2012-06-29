@@ -8,8 +8,10 @@
 "
 
 "set options for folding
-set fdm=expr
-set foldexpr=LatexBox_FoldLevel(v:lnum)
+if exists('g:LatexBox_Folding')
+    set fdm=expr
+    set foldexpr=LatexBox_FoldLevel(v:lnum)
+endif
 
 function! LatexBox_FoldLevel(linenum)
     " Get the line and next line
