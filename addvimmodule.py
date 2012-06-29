@@ -1,13 +1,15 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
-addvimmodule.py
-	usage:
-		./addvimmodule.py <git repo> <folder name>
-clones the passed repo into a new directory of folder name as a submodule
+addvimmodule [git repository] [folder name]
+
+Adds a git repository as a submodule in the bundle directory.
 """
 
 import sys
 import os
 
-os.system('git submodule add ' + sys.argv[1] + ' vim/bundle/' + sys.argv[2])
+repo = sys.argv[1]
+foldername = sys.argv[2]
+
+os.system('git submodule add ' + repo + ' vim/bundle/' + foldername)
