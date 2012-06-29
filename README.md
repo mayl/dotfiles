@@ -11,6 +11,7 @@
 - Motion through brackets/braces (with user-defined keys);
 - Environment objects (e.g., select environement with "vie" or "vae");
 - Inline math objects (e.g., select inline math with "vi$" or "va$").
+- Folding of part/chapter/section/subsection
 
 See ":help latex-box" for more details.
 
