@@ -14,10 +14,6 @@ files="bashrc vimrc vim zshrc oh-my-zsh private scrotwm.conf Xresources"    # li
 
 ##########
 
-# populate submodules
-git submodule init
-git submodule update
-
 # create dotfiles_old in homedir
 echo "Creating $olddir for backup of any existing dotfiles in ~"
 mkdir -p $olddir
