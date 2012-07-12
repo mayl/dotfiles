@@ -31,6 +31,3 @@
 [submodule "vim/bundle/YankRing"]
 	path = vim/bundle/YankRing
 	url = https://github.com/vim-scripts/YankRing.vim.git
-[submodule "oh-my-zsh"]
-	path = oh-my-zsh
-	url = https://github.com/robbyrussell/oh-my-zsh.git
