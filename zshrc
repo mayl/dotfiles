@@ -36,9 +36,12 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
 # gopaths for go in home
-export GOROOT=$HOME/go
-export PATH=$PATH:$GOROOT/bin
+# export GOROOT=$HOME/go
+# export PATH=$PATH:$GOROOT/bin
+# overwrite original source with gofmt
+alias gofmt='gofmt -w'
 
 #deal with dumbass vim bug
 alias gvim='gvim -f'
 alias nautilus='nautilus .'
+
