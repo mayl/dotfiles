@@ -1,0 +1,3 @@
+set passkeys+=mail.google.com:jkroaey<CR>,gi
+set passkeys+=google.com/reader:jk<CR>
+map -b j5j
