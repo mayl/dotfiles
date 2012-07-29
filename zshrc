@@ -45,3 +45,9 @@ alias gofmt='gofmt -w'
 alias gvim='gvim -f'
 alias nautilus='nautilus .'
 
+#setup t
+alias t='python ~/t/t.py --task-dir ~/Dropbox/tasks --list tasks'
+
+#setup j
+export JPY=~/j2/j.py
+alias j='~/j2/j.py'
