@@ -130,13 +130,17 @@ function! s:FindBibData(...)
 		return ''
 	endif
 
+	let bibliography_cmds = [ '\\bibliography', '\\addbibresource', '\\addglobalbib', '\\addsectionbib' ]
+
 	let lines = readfile(file)
 
 	let bibdata_list = []
 
-	let bibdata_list +=
-				\ map(filter(copy(lines), 'v:val =~ ''\C\\bibliography\s*{[^}]\+}'''),
-				\ 'matchstr(v:val, ''\C\\bibliography\s*{\zs[^}]\+\ze}'')')
+	for cmd in bibliography_cmds
+		let bibdata_list +=
+				\ map(filter(copy(lines), 'v:val =~ ''\C' . cmd . '\s*{[^}]\+}'''),
+				\ 'matchstr(v:val, ''\C' . cmd . '\s*{\zs[^}]\+\ze}'')')
+	endfor
 
 	let bibdata_list +=
 				\ map(filter(copy(lines), 'v:val =~ ''\C\\\%(input\|include\)\s*{[^}]\+}'''),
