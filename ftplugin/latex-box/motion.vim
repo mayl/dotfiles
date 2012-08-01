@@ -278,12 +278,12 @@ function! s:ReadTOC(auxfile)
 			continue
 		endif
 
-		" Parse lines like:
+		" Parse statements like:
 		" \@writefile{toc}{\contentsline {section}{\numberline {secnum}Section Title}{pagenumber}}
 		" \@writefile{toc}{\contentsline {section}{\tocsection {}{1}{Section Title}}{pagenumber}}
 		" \@writefile{toc}{\contentsline {section}{\numberline {secnum}Section Title}{pagenumber}{otherstuff}}
 
-		let line = matchstr(line, '^\\@writefile{toc}{\\contentsline\s*\zs.*\ze}\s*$')
+		let line = matchstr(line, '\\@writefile{toc}{\\contentsline\s*\zs.*\ze}\s*$')
 		if empty(line)
 			continue
 		endif
