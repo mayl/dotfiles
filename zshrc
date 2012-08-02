@@ -55,4 +55,4 @@ alias gvim='gvim -f'
 alias nautilus='nautilus .'
 
 #setup t
-alias t='python ~/t/t.py --task-dir ~/Dropbox/tasks --list tasks'
+alias t='python ~/dotfiles/t/t.py --task-dir ~/Dropbox/tasks --list tasks'
