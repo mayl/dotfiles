@@ -39,7 +39,7 @@ source $ZSH/oh-my-zsh.sh
 export GOPATH="/usr/bin:$HOME/code/go"
 
 #setup z
-. $HOME/z/z.sh
+. $HOME/dotfiles/z/z.sh
 function precmd () {
 	_z --add "$(pwd -P)"
 }
