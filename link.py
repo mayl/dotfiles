@@ -13,6 +13,7 @@ import sys
 print(os.name)
 print(sys.platform)  # more detailed differentiator, may be needed later
 
+
 #Home directory is different on posix and nt, get the appropriate one
 if os.name == "posix":
     HOME = os.getenv("HOME")
