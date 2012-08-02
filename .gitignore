@@ -1,3 +1,5 @@
 #ignore oh-my-zsh
 oh-my-zsh/
 vim/bundle
+/*/.hg/*
+/*/.hg*
