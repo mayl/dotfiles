@@ -29,14 +29,23 @@ ZSH_THEME="robbyrussell"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(git hg)
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
-# gopaths for go in home
-# export GOROOT=$HOME/go
+# gopaths 
+export GOPATH="/usr/bin:$HOME/code/go"
+
+#setup z
+. $HOME/z/z.sh
+function precmd () {
+	_z --add "$(pwd -P)"
+}
+
+
+# export GOROOT=~/code/go
 # export PATH=$PATH:$GOROOT/bin
 # overwrite original source with gofmt
 alias gofmt='gofmt -w'
@@ -47,7 +56,3 @@ alias nautilus='nautilus .'
 
 #setup t
 alias t='python ~/t/t.py --task-dir ~/Dropbox/tasks --list tasks'
-
-#setup j
-export JPY=~/j2/j.py
-alias j='~/j2/j.py'
