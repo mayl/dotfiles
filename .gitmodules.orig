@@ -36,4 +36,4 @@
 	url = https://github.com/ervandew/supertab.git
 [submodule "z"]
 	path = z
-	url = https://github.com/rupa/z.git
+	url = ./z
