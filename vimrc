@@ -36,6 +36,7 @@ set autoread
 
 "folds
 nnoremap <silent><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+nnoremap <silent><S-Space> @=(foldlevel('.')?'zA':"\<Space>")<CR>
 vnoremap <Space> zf
 
 "wildmenu
