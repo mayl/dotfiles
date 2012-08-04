@@ -34,6 +34,10 @@ set relativenumber
 set undofile
 set autoread
 
+"folds
+nnoremap <silent><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+vnoremap <Space> zf
+
 "wildmenu
 set wildmenu
 set wildmode=list:longest
@@ -109,7 +113,3 @@ inoremap <silent> <F3> <ESC>:YRShow<cr>
 
 "Gundo
 nnoremap <F5> :GundoToggle<cr>
-
-
-
-
