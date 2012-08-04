@@ -34,11 +34,6 @@ set relativenumber
 set undofile
 set autoread
 
-"folds
-nnoremap <silent><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-nnoremap <silent><S-Space> @=(foldlevel('.')?'zA':"\<Space>")<CR>
-vnoremap <Space> zf
-
 "wildmenu
 set wildmenu
 set wildmode=list:longest
@@ -56,10 +51,15 @@ set directory=~/.vim/tmp/swap//
 set backup
 set noswapfile
 
-
 "leader
 let mapleader=","
 let maplocalleader="\\"
+
+"folds
+nnoremap <silent><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+nnoremap <silent><S-Space> @=(foldlevel('.')?'zA':"\<Space>")<CR>
+vnoremap <Space> zf
+nnoremap <leader>z gg<S-v><S-g>z<S-o>``
 
 "fix search, map ,<space> to clear hl
 nnoremap / /\v
