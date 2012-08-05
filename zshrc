@@ -29,30 +29,32 @@ ZSH_THEME="robbyrussell"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git hg)
+plugins=(git hg pip python gem)
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
 # gopaths 
-export GOPATH="/usr/bin:$HOME/code/go"
+export GOROOT=/home/user/go
+export GOBIN=$GOROOT/bin
+export GOARCH=386
+export GOOS=linux
+export PATH=$PATH:$GOROOT/bin
 
-#setup z
-. $HOME/dotfiles/z/z.sh
-function precmd () {
-	_z --add "$(pwd -P)"
-}
+#fasd
+export PATH=$PATH:$HOME/dotfiles/fasd
+eval "$(fasd --init posix-alias zsh-hook zsh-wcomp zsh-wcomp-install)"
+alias v='f -e vim -g'
+alias m='f -e mplayer'
+alias o='a -e xdg-open'
 
-
-# export GOROOT=~/code/go
-# export PATH=$PATH:$GOROOT/bin
 # overwrite original source with gofmt
 alias gofmt='gofmt -w'
+
+#setup t
+alias t='python ~/dotfiles/t/t.py --task-dir ~/Dropbox/tasks --list tasks'
 
 #deal with dumbass vim bug
 alias gvim='gvim -f'
 alias nautilus='nautilus .'
-
-#setup t
-alias t='python ~/dotfiles/t/t.py --task-dir ~/Dropbox/tasks --list tasks'
