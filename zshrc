@@ -47,7 +47,7 @@ export PATH=$PATH:$GOROOT/bin
 #fasd
 export PATH=$PATH:$HOME/dotfiles/fasd
 eval "$(fasd --init posix-alias zsh-hook zsh-wcomp zsh-wcomp-install)"
-alias v='f -e vim -g'
+alias v='f -e gvim'
 alias m='f -e mplayer'
 alias o='a -e xdg-open'
 
