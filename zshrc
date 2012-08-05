@@ -35,6 +35,8 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
+setopt No_Beep
+
 # gopaths 
 export GOROOT=/home/user/go
 export GOBIN=$GOROOT/bin
