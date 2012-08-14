@@ -250,6 +250,8 @@ function! s:CompleteLabels(regex, ...)
 
 		" search for matching label
 		let matches = matchlist(line, '^\\newlabel{\(' . a:regex . '[^}]*\)}{{\([^}]*\)}{\([^}]*\)}.*}')
+		" workaround for ntheorem numbering in sections/chapters/etc
+		let matches += matchlist(line, '^\\newlabel{\(' . a:regex . '[^}]*\)}{{\([^{}]*{[^}]*}\)}{\([^}]*\)}.*}')
 
 		if empty(matches)
 			" also try to match label and number
