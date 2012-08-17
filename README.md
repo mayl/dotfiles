@@ -1,5 +1,6 @@
 Fork of [LaTeX-Box](https://github.com/LaTeX-Box-Team/LaTeX-Box).
 See there for more information.
 
-This fork fixes this [issue](https://github.com/LaTeX-Box-Team/LaTeX-Box/issues/9), 
-i.e. makes autocompletion of citation commands work with biblatex.
+The purpose of this fork was originally to fix this [issue](https://github.com/LaTeX-Box-Team/LaTeX-Box/issues/9).
+In the meantime, I adapted completion of references in LateX-Box a little bit more to my needs.
+
