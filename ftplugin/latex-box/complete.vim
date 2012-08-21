@@ -299,7 +299,9 @@ function! ExtractInputs()
 			let [inline, inbegin] = searchpos( '\\@input{', 'ecW' )
 			break
 		endif
-		let matches += [ strpart( getline( inline ), inbegin, inend - inbegin - 1 )
+		let matches += [ strpart( getline( inline ), inbegin, inend - inbegin - 1 ) ]
+
+		let [inline, inbegin] = searchpos( '\\@input{', 'ecW' )
 	endwhile
 
 	return matches
@@ -341,7 +343,7 @@ function! s:GetLabelCache(file)
 	endif
 
 	for input in s:LabelCache[fid][2]
-		let labels += s:UpdateLabelCache(input)
+		let labels += s:GetLabelCache(input)
 	endfor
 
 	return labels
