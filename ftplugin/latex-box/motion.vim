@@ -325,7 +325,8 @@ function! s:ReadTOC(auxfile)
 		let text = substitute(text, '\v\\IeC\{\\"(.)\}', '\1', 'g')
 
 		" add TOC entry
-		call add(toc, {'file': bufname('%'),
+		let texfile = substitute(a:auxfile, '\.aux$', '.tex', '')
+		call add(toc, {'file': texfile,
 					\ 'level': level, 'number': secnum, 'text': text, 'page': page})
 	endfor
 
@@ -425,11 +426,12 @@ function! s:TOCActivate(close)
 	execute b:calling_win . 'wincmd w'
 
 	let bnr = bufnr(entry['file'])
-	if bnr >= 0
-		execute 'buffer ' . bnr
-	else
-		execute 'edit ' . entry['file']
+	if bnr == -1 
+		execute 'badd ' . entry['file']
+		let bnr = bufnr(entry['file'])
 	endif
+
+	execute 'buffer ' . bnr
 
 	let titlestr = entry['text']
 
