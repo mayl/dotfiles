@@ -228,8 +228,11 @@ endfunction
 " }}}
 
 " ExtractLabels {{{
-" searches the current buffer for \newlabel{name}{{number}{page}.* 
-" entries and returns list of [ name, number, page ] tuples
+" Generate list of \newlabel commands in current buffer.
+" 
+" Searches the current buffer for commands of the form
+"	\newlabel{name}{{number}{page}.* 
+" and returns list of [ name, number, page ] tuples.
 function! ExtractLabels()
 	call cursor(1,1)
 	
@@ -280,8 +283,10 @@ endfunction
 "}}}
 
 " ExtractInputs {{{
-" searches the current buffer for \@input{file} entries and
-" returns list of [ file ] 
+" Generate list of \@input commands in current buffer.
+"
+" Searches the current buffer for \@input{file} entries and
+" returns list of all files. 
 function! ExtractInputs()
 	call cursor(1,1)
 
@@ -301,6 +306,50 @@ function! ExtractInputs()
 endfunction
 "}}}
 
+
+" s:LabelCache {{{
+" Cache of all labels.
+"
+" LabelCache is a dictionary mapping filenames to tuples
+" [ time, labels, inputs ]
+" where 
+" * time is modification time of the cache entry
+" * labels is a list like returned by ExtractLabels
+" * inputs is a list like returned by ExtractInputs
+let s:LabelCache = {}
+"}}}
+
+
+" GetLabelCache {{{
+" Extract labels from LabelCache and update it.
+"
+" Compares modification time of each entry in the label 
+" cache and updates it, if necessary. During traversal of
+" the LabelCache, all current labels are collected and 
+" returned.
+function! s:GetLabelCache(file)
+	let fid = fnamemodify(a:file, ':p')
+
+	let labels = []
+	if !has_key(s:LabelCache , fid) || s:LabelCache[fid][0] != getftime(fid)
+		" Open file in temporary split window for label extraction.
+		exe '1sp +let\ labels=ExtractLabels()|quit! ' . fid
+		exe '1sp +let\ inputs=ExtractInputs()|quit! ' . fid
+		let s:LabelCache[fid] = [ getftime(fid), labels, inputs ]
+	else
+		let labels = s:LabelCache[fid][1]
+	endif
+
+	for input in s:LabelCache[fid][2]
+		let labels += s:UpdateLabelCache(input)
+	endfor
+
+	return labels
+endfunction
+"}}}
+
+
+
 " Complete Labels {{{
 " the optional argument is the file name to be searched
 function! s:CompleteLabels(regex, ...)
@@ -315,8 +364,7 @@ function! s:CompleteLabels(regex, ...)
 		return []
 	endif
 
-	" Open file in temporary split window for label extraction.
-	exe '1sp +let\ labels=ExtractLabels()|quit! ' . glob(file, 1)
+	let labels = s:GetLabelCache(file)
 
 	let matches = filter( copy(labels), 'match(v:val[0], "' . a:regex . '") != -1' )
 	if empty(matches)
@@ -345,15 +393,12 @@ function! s:CompleteLabels(regex, ...)
 		call add(suggestions, entry)
 	endfor
 
-	" recurse on \@input files
-	exe '1sp +let\ inputs=ExtractInputs()|quit! ' . glob(file, 1)
-	for input in inputs
-		suggestions += CompleteLabels(regex, input)
-	endfor
-
 	return suggestions
 endfunction
 " }}}
+
+
+
 
 " Close Current Environment {{{
 function! s:CloseCurEnv()
