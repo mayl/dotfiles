@@ -446,7 +446,7 @@ function! s:TOCActivate(close)
 		let bnr = bufnr(entry['file'])
 	endif
 
-	execute 'buffer ' . bnr
+	execute 'buffer! ' . bnr
 
 	let titlestr = entry['text']
 
