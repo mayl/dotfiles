@@ -99,6 +99,16 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+"line indents
+nmap <Left> <<
+nmap <Right> >>
+nmap <Up> [e
+nmap <Down> ]e
+vmap <Left> <gv
+vmap <Right> >gv
+vmap <Up> [egv
+vmap <Down> ]egv
+
 "NERDtree
 nnoremap <F2> :NERDTreeToggle<cr>
 inoremap <F2> <esc>:NERDTreeToggle<cr>

@@ -40,3 +40,15 @@
 [submodule "z"]
 	path = z
 	url = https://github.com/rupa/z.git
+[submodule "vim/bundle/vim-unimpaired"]
+	path = vim/bundle/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired.git
+[submodule "vim/bundle/vim-fugitive"]
+	path = vim/bundle/vim-fugitive
+	url = http://github.com/tpope/vim-fugitive.git
+[submodule "vim/bundle/vim-powerline"]
+	path = vim/bundle/vim-powerline
+	url = https://github.com/Lokaltog/vim-powerline.git
+[submodule "fasd"]
+	path = fasd
+	url = https://github.com/clvv/fasd.git
