@@ -143,7 +143,13 @@ function! LatexBox_GetMainTexFile()
 		endif
 	endfor
 
-	" 4. prompt for file with completion
+	" 3 borrow the Vim-Latex-Suite method of finding it
+	if Tex_GetMainFileName() != expand('%:p')
+		let b:main_tex_file = Tex_GetMainFileName()
+		return b:main_tex_file
+	endif
+
+	" 5. prompt for file with completion
 	let b:main_tex_file = s:PromptForMainFile()
 	return b:main_tex_file
 endfunction
