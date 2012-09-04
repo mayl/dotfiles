@@ -1,5 +1,5 @@
-Fork of [LaTeX-Box](https://github.com/LaTeX-Box-Team/LaTeX-Box).
-See there for more information.
+# LaTeX-BoX
+![LaTeX-BoX](https://raw.github.com/LaTeX-Box-Team/LaTeX-Box/master/doc/LaTeX-BoX.png)
 
 ## This plugin provides:
 - Background compilation using latexmk;
