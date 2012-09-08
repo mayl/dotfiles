@@ -112,7 +112,7 @@ function! LatexBox_kpsewhich(file)
 	let out = split(out, "\<NL>")[-1]
 	let out = substitute(out, '\r', '', 'g')
 	let out = glob(fnamemodify(out, ':p'), 1)
-	
+
 	execute 'lcd ' . fnameescape(old_dir)
 
 	return out
@@ -227,19 +227,20 @@ function! LatexBox_BibComplete(regexp)
 endfunction
 " }}}
 
+
 " ExtractLabels {{{
 " Generate list of \newlabel commands in current buffer.
-" 
+"
 " Searches the current buffer for commands of the form
-"	\newlabel{name}{{number}{page}.* 
+"	\newlabel{name}{{number}{page}.*
 " and returns list of [ name, number, page ] tuples.
-function! ExtractLabels()
+function! s:ExtractLabels()
 	call cursor(1,1)
-	
+
 	let matches = []
 	let [lblline, lblbegin] = searchpos( '\\newlabel{', 'ecW' )
 
-	while [lblline, lblbegin] != [0,0] 
+	while [lblline, lblbegin] != [0,0]
 		let [nln, nameend] = searchpairpos( '{', '', '}', 'W' )
 		if nln != lblline
 			let [lblline, lblbegin] = searchpos( '\\newlabel{', 'ecW' )
@@ -277,8 +278,8 @@ function! ExtractLabels()
 
         let [lblline, lblbegin] = searchpos( '\\newlabel{', 'ecW' )
 	endwhile
-	
-	return matches 
+
+	return matches
 endfunction
 "}}}
 
@@ -286,8 +287,8 @@ endfunction
 " Generate list of \@input commands in current buffer.
 "
 " Searches the current buffer for \@input{file} entries and
-" returns list of all files. 
-function! ExtractInputs()
+" returns list of all files.
+function! s:ExtractInputs()
 	call cursor(1,1)
 
 	let matches = []
@@ -308,26 +309,24 @@ function! ExtractInputs()
 endfunction
 "}}}
 
-
-" s:LabelCache {{{
+" LabelCache {{{
 " Cache of all labels.
 "
 " LabelCache is a dictionary mapping filenames to tuples
 " [ time, labels, inputs ]
-" where 
+" where
 " * time is modification time of the cache entry
 " * labels is a list like returned by ExtractLabels
 " * inputs is a list like returned by ExtractInputs
 let s:LabelCache = {}
 "}}}
 
-
 " GetLabelCache {{{
 " Extract labels from LabelCache and update it.
 "
-" Compares modification time of each entry in the label 
+" Compares modification time of each entry in the label
 " cache and updates it, if necessary. During traversal of
-" the LabelCache, all current labels are collected and 
+" the LabelCache, all current labels are collected and
 " returned.
 function! s:GetLabelCache(file)
 	let fid = fnamemodify(a:file, ':p')
@@ -335,8 +334,8 @@ function! s:GetLabelCache(file)
 	let labels = []
 	if !has_key(s:LabelCache , fid) || s:LabelCache[fid][0] != getftime(fid)
 		" Open file in temporary split window for label extraction.
-		exe '1sp +let\ labels=ExtractLabels()|quit! ' . fid
-		exe '1sp +let\ inputs=ExtractInputs()|quit! ' . fid
+		exe '1sp +let\ labels=<SID>ExtractLabels()|quit! ' . fid
+		exe '1sp +let\ inputs=<SID>ExtractInputs()|quit! ' . fid
 		let s:LabelCache[fid] = [ getftime(fid), labels, inputs ]
 	else
 		let labels = s:LabelCache[fid][1]
@@ -349,8 +348,6 @@ function! s:GetLabelCache(file)
 	return labels
 endfunction
 "}}}
-
-
 
 " Complete Labels {{{
 " the optional argument is the file name to be searched
@@ -400,8 +397,6 @@ endfunction
 " }}}
 
 
-
-
 " Close Current Environment {{{
 function! s:CloseCurEnv()
 	" first, try with \left/\right pairs
@@ -414,7 +409,7 @@ function! s:CloseCurEnv()
 		endfor
 		return '\right' . bracket
 	endif
-	
+
 	" second, try with environments
 	let env = LatexBox_GetCurrentEnvironment()
 	if env == '\['
@@ -483,7 +478,7 @@ function! s:ChangeEnvPrompt()
 		let l:begin = '\begin{' . new_env . '}'
 		let l:end = '\end{' . new_env . '}'
 	endif
-	
+
 	if env == '\[' || env == '\('
 		let line = getline(lnum2)
 		let line = strpart(line, 0, cnum2 - 1) . l:end . strpart(line, cnum2 + 1)
