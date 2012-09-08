@@ -38,8 +38,8 @@ source $ZSH/oh-my-zsh.sh
 setopt No_Beep
 
 # gopaths 
-export GOROOT=/home/larry/go
-export GOPATH=$GOROOT:/home/larry/code/go
+export GOROOT=~/go
+export GOPATH=$GOROOT:~/code/go
 export GOBIN=$GOROOT/bin
 export GOARCH=386
 export GOOS=linux
