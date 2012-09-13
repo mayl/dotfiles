@@ -44,6 +44,7 @@ export GOBIN=$GOROOT/bin
 export GOARCH=386
 export GOOS=linux
 export PATH=$PATH:$GOROOT/bin
+export GOMAXPROCS=2
 
 #fasd
 export PATH=$PATH:$HOME/dotfiles/fasd
