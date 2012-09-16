@@ -42,7 +42,7 @@ function! s:ComputeLevel(lnum_prev, open_pat, close_pat)
 	if line_prev =~ '^\s*\%(' . a:close_pat . '\)'
 		let n += 1
 	endif
-	
+
 	return n
 endfunction
 " }}}
