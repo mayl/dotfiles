@@ -12,10 +12,10 @@ setlocal indentkeys=0=\\end,0=\\end{enumerate},0=\\end{itemize},0=\\end{descript
 
 let s:list_envs = ['itemize', 'enumerate', 'description']
 " indent on \left( and on \(, but not on (
-" indent on \left[ and on \[, but not on [ 
+" indent on \left[ and on \[, but not on [
 " indent on \left\{ and on {, but not on \{
 let s:open_pat = '\\\@<!\%(\\begin\|\\left\|\\(\|\\\[\|{\)'
-let s:close_pat = '\\\@<!\%(\\end\|\\right\|\\)\|\\\]\|\\\@<!}\)'
+let s:close_pat = '\\\@<!\%(\\end\|\\right\|\\)\|\\\]\|}\)'
 let s:list_open_pat = '\\\@<!\\begin{\%(' . join(s:list_envs, '\|') . '\)}'
 let s:list_close_pat	= '\\\@<!\\end{\%(' . join(s:list_envs, '\|') . '\)}'
 
@@ -27,7 +27,7 @@ endfunction
 " Compute Level {{{
 function! s:ComputeLevel(lnum_prev, lnum_curr)
 
-	let line_curr = getline(a:lnum_curr) 
+	let line_curr = getline(a:lnum_curr)
 	let line_prev = getline(a:lnum_prev)
 
 	" strip comments
@@ -60,7 +60,7 @@ function! s:ComputeLevel(lnum_prev, lnum_curr)
 	" reduce indentation if previous line is \begin{document}
 	if line_prev =~ '\\begin\s*{document}'
 		let n -= 1
-	endif 
+	endif
 
 	" less shift for lines starting with \item
 	let item_here =  line_curr =~ '^\s*\\item'
