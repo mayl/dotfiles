@@ -30,8 +30,13 @@ function! s:ComputeLevel(lnum_prev, lnum_curr)
 	let line_curr = getline(a:lnum_curr)
 	let line_prev = getline(a:lnum_prev)
 
+	" remove \\
+	let line_curr = substitute(line_curr, '\\\\', '', 'g')
+	let line_prev = substitute(line_prev, '\\\\', '', 'g')
+
 	" strip comments
-	let line_prev = substitute(line_prev, '\\\@<!%.*', '', 'g')
+	let line_curr = substitute(line_curr, '\\\@<!%.*$', '', 'g')
+	let line_prev = substitute(line_prev, '\\\@<!%.*$', '', 'g')
 
 	" find unmatched opening patterns on previous line
 	let n = s:CountMatches(line_prev, s:open_pat)-s:CountMatches(line_prev, s:close_pat)
