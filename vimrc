@@ -6,7 +6,7 @@ filetype plugin indent on
 "colors
 set background=dark
 set t_Co=256
-colorscheme badwolf
+colorscheme base16
 
 "GUI
 set guioptions-=T 

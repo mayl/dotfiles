@@ -40,12 +40,13 @@ setopt No_Beep
 export PATH=$PATH:~/sat/bin
 
 # gopaths 
-export GOROOT=/home/larry/go
-export GOPATH=$GOROOT:/home/larry/code/go
+export GOROOT=~/go
+export GOPATH=$GOROOT:~/code/go
 export GOBIN=$GOROOT/bin
 export GOARCH=386
 export GOOS=linux
 export PATH=$PATH:$GOROOT/bin
+export GOMAXPROCS=2
 
 #fasd
 export PATH=$PATH:$HOME/dotfiles/fasd
