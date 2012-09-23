@@ -218,8 +218,8 @@ command! LatexView			call LatexBox_View()
 " LatexBox_InComment([line], [col])
 " return true if inside comment
 function! LatexBox_InComment(...)
-	let line	= a:0 >= 1 ? a:1 : line('.')
-	let col		= a:0 >= 2 ? a:2 : col('.')
+	let line = a:0 >= 1 ? a:1 : line('.')
+	let col = a:0 >= 2 ? a:2 : col('.')
 	return synIDattr(synID(line, col, 0), "name") =~# '^texComment'
 endfunction
 " }}}
