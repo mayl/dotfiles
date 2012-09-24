@@ -572,6 +572,8 @@ function! s:HighlightMatchingPair()
 			return
 		endif
 
+		let saved_pos = getpos('.')
+
 		for i in range(len(open_pats))
 			let open_pat = open_pats[i]
 			let close_pat = close_pats[i]
@@ -582,6 +584,7 @@ function! s:HighlightMatchingPair()
 				let [line, col] = searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'nW', 'LatexBox_InComment()')
 				execute '2match MatchParen /\%(\%' . lnum . 'l\%' . cnum . 'c' . open_pats[i]
 							\	. '\|\%' . line . 'l\%' . col . 'c' . close_pats[i] . '\)/'
+				call setpos('.', saved_pos)
 				break
 			elseif delim =~# '^' . close_pat
 				" if on closing pattern, go to opening pattern
@@ -589,6 +592,7 @@ function! s:HighlightMatchingPair()
 				let [line, col] =  searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'bnW', 'LatexBox_InComment()')
 				execute '2match MatchParen /\%(\%' . line . 'l\%' . col . 'c' . open_pats[i]
 							\	. '\|\%' . lnum . 'l\%' . cnum . 'c' . close_pats[i] . '\)/'
+				call setpos('.', saved_pos)
 				break
 			endif
 		endfor
