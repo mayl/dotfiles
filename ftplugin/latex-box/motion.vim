@@ -47,6 +47,7 @@ function! s:SearchPosAndSkipComments(pat, ...)
 	let flags		= a:0 >= 1 ? a:1 : ''
 	let stopline	= a:0 >= 2 ? a:2 : 0
 	let saved_pos = getpos('.')
+    let jumped = 0
 
 	" search once
 	let [line,col] = searchpos(a:pat, flags, stopline)
@@ -57,6 +58,8 @@ function! s:SearchPosAndSkipComments(pat, ...)
 
 		" keep searching while in comment
 		while LatexBox_InComment(line,col)
+			let jumped = 1
+			call cursor(line,col)
 			let [line,col] = searchpos(a:pat, flags, stopline)
 			if !line
 				break
@@ -64,10 +67,17 @@ function! s:SearchPosAndSkipComments(pat, ...)
 		endwhile
 	endif
 
-	if !line && flags !~ 'n'
-		" if no match found, restore position
+	if flags!~ 'n'
+		if  !line
+			" if no match found, restore position
+			call setpos('.', saved_pos)
+		else
+			call cursor(line,col)
+		endif
+	elseif jumped ==1
 		call setpos('.', saved_pos)
 	endif
+
 
 	return [line,col]
 endfunction
