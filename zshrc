@@ -66,3 +66,4 @@ alias gvim="gvim -f"
 alias nautilus="nautilus ."
 #other aliases
 alias open="xdg-open"
+alias mm="freemind ~/Dropbox/Mindmaps/Larry.mm &"
