@@ -8,6 +8,11 @@ set background=dark
 set t_Co=256
 colorscheme base16
 
+"font
+if has ('gui_running')
+	set guifont=Source\ Code\ Pro\ Heavy\ 10
+endif
+
 "GUI
 set guioptions-=T 
 set guioptions-=r
