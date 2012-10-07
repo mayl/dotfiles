@@ -3,13 +3,13 @@ filetype off
 call pathogen#runtime_append_all_bundles()
 filetype plugin indent on
 
+if has ('gui_running')
 "colors
-set background=dark
-set t_Co=256
-colorscheme base16
+	set background=dark
+	set t_Co=256
+	colorscheme base16
 
 "font
-if has ('gui_running')
 	set guifont=Source\ Code\ Pro\ Heavy\ 10
 endif
 
