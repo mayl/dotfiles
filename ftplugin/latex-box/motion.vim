@@ -306,7 +306,7 @@ function! s:ReadTOC(auxfile, ...)
 
 	for line in readfile(a:auxfile)
 
-		let included = matchstr(line, '^\\input{\zs[^}]*\ze}')
+		let included = matchstr(line, '^\\@input{\zs[^}]*\ze}')
 
 		if included != ''
 			" append the input TOX to `toc` and `fileindices`
