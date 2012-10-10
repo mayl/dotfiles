@@ -128,12 +128,8 @@ function! LatexBox_GetMainTexFile()
 		return b:main_tex_file
 	endif
 
-	" 2. scan current file for "\begin{document}"
-	if &filetype == 'tex' && search('\C\\begin\_\s*{document}', 'nw') != 0
-		return expand('%:p')
-	endif
 
-	" 3. scan the first few lines of the file for root = filename
+	" 2. scan the first few lines of the file for root = filename
 	for linenum in range(1,5)
 		let linecontents = getline(linenum)
 		if linecontents =~ 'root\s*='
@@ -144,6 +140,11 @@ function! LatexBox_GetMainTexFile()
 			return b:main_tex_file
 		endif
 	endfor
+	
+	" 3. scan current file for "\begin{document}"
+	if &filetype == 'tex' && search('\C\\begin\_\s*{document}', 'nw') != 0
+		return expand('%:p')
+	endif
 
 	" 4 borrow the Vim-Latex-Suite method of finding it
 	if Tex_GetMainFileName() != expand('%:p')
