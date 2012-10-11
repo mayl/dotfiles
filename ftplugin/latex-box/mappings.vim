@@ -29,9 +29,10 @@ command! LatexTOC call LatexBox_TOC()
 map <silent> <buffer> <LocalLeader>lt :LatexTOC<CR>
 " }}}
 
-" begin/end pairs {{{
+"Jump to match {{{
 nmap <buffer> % <Plug>LatexBox_JumpToMatch
-xmap <buffer> % <Plug>LatexBox_JumpToMatch
+omap <buffer> % <Plug>LatexBox_JumpToMatch
+
 vmap <buffer> ie <Plug>LatexBox_SelectCurrentEnvInner
 vmap <buffer> ae <Plug>LatexBox_SelectCurrentEnvOuter
 omap <buffer> ie :normal vie<CR>
