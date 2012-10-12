@@ -42,9 +42,8 @@ endfunction
 " }}}
 
 
-" begin/end pairs {{{
-"
-" s:JumpToMatch()
+
+" s:JumpToMatch() {{{
 "
 function! s:JumpToMatch()
 
@@ -54,13 +53,14 @@ function! s:JumpToMatch()
 	endif
 
 	" open/close pairs (dollars signs are treated apart)
-	let open_pats  = ['\\begin\>', '\\left\>']
-	let close_pats = ['\\end\>', '\\right\>']
+	let open_pats  = ['{','(','\[','\\begin\>', '\\left\>']
+	let close_pats = ['}',')','\]','\\end\>', '\\right\>']
 	let dollar_pat = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!\%(\\\@<!\%(\\\\\)*\)\@<=\$'
 
 
+
 	" match for '$' pairs
-	if getline('.')[col('.') - 1] == '$'
+	if strpart(getline('.'), 0,  col('.') ) =~ dollar_pat."$"
 
 		" check if next character is in inline math
 		let [lnum, cnum] = searchpos('.', 'nW')
@@ -103,7 +103,6 @@ function! s:JumpToMatch()
 endfunction
 
 nnoremap <silent> <Plug>LatexBox_JumpToMatch		:call <SID>JumpToMatch()<CR>
-onoremap <silent> <Plug>LatexBox_JumpToMatch		:call <SID>JumpToMatch()<CR>
 " }}}
 
 
@@ -117,30 +116,24 @@ function! s:HighlightMatchingPair()
 		return
 	endif
 
-	let open_pats = ['\\begin\>', '\\left\>']
-	let close_pats = ['\\end\>', '\\right\>']
+	let open_pats  = ['{','(','\[','\\begin\>', '\\left\>']
+	let close_pats = ['}',')','\]','\\end\>', '\\right\>']
 	let dollar_pat = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!\%(\\\@<!\%(\\\\\)*\)\@<=\$'
 
 
-	if getline('.')[col('.') - 1] == '$'
-
-		if strpart(getline('.'), col('.') - 2, 1) == '\'
-			return
-		endif
+	if strpart(getline('.'), 0,  col('.') ) =~ dollar_pat."$"
 
 		" match $-pairs
-		let lnum = line('.')
-		let cnum = col('.')
 
 		" check if next character is in inline math
-		let [lnum2, cnum2] = searchpos('.', 'nW')
-		if lnum2 && s:HasSyntax('texMathZoneX', lnum2, cnum2)
+		let [lnum, cnum] = searchpos('.', 'nW')
+		if lnum && s:HasSyntax('texMathZoneX', lnum, cnum)
 			let [line, col] = searchpos(dollar_pat, 'nW')
 		else
 			let [line, col] = searchpos(dollar_pat, 'bnW')
 		endif
 
-		execute '2match MatchParen /\%(\%' . lnum . 'l\%' . cnum . 'c\$' . '\|\%' . line . 'l\%' . col . 'c\$\)/'
+		execute '2match MatchParen /\%(\%' . line('.') . 'l\%' . col('.') . 'c\$' . '\|\%' . line . 'l\%' . col . 'c\$\)/'
 
 	else
 
@@ -167,25 +160,23 @@ function! s:HighlightMatchingPair()
 				let [line, col] = searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'nW', 'LatexBox_InComment()')
 				execute '2match MatchParen /\%(\%' . lnum . 'l\%' . cnum . 'c' . open_pats[i]
 							\	. '\|\%' . line . 'l\%' . col . 'c' . close_pats[i] . '\)/'
-				call setpos('.', saved_pos)
-				break
 			elseif delim =~# '^' . close_pat
 				" if on closing pattern, go to opening pattern
 				let [line, col] =  searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'bnW', 'LatexBox_InComment()')
 				execute '2match MatchParen /\%(\%' . line . 'l\%' . col . 'c' . open_pats[i]
 							\	. '\|\%' . lnum . 'l\%' . cnum . 'c' . close_pats[i] . '\)/'
-				call setpos('.', saved_pos)
-				break
 			endif
+			break
 		endfor
-
+		call setpos('.', saved_pos)
 	endif
 endfunction
 
+" disable the matchparen autocommands
 augroup LatexBox_HighlightPairs
-	" Replace all matchparen autocommands
-	autocmd! CursorMoved *.tex call s:HighlightMatchingPair()
-	autocmd! CursorMovedi *.tex call s:HighlightMatchingPair()
+	autocmd BufEnter *.tex NoMatchParen
+	autocmd BufLeave *.tex DoMatchParen
+	autocmd! CursorMoved,CursorMovedi *.tex call s:HighlightMatchingPair()
 augroup END
 " }}}
 
