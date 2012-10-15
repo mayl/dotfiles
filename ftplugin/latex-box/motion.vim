@@ -143,8 +143,8 @@ endfunction
 
 " disable matchparen autocommands
 augroup LatexBox_HighlightPairs
+	autocmd BufEnter * runtime plugin/matchparen.vim
 	autocmd BufEnter *.tex NoMatchParen
-	autocmd BufLeave *.tex DoMatchParen
 	autocmd! CursorMoved *.tex call s:FindMatchingPair('h')
 	autocmd! CursorMovedI *.tex call s:FindMatchingPair('i')
 augroup END
