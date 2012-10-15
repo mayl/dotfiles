@@ -89,10 +89,10 @@ function! s:FindMatchingPair(mode)
 		endif
 	endif
 
-	if delim =~ '^\$'
+	if delim =~ '^\$' && strpart(getline(lnum), 0,  cnum) =~ dollar_pat."$"
 
 		" match $-pairs
-
+		"
 		" check if next character is in inline math
 		let [lnum0, cnum0] = searchpos('.', 'nW')
 		if lnum0 && s:HasSyntax('texMathZoneX', lnum0, cnum0)
