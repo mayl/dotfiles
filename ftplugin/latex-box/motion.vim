@@ -43,144 +43,116 @@ endfunction
 
 
 
-" s:JumpToMatch() {{{
-"
-function! s:JumpToMatch()
 
+" Finding Matching Pair {{{
+function! s:FindMatchingPair(mode)
+
+	if a:mode =~ 'h\|i'
+	   	2match none
+	elseif a:mode == 'v'
+		normal! gv
+	endif
 
 	if LatexBox_InComment()
 		return
 	endif
 
 	" open/close pairs (dollars signs are treated apart)
-	let open_pats  = ['{','(','\[','\\begin\>', '\\left\>']
-	let close_pats = ['}',')','\]','\\end\>', '\\right\>']
-	let dollar_pat = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!\%(\\\@<!\%(\\\\\)*\)\@<=\$'
+	let open_pats  = ['{','(','\[','\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\[{}]\|\\\a*\)']
+	let close_pats = ['}',')','\]','\\end\s*{.\{-}}',  '\\right\s*\%([^\\]\|\\[{}]\|\\\a*\)']
+	let dollar_pat = '\%(\\\@<!\%(\\\\\)*\)\@<=\$'
+	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
+	let anymatch = '\(' . join(open_pats + close_pats, '\|') . '\|' . dollar_pat . '\)'
 
+	let [lnum, cnum] = searchpos('\A', 'cbnW', line('.'))
+	let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
 
-
-	" match for '$' pairs
-	if strpart(getline('.'), 0,  col('.') ) =~ dollar_pat."$"
-
-		" check if next character is in inline math
-		let [lnum, cnum] = searchpos('.', 'nW')
-		if lnum && s:HasSyntax('texMathZoneX', lnum, cnum)
-			let [line, col] = searchpos(dollar_pat, 'W')
-		else
-			let [line, col] = searchpos(dollar_pat, 'bW')
-		endif
-
-	else
-
-		" match other pairs
-		let [lnum, cnum] = searchpos('\A', 'cbnW', line('.'))
-
-		let delim = matchstr(getline(lnum), '^\m\(' . join(open_pats + close_pats, '\|') . '\)', cnum - 1)
-
-		if empty(delim)
+	if empty(delim) || strlen(delim)+cnum-1< col('.')
+		if a:mode =~ 'n\|v\|o'
+			" if not found, search forward
+			let [lnum, cnum] = searchpos('\C' . anymatch, 'W', line('.'))
+			if lnum !=0
+				let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+				if empty(delim)
+					return
+				endif
+			endif
+		elseif a:mode =~ 'i'
+			" if not found, move one char bacward and search
+			let [lnum, cnum] = searchpos('\A', 'bnW', line('.'))
+			let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+			if empty(delim) || strlen(delim)+cnum< col('.')
+				return
+			endif
+		elseif a:mode =~ 'h'
 			return
 		endif
-
-		call search('\A', 'cbW', line('.'))
-
-		for i in range(len(open_pats))
-			let open_pat = open_pats[i]
-			let close_pat = close_pats[i]
-
-			if delim =~# '^' . open_pat
-				" if on opening pattern, go to closing pattern
-				call searchpair('\C' . open_pat, '', '\C' . close_pat, 'W', 'LatexBox_InComment()')
-				break
-			elseif delim =~# '^' . close_pat
-				" if on closing pattern, go to opening pattern
-				call searchpair('\C' . open_pat, '', '\C' . close_pat, 'bW', 'LatexBox_InComment()')
-				break
-			endif
-
-		endfor
 	endif
 
-endfunction
-
-nnoremap <silent> <Plug>LatexBox_JumpToMatch		:call <SID>JumpToMatch()<CR>
-" }}}
-
-
-
-" Highlight Matching Pair {{{
-function! s:HighlightMatchingPair()
-
-	2match none
-
-	if LatexBox_InComment()
-		return
-	endif
-
-	let open_pats  = ['{','(','\[','\\begin\>', '\\left\>']
-	let close_pats = ['}',')','\]','\\end\>', '\\right\>']
-	let dollar_pat = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!\%(\\\@<!\%(\\\\\)*\)\@<=\$'
-
-
-	if strpart(getline('.'), 0,  col('.') ) =~ dollar_pat."$"
+	if delim =~ '^\$'
 
 		" match $-pairs
 
 		" check if next character is in inline math
-		let [lnum, cnum] = searchpos('.', 'nW')
-		if lnum && s:HasSyntax('texMathZoneX', lnum, cnum)
-			let [line, col] = searchpos(dollar_pat, 'nW')
+		let [lnum0, cnum0] = searchpos('.', 'nW')
+		if lnum0 && s:HasSyntax('texMathZoneX', lnum0, cnum0)
+			let [lnum2, cnum2] = searchpos(notcomment . dollar_pat, 'nW')
 		else
-			let [line, col] = searchpos(dollar_pat, 'bnW')
+			let [lnum2, cnum2] = searchpos('\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!'. notcomment . dollar_pat, 'bnW')
 		endif
 
-		execute '2match MatchParen /\%(\%' . line('.') . 'l\%' . col('.') . 'c\$' . '\|\%' . line . 'l\%' . col . 'c\$\)/'
+		if a:mode =~ 'h\|i'
+			execute '2match MatchParen /\%(\%' . lnum . 'l\%' . cnum . 'c\$' . '\|\%' . lnum2 . 'l\%' . cnum2 . 'c\$\)/'
+		elseif a:mode =~ 'n\|v\|o'
+			call cursor(lnum2,cnum2)
+		endif
 
 	else
 
 		" match other pairs
-		"
-		" find first non-alpha character to the left on the same line
-		let [lnum, cnum] = searchpos('\A', 'cbnW', line('.'))
-
-		let delim = matchstr(getline(lnum), '^\m\(' . join(open_pats + close_pats, '\|') . '\)', cnum - 1)
-
-		if empty(delim)
-			return
-		endif
-
-		let saved_pos = getpos('.')
-		call search('\A', 'cbW', line('.'))
-
 		for i in range(len(open_pats))
 			let open_pat = open_pats[i]
 			let close_pat = close_pats[i]
 
 			if delim =~# '^' . open_pat
-				" if on opening pattern, go to closing pattern
-				let [line, col] = searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'nW', 'LatexBox_InComment()')
-				execute '2match MatchParen /\%(\%' . lnum . 'l\%' . cnum . 'c' . open_pats[i]
-							\	. '\|\%' . line . 'l\%' . col . 'c' . close_pats[i] . '\)/'
+				" if on opening pattern, search for closing pattern
+				let [lnum2, cnum2] = searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'nW', 'LatexBox_InComment()', 0 , 300)
+				if a:mode =~ 'h\|i'
+					execute '2match MatchParen /\%(\%' . lnum . 'l\%' . cnum . 'c' . open_pats[i] . '\|\%' . lnum2 . 'l\%' . cnum2 . 'c' . close_pats[i] . '\)/'
+				elseif a:mode =~ 'n\|v\|o'
+					call cursor(lnum2,cnum2)
+					if strlen(close_pat)>1 && a:mode =~ 'o'
+						call cursor(lnum2, matchend(getline('.'), '\C' . close_pat, col('.')-1))
+					endif
+				endif
+				break
 			elseif delim =~# '^' . close_pat
-				" if on closing pattern, go to opening pattern
-				let [line, col] =  searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'bnW', 'LatexBox_InComment()')
-				execute '2match MatchParen /\%(\%' . line . 'l\%' . col . 'c' . open_pats[i]
-							\	. '\|\%' . lnum . 'l\%' . cnum . 'c' . close_pats[i] . '\)/'
+				" if on closing pattern, search for opening pattern
+				let [lnum2, cnum2] =  searchpairpos('\C' . open_pat, '', '\C\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!' . close_pat, 'bnW', 'LatexBox_InComment()', 0 , 300)
+				if a:mode =~ 'h\|i'
+					execute '2match MatchParen /\%(\%' . lnum2 . 'l\%' . cnum2 . 'c' . open_pats[i] . '\|\%' . lnum . 'l\%' . cnum . 'c' . close_pats[i] . '\)/'
+				elseif a:mode =~ 'n\|v\|o'
+					call cursor(lnum2,cnum2)
+				endif
+				break
 			endif
-			break
 		endfor
-		call setpos('.', saved_pos)
+
 	endif
 endfunction
 
-" disable the matchparen autocommands
+" disable matchparen autocommands
 augroup LatexBox_HighlightPairs
 	autocmd BufEnter *.tex NoMatchParen
 	autocmd BufLeave *.tex DoMatchParen
-	autocmd! CursorMoved,CursorMovedi *.tex call s:HighlightMatchingPair()
+	autocmd! CursorMoved *.tex call s:FindMatchingPair('h')
+	autocmd! CursorMovedI *.tex call s:FindMatchingPair('i')
 augroup END
+
+nnoremap <silent> <Plug>LatexBox_JumpToMatch		:call <SID>FindMatchingPair('n')<CR>
+vnoremap <silent> <Plug>LatexBox_JumpToMatch		:call <SID>FindMatchingPair('v')<CR>
+onoremap <silent> <Plug>LatexBox_JumpToMatch		v:call <SID>FindMatchingPair('o')<CR>
 " }}}
-
-
 
 
 " select inline math {{{
