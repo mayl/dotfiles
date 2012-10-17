@@ -50,7 +50,7 @@ function! LatexBox_FoldLevel(lnum)
             return ">" . level
         endif
         let level += 1
-    endfo
+    endfor
 
     " Fold environments
     if exists('g:LatexBox_fold_envs')
@@ -118,7 +118,6 @@ function! LatexBox_FoldText(lnum)
     " Not defined
     return "Fold text not defined"
 endfunction
-
 
 " {{{1 Footer
 " vim:fdm=marker:ff=unix:ts=4:sw=4
