@@ -10,8 +10,8 @@
 " {{{1 Set options
 if exists('g:LatexBox_Folding')
     setl foldmethod=expr
-    setl foldexpr=FoldLevel(v:lnum)
-    setl foldtext=FoldText(v:foldstart)
+    setl foldexpr=LatexBox_FoldLevel(v:lnum)
+    setl foldtext=LatexBox_FoldText(v:foldstart)
 endif
 if !exists('g:LatexBox_fold_preamble')
     let g:LatexBox_fold_preamble=1
@@ -29,8 +29,8 @@ if !exists('g:LatexBox_fold_parts')
                 \ ]
 endif
 
-" {{{1 FoldLevel
-fu! FoldLevel(lnum)
+" {{{1 LatexBox_FoldLevel
+fu! LatexBox_FoldLevel(lnum)
     let line  = getline(a:lnum)
 
     " Fold preamble
@@ -65,8 +65,8 @@ fu! FoldLevel(lnum)
     return "="
 endfu
 
-" {{{1 FoldText
-fu! FoldText(lnum)
+" {{{1 LatexBox_FoldText
+fu! LatexBox_FoldText(lnum)
     let line = getline(a:lnum)
 
     " Define pretext
