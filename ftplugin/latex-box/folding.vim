@@ -30,7 +30,7 @@ if !exists('g:LatexBox_fold_parts')
 endif
 
 " {{{1 LatexBox_FoldLevel
-fu! LatexBox_FoldLevel(lnum)
+function! LatexBox_FoldLevel(lnum)
     let line  = getline(a:lnum)
 
     " Fold preamble
@@ -63,10 +63,10 @@ fu! LatexBox_FoldLevel(lnum)
     endif
 
     return "="
-endfu
+endfunction
 
 " {{{1 LatexBox_FoldText
-fu! LatexBox_FoldText(lnum)
+function! LatexBox_FoldText(lnum)
     let line = getline(a:lnum)
 
     " Define pretext
@@ -117,7 +117,7 @@ fu! LatexBox_FoldText(lnum)
 
     " Not defined
     return "Fold text not defined"
-endfu
+endfunction
 
 
 " {{{1 Footer
