@@ -159,6 +159,7 @@ function! LatexBox_BibSearch(regexp)
 
 	" find bib data
     let bibdata = s:FindBibData()
+	let g:test = bibdata
     if bibdata == ''
         echomsg 'error: no \bibliography{...} command found'
         return
