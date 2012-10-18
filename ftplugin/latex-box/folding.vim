@@ -20,7 +20,7 @@ if !exists('g:LatexBox_fold_envs')
     let g:LatexBox_fold_envs=1
 endif
 if !exists('g:LatexBox_fold_parts')
-    let s:LatexBox_fold_parts=[
+    let g:LatexBox_fold_parts=[
                 \ "part",
                 \ "chapter",
                 \ "section",
