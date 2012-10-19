@@ -58,14 +58,23 @@ function! s:FindMatchingPair(mode)
 	endif
 
 	" open/close pairs (dollars signs are treated apart)
-	let open_pats  = ['{','(','\[','\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\[{}]\|\\\a*\)']
-	let close_pats = ['}',')','\]','\\end\s*{.\{-}}',  '\\right\s*\%([^\\]\|\\[{}]\|\\\a*\)']
-	let dollar_pat = '\%(\\\@<!\%(\\\\\)*\)\@<=\$'
+	let open_pats  = ['\\{','{','\\(','(','\\\[','\[','\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\.\|\\\a*\)']
+	let close_pats = ['\\}','}','\\)',')','\\\]','\]','\\end\s*{.\{-}}',  '\\right\s*\%([^\\]\|\\.\|\\\a*\)']
+	let dollar_pat = '\$'
+	let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
 	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
-	let anymatch = '\(' . join(open_pats + close_pats, '\|') . '\|' . dollar_pat . '\)'
+	let anymatch =  '\(' . join(open_pats + close_pats, '\|') . '\|' . dollar_pat . '\)'
 
-	let [lnum, cnum] = searchpos('\A', 'cbnW', line('.'))
-	let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+	let lnum = line('.')
+	let cnum = searchpos('\A', 'cbnW', lnum)[1]
+
+	" if the previous char is not a backslash
+	if strpart(getline(lnum), 0,  cnum-1) =~ notbslash . '$'
+		let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+	else
+		let cnum = cnum-1
+		let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+	endif
 
 	if empty(delim) || strlen(delim)+cnum-1< col('.')
 		if a:mode =~ 'n\|v\|o'
@@ -76,8 +85,15 @@ function! s:FindMatchingPair(mode)
 				let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
 		elseif a:mode =~ 'i'
 			" if not found, move one char bacward and search
-			let [lnum, cnum] = searchpos('\A', 'bnW', line('.'))
-			let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+			let [lnum, cnum] = searchpos('\A', 'bnW', lnum)
+
+			" if the previous char is not a backslash
+			if strpart(getline(lnum), 0,  cnum-1) =~ notbslash . '$'
+				let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+			else
+				let cnum = cnum-1
+				let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+			endif
 			if empty(delim) || strlen(delim)+cnum< col('.')
 				return
 			endif
@@ -86,16 +102,16 @@ function! s:FindMatchingPair(mode)
 		endif
 	endif
 
-	if delim =~ '^\$' && strpart(getline(lnum), 0,  cnum) =~ dollar_pat."$"
+	if delim =~ '^\$'
 
 		" match $-pairs
 		"
 		" check if next character is in inline math
 		let [lnum0, cnum0] = searchpos('.', 'nW')
 		if lnum0 && s:HasSyntax('texMathZoneX', lnum0, cnum0)
-			let [lnum2, cnum2] = searchpos(notcomment . dollar_pat, 'nW')
+			let [lnum2, cnum2] = searchpos(notcomment . notbslash. dollar_pat, 'nW')
 		else
-			let [lnum2, cnum2] = searchpos('\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!'. notcomment . dollar_pat, 'bnW')
+			let [lnum2, cnum2] = searchpos('\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!'. notcomment . notbslash . dollar_pat, 'bnW')
 		endif
 
 		if a:mode =~ 'h\|i'
@@ -108,8 +124,8 @@ function! s:FindMatchingPair(mode)
 
 		" match other pairs
 		for i in range(len(open_pats))
-			let open_pat = open_pats[i]
-			let close_pat = close_pats[i]
+			let open_pat = notbslash . open_pats[i]
+			let close_pat = notbslash . close_pats[i]
 
 			if delim =~# '^' . open_pat
 				" if on opening pattern, search for closing pattern
