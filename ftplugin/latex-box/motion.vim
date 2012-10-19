@@ -70,13 +70,10 @@ function! s:FindMatchingPair(mode)
 	if empty(delim) || strlen(delim)+cnum-1< col('.')
 		if a:mode =~ 'n\|v\|o'
 			" if not found, search forward
-			let [lnum, cnum] = searchpos('\C' . anymatch, 'W', line('.'))
-			if lnum !=0
+				let cnum = match(getline(lnum), '\C'. anymatch , col('.') - 1) + 1
+				if cnum == 0 | return | endif
+				call cursor(lnum, cnum)
 				let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
-				if empty(delim)
-					return
-				endif
-			endif
 		elseif a:mode =~ 'i'
 			" if not found, move one char bacward and search
 			let [lnum, cnum] = searchpos('\A', 'bnW', line('.'))
