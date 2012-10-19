@@ -34,7 +34,7 @@ function! LatexBox_FoldLevel(lnum)
     let line  = getline(a:lnum)
 
     " Fold preamble
-    if exists('g:LatexBox_fold_preamble')
+    if g:LatexBox_fold_preamble==1
         if line =~ '\s*\\documentclass'
             return ">1"
         endif
@@ -53,11 +53,11 @@ function! LatexBox_FoldLevel(lnum)
     endfor
 
     " Fold environments
-    if exists('g:LatexBox_fold_envs')
-        if line =~ '\\begin{.*}'
+    if g:LatexBox_fold_envs==1
+        if line =~ '\\begin\s*{.\{-}}'
             return "a1"
         endif
-        if line =~ '\\end{.*}'
+        if line =~ '\\end\s*{.\{-}}'
             return "s1"
         endif
     endif
