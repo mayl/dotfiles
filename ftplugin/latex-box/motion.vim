@@ -48,7 +48,7 @@ endfunction
 function! s:FindMatchingPair(mode)
 
 	if a:mode =~ 'h\|i'
-	   	2match none
+		2match none
 	elseif a:mode == 'v'
 		normal! gv
 	endif
@@ -66,21 +66,21 @@ function! s:FindMatchingPair(mode)
 	let lnum = line('.')
 	let cnum = searchpos('\A', 'cbnW', lnum)[1]
 	" if the previous char is a backslash
-	if strpart(getline(lnum), 0,  cnum-1) !~ notbslash . '$' | cnum = cnum-1 | endif
+	if strpart(getline(lnum), 0,  cnum-1) !~ notbslash . '$' | let cnum = cnum-1 | endif
 	let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
 
 	if empty(delim) || strlen(delim)+cnum-1< col('.')
 		if a:mode =~ 'n\|v\|o'
 			" if not found, search forward
-				let cnum = match(getline(lnum), '\C'. anymatch , col('.') - 1) + 1
-				if cnum == 0 | return | endif
-				call cursor(lnum, cnum)
-				let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+			let cnum = match(getline(lnum), '\C'. anymatch , col('.') - 1) + 1
+			if cnum == 0 | return | endif
+			call cursor(lnum, cnum)
+			let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
 		elseif a:mode =~ 'i'
 			" if not found, move one char bacward and search
 			let cnum = searchpos('\A', 'bnW', lnum)[1]
 			" if the previous char is a backslash
-			if strpart(getline(lnum), 0,  cnum-1) !~ notbslash . '$' | cnum = cnum-1 | endif
+			if strpart(getline(lnum), 0,  cnum-1) !~ notbslash . '$' | let cnum = cnum-1 | endif
 			let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
 			if empty(delim) || strlen(delim)+cnum< col('.') | return | endif
 		elseif a:mode =~ 'h'
