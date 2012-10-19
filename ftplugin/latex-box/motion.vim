@@ -53,9 +53,7 @@ function! s:FindMatchingPair(mode)
 		normal! gv
 	endif
 
-	if LatexBox_InComment()
-		return
-	endif
+	if LatexBox_InComment() | return | endif
 
 	" open/close pairs (dollars signs are treated apart)
 	let open_pats  = ['\\{','{','\\(','(','\\\[','\[','\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\.\|\\\a*\)']
@@ -67,14 +65,9 @@ function! s:FindMatchingPair(mode)
 
 	let lnum = line('.')
 	let cnum = searchpos('\A', 'cbnW', lnum)[1]
-
-	" if the previous char is not a backslash
-	if strpart(getline(lnum), 0,  cnum-1) =~ notbslash . '$'
-		let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
-	else
-		let cnum = cnum-1
-		let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
-	endif
+	" if the previous char is a backslash
+	if strpart(getline(lnum), 0,  cnum-1) !~ notbslash . '$' | cnum = cnum-1 | endif
+	let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
 
 	if empty(delim) || strlen(delim)+cnum-1< col('.')
 		if a:mode =~ 'n\|v\|o'
@@ -85,18 +78,11 @@ function! s:FindMatchingPair(mode)
 				let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
 		elseif a:mode =~ 'i'
 			" if not found, move one char bacward and search
-			let [lnum, cnum] = searchpos('\A', 'bnW', lnum)
-
-			" if the previous char is not a backslash
-			if strpart(getline(lnum), 0,  cnum-1) =~ notbslash . '$'
-				let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
-			else
-				let cnum = cnum-1
-				let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
-			endif
-			if empty(delim) || strlen(delim)+cnum< col('.')
-				return
-			endif
+			let cnum = searchpos('\A', 'bnW', lnum)[1]
+			" if the previous char is a backslash
+			if strpart(getline(lnum), 0,  cnum-1) !~ notbslash . '$' | cnum = cnum-1 | endif
+			let delim = matchstr(getline(lnum), '\C^'. anymatch , cnum - 1)
+			if empty(delim) || strlen(delim)+cnum< col('.') | return | endif
 		elseif a:mode =~ 'h'
 			return
 		endif
@@ -105,7 +91,6 @@ function! s:FindMatchingPair(mode)
 	if delim =~ '^\$'
 
 		" match $-pairs
-		"
 		" check if next character is in inline math
 		let [lnum0, cnum0] = searchpos('.', 'nW')
 		if lnum0 && s:HasSyntax('texMathZoneX', lnum0, cnum0)
@@ -121,7 +106,6 @@ function! s:FindMatchingPair(mode)
 		endif
 
 	else
-
 		" match other pairs
 		for i in range(len(open_pats))
 			let open_pat = notbslash . open_pats[i]
