@@ -5,9 +5,9 @@
 - Background compilation using latexmk;
 - Completion for commands, environments, labels, and bibtex entries;
 - A simple table of contents;
-- Smart indentation (activated with "set smartindent");
-- Highlight matching \begin/\end pairs;
-- Motion between \begin/\end pairs with the % key;
+- Smart indentation;
+- Highlight matching \begin/\end and \left\right pairs;
+- Motion between \begin/\end and \left\right pairs with the % key;
 - Motion through brackets/braces (with user-defined keys);
 - Environment objects (e.g., select environement with "vie" or "vae");
 - Inline math objects (e.g., select inline math with "vi$" or "va$").
