@@ -29,22 +29,19 @@ if !exists('g:LatexBox_fold_parts')
                 \ ]
 endif
 
-function s:Detect_folds(force)
-    if !exists('b:LatexBox_fold_parts') || a:force
+function s:Detect_folds()
         let b:LatexBox_fold_parts = []
         for i in range(len(g:LatexBox_fold_parts))
             if search('\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{', 'n')
                 call add(b:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
             end
         endfor
-    endif
 endfunction
 
 " {{{1 LatexBox_FoldLevel
 function! LatexBox_FoldLevel(lnum)
     let line  = getline(a:lnum)
     let line2 = getline(a:lnum+1)
-    call s:Detect_folds(0)
 
     " Fold preamble
     if g:LatexBox_fold_preamble==1
@@ -58,20 +55,11 @@ function! LatexBox_FoldLevel(lnum)
     " Fold parts and sections
     for i in range(len(g:LatexBox_fold_parts))
         if line  =~ '^\s*\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{'
+            call s:Detect_folds()
             let found = index(b:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
-            if found >=0
-                return ">" . (found+2)
-            else
-                call s:Detect_folds(1)
-                let found = index(b:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
-                return ">" . (found+2)
-            endif
+            return ">" . (found+2)
         endif
     endfor
-
-    if line2  =~ '\s*\\end{document}'
-        return "1"
-    endif
 
 
     " Fold environments
@@ -81,6 +69,13 @@ function! LatexBox_FoldLevel(lnum)
         endif
         if line =~ '\\end\s*{.\{-}}'
             return "s1"
+        endif
+    endif
+    if line2  =~ '\s*\\end{document}'
+        if g:LatexBox_fold_envs==1
+            return "1"
+        else
+            return "0"
         endif
     endif
 
