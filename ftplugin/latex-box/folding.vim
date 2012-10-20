@@ -57,12 +57,15 @@ function! LatexBox_FoldLevel(lnum)
         if line  =~ '^\s*\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{'
             call s:Detect_folds()
             let found = index(b:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
-            return ">" . (found+2)
+            return ">" . (found + 1 + (g:LatexBox_fold_envs==1))
         endif
     endfor
 
 
     " Fold environments
+    if line  =~ '\s*\\end{document}'
+        return g:LatexBox_fold_envs==1
+    endif
     if g:LatexBox_fold_envs==1
         if line =~ '\\begin\s*{.\{-}}'
             return "a1"
@@ -71,13 +74,7 @@ function! LatexBox_FoldLevel(lnum)
             return "s1"
         endif
     endif
-    if line2  =~ '\s*\\end{document}'
-        if g:LatexBox_fold_envs==1
-            return "1"
-        else
-            return "0"
-        endif
-    endif
+
 
     return "="
 endfunction
