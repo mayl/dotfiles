@@ -29,28 +29,50 @@ if !exists('g:LatexBox_fold_parts')
                 \ ]
 endif
 
+function s:Detect_folds(force)
+    if !exists('b:LatexBox_fold_parts') || a:force
+        let b:LatexBox_fold_parts = []
+        for i in range(len(g:LatexBox_fold_parts))
+            if search('\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{', 'n')
+                call add(b:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
+            end
+        endfor
+    endif
+endfunction
+
 " {{{1 LatexBox_FoldLevel
 function! LatexBox_FoldLevel(lnum)
     let line  = getline(a:lnum)
+    let line2 = getline(a:lnum+1)
+    call s:Detect_folds(0)
 
     " Fold preamble
     if g:LatexBox_fold_preamble==1
         if line =~ '\s*\\documentclass'
             return ">1"
-        endif
-        if line =~ '\s*\\begin{document}'
+        elseif  line2 =~ '\s*\\begin{document}'
             return "<1"
         endif
     endif
 
     " Fold parts and sections
-    let level = 1
-    for part in g:LatexBox_fold_parts
-        if line  =~ '^\s*\\' . part . '\*\?{'
-            return ">" . level
+    for i in range(len(g:LatexBox_fold_parts))
+        if line  =~ '^\s*\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{'
+            let found = index(b:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
+            if found >=0
+                return ">" . (found+2)
+            else
+                call s:Detect_folds(1)
+                let found = index(b:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
+                return ">" . (found+2)
+            endif
         endif
-        let level += 1
     endfor
+
+    if line2  =~ '\s*\\end{document}'
+        return "1"
+    endif
+
 
     " Fold environments
     if g:LatexBox_fold_envs==1
@@ -88,13 +110,19 @@ function! LatexBox_FoldText(lnum)
 
     " Parts and sections
     if line =~ '\\\(\(sub\)*section\|part\|chapter\)'
-        return pretext .  matchstr(line,
-                    \ '^\s*\\\(\(sub\)*section\|part\|chapter\)\*\?{\zs.*\ze}')
+        let title = matchstr(line, '^\s*\\\(\(sub\)*section\|part\|chapter\)\*\?{\zs.*\ze}')
+        if empty(title)
+            let title = matchstr(line, '^\s*\\\(\(sub\)*section\|part\|chapter\)\*\?{\zs.*\ze')
+        endif
+        return pretext . title
     endif
 
     " Environments
     if line =~ '\\begin'
-        let env = matchstr(line,'\\begin\*\?{\zs\w*\*\?\ze}')
+        let env = matchstr(line,'\\begin\*\?{\zs.\{-}\ze}')
+        if env == 'document'
+            return pretext . "Document"
+        endif
         let label = ''
         let caption = ''
         let i = v:foldstart
