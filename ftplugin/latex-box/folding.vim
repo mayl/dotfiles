@@ -62,11 +62,11 @@ function! LatexBox_FoldLevel(lnum)
                 return 0
             endif
         elseif nlnum > a:lnum && line =~ '\s*\\begin{document}'
-            return "<1"
+            return 0
         endif
     endif
 
-    " Don't fold \fontmatter \mainmatter \backmatter \appendix
+    " Don't fold \frontmatter \mainmatter \backmatter \appendix
     if line =~ '^\s*\\\%('.join(g:LatexBox_not_fold, '\|') . '\)'
         return baselevel
     endif
@@ -77,7 +77,7 @@ function! LatexBox_FoldLevel(lnum)
         if  nlnum == a:lnum
             return ">" . (s:Detect_fold_level(delim)+ baselevel + 1)
         else
-            return "<" . (s:Detect_fold_level(delim)+ baselevel + 1)
+            return (s:Detect_fold_level(delim)+ baselevel)
         endif
     endif
 
@@ -116,31 +116,32 @@ function! LatexBox_FoldText(lnum)
 
     " Preamble
     if line =~ '\s*\\documentclass'
-        return pretext . "Preamble"
+        return pretext . "Preamble" . ' '
     endif
 
     " Parts and sections
     if line =~ '\\\(\(sub\)*section\|part\|chapter\)'
-        let title = matchstr(line, '^\s*\\\(\(sub\)*section\|part\|chapter\)\*\?{\zs.*\ze}')
+        let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?{\(.*\)}')
         if empty(title)
-            let title = matchstr(line, '^\s*\\\(\(sub\)*section\|part\|chapter\)\*\?{\zs.*\ze')
+            let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?{\(.*\)')
         endif
-        return pretext . title
+        return pretext . substitute(title[1], '^\(.\)' , '\u\1', '') . ': ' . title[2] . ' '
     endif
 
     " Environments
     if line =~ '\\begin'
         let env = matchstr(line,'\\begin\*\?{\zs.\{-}\ze}')
         if env == 'document'
-            return pretext . "Document"
+            return pretext. "Document"
         endif
-        let label = ''
+        let label = ' '
         let caption = ''
+        let env = '[' . env . ']'
         let i = v:foldstart
         while i <= v:foldend
             if getline(i) =~ '^\s*\\label'
                 let label = ' (' . matchstr(getline(i),
-                            \ '^\s*\\label{\zs.*\ze}') . ')'
+                            \ '^\s*\\label{\zs.*\ze}') . ') '
             end
             if getline(i) =~ '^\s*\\caption'
                 let env .=  ': '
@@ -151,7 +152,7 @@ function! LatexBox_FoldText(lnum)
             end
             let i += 1
         endwhile
-        return pretext . printf('%-12s', env) . caption . label
+        return pretext . env . caption . label
     endif
 
     " Not defined
