@@ -28,53 +28,72 @@ if !exists('g:LatexBox_fold_parts')
                 \ "subsubsection"
                 \ ]
 endif
+if !exists('g:LatexBox_not_fold')
+    let g:LatexBox_not_fold=[
+                \ "appendix",
+                \ "frontmatter",
+                \ "mainmatter",
+                \ "backmatter"
+                \ ]
+endif
 
-function s:Detect_folds()
-        let b:LatexBox_fold_parts = []
-        for i in range(len(g:LatexBox_fold_parts))
-            if search('\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{', 'n')
-                call add(b:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
-            end
-        endfor
+function s:Detect_fold_level(delim)
+    let s:LatexBox_fold_parts = []
+    for i in range(len(g:LatexBox_fold_parts))
+        if search('\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{', 'n')
+            call add(s:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
+        end
+    endfor
+    return index(s:LatexBox_fold_parts, a:delim)
 endfunction
 
 " {{{1 LatexBox_FoldLevel
 function! LatexBox_FoldLevel(lnum)
-    let line  = getline(a:lnum)
-    let line2 = getline(a:lnum+1)
+    let nlnum = nextnonblank(a:lnum)
+    let line = getline(nlnum)
+    let baselevel = (g:LatexBox_fold_envs==1)
 
     " Fold preamble
     if g:LatexBox_fold_preamble==1
-        if line =~ '\s*\\documentclass'
-            return ">1"
-        elseif  line2 =~ '\s*\\begin{document}'
+        if nlnum == a:lnum && line =~ '\s*\\documentclass'
+            if search('\s*\\begin{document}', 'n') > nlnum +1
+                return ">1"
+            else
+                return 0
+            endif
+        elseif nlnum > a:lnum && line =~ '\s*\\begin{document}'
             return "<1"
         endif
     endif
 
-    " Fold parts and sections
-    for i in range(len(g:LatexBox_fold_parts))
-        if line  =~ '^\s*\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{'
-            call s:Detect_folds()
-            let found = index(b:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
-            return ">" . (found + 1 + (g:LatexBox_fold_envs==1))
-        endif
-    endfor
+    " Don't fold \fontmatter \mainmatter \backmatter \appendix
+    if line =~ '^\s*\\\%('.join(g:LatexBox_not_fold, '\|') . '\)'
+        return baselevel
+    endif
 
+    " Fold parts and sections
+    let delim = matchstr(line, '^\s*\\\zs\%(' . join(g:LatexBox_fold_parts, '\|') . '\)\ze\*\?\s*{')
+    if !empty(delim)
+        if  nlnum == a:lnum
+            return ">" . (s:Detect_fold_level(delim)+ baselevel + 1)
+        else
+            return "<" . (s:Detect_fold_level(delim)+ baselevel + 1)
+        endif
+    endif
 
     " Fold environments
-    if line  =~ '\s*\\end{document}'
-        return g:LatexBox_fold_envs==1
+    if line =~ '\\end\s*{document}'
+        return baselevel
     endif
     if g:LatexBox_fold_envs==1
-        if line =~ '\\begin\s*{.\{-}}'
-            return "a1"
-        endif
-        if line =~ '\\end\s*{.\{-}}'
-            return "s1"
+        if nlnum == a:lnum
+            if line =~ '\\begin\s*{.\{-}}'
+                return "a1"
+            elseif line =~ '\\end\s*{.\{-}}'
+                return "s1"
+            endif
         endif
     endif
-
 
     return "="
 endfunction
