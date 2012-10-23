@@ -66,7 +66,7 @@ function! LatexBox_FoldLevel(lnum)
         endif
     endif
 
-    " Don't fold \frontmatter \mainmatter \backmatter \appendix
+    " reset foldlevel if \frontmatter \mainmatter \backmatter \appendix
     if line =~ '^\s*\\\%('.join(g:LatexBox_not_fold, '\|') . '\)'
         return baselevel
     endif
@@ -87,7 +87,9 @@ function! LatexBox_FoldLevel(lnum)
     endif
     if g:LatexBox_fold_envs==1
         if nlnum == a:lnum
-            if line =~ '\\begin\s*{.\{-}}'
+            if line =~ '\\begin\s*{document}'
+                return ">1"
+            elseif line =~ '\\begin\s*{.\{-}}'
                 return "a1"
             elseif line =~ '\\end\s*{.\{-}}'
                 return "s1"
