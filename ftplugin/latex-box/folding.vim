@@ -52,16 +52,18 @@ function! LatexBox_FoldLevel(lnum)
     let nlnum = nextnonblank(a:lnum)
     let line = getline(nlnum)
     let baselevel = (g:LatexBox_fold_envs==1)
+	let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
+	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
 
     " Fold preamble
     if g:LatexBox_fold_preamble==1
         if nlnum == a:lnum && line =~ '\s*\\documentclass'
-            if search('\s*\\begin{document}', 'n') > nlnum +1
+            if search('^\s*\\begin{document}', 'n') > nlnum +1
                 return ">1"
             else
                 return 0
             endif
-        elseif nlnum > a:lnum && line =~ '\s*\\begin{document}'
+        elseif nlnum > a:lnum && line =~ '^\s*\\begin{document}'
             return 0
         endif
     endif
@@ -82,16 +84,16 @@ function! LatexBox_FoldLevel(lnum)
     endif
 
     " Fold environments
-    if line =~ '\\end\s*{document}'
+    if line =~ '^\s*\\end\s*{document}'
         return baselevel
     endif
     if g:LatexBox_fold_envs==1
         if nlnum == a:lnum
-            if line =~ '\\begin\s*{document}'
+            if line =~ '^\s*\\begin\s*{document}'
                 return ">1"
-            elseif line =~ '\\begin\s*{.\{-}}'
+            elseif line =~ notcomment . notbslash . '\\begin\s*{.\{-}}'
                 return "a1"
-            elseif line =~ '\\end\s*{.\{-}}'
+            elseif line =~ notcomment . notbslash . '\\end\s*{.\{-}}'
                 return "s1"
             endif
         endif
@@ -123,16 +125,13 @@ function! LatexBox_FoldText(lnum)
 
     " Parts and sections
     if line =~ '\\\(\(sub\)*section\|part\|chapter\)'
-        let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?{\(.*\)}')
-        if empty(title)
-            let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?{\(.*\)')
-        endif
-        return pretext . substitute(title[1], '^\(.\)' , '\u\1', '') . ': ' . title[2] . ' '
+        let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?\s*{\(.\{1,80}\)')
+        return pretext . substitute(title[1], '^\(.\)' , '\u\1', '') . ': ' . substitute(title[2], '}\s*$', '', '') . ' '
     endif
 
     " Environments
     if line =~ '\\begin'
-        let env = matchstr(line,'\\begin\*\?{\zs.\{-}\ze}')
+        let env = matchstr(line,'\\begin\*\?\s*{\zs.\{-}\ze}')
         if env == 'document'
             return pretext. "Document"
         endif
@@ -143,12 +142,12 @@ function! LatexBox_FoldText(lnum)
         while i <= v:foldend
             if getline(i) =~ '^\s*\\label'
                 let label = ' (' . matchstr(getline(i),
-                            \ '^\s*\\label{\zs.*\ze}') . ') '
+                            \ '^\s*\\label\s*{\zs.*\ze}') . ') '
             end
             if getline(i) =~ '^\s*\\caption'
                 let env .=  ': '
                 let caption = matchstr(getline(i),
-                            \ '^\s*\\caption\(\[.*\]\)\?{\zs.\{1,30}')
+                            \ '^\s*\\caption\s*\(\[.*\]\)\?{\zs.\{1,30}')
                 let caption = substitute(caption, '}\s*$', '','')
 
             end
