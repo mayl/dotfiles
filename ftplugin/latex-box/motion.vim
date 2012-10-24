@@ -94,9 +94,9 @@ function! s:FindMatchingPair(mode)
 		" check if next character is in inline math
 		let [lnum0, cnum0] = searchpos('.', 'nW')
 		if lnum0 && s:HasSyntax('texMathZoneX', lnum0, cnum0)
-			let [lnum2, cnum2] = searchpos(notcomment . notbslash. dollar_pat, 'nW')
+			let [lnum2, cnum2] = searchpos(notcomment . notbslash. dollar_pat, 'nW', line('w$') , 200)
 		else
-			let [lnum2, cnum2] = searchpos('\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!'. notcomment . notbslash . dollar_pat, 'bnW')
+			let [lnum2, cnum2] = searchpos('\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!'. notcomment . notbslash . dollar_pat, 'bnW', line('w0') , 200)
 		endif
 
 		if a:mode =~ 'h\|i'
@@ -113,7 +113,7 @@ function! s:FindMatchingPair(mode)
 
 			if delim =~# '^' . open_pat
 				" if on opening pattern, search for closing pattern
-				let [lnum2, cnum2] = searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'nW', 'LatexBox_InComment()', 0 , 300)
+				let [lnum2, cnum2] = searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'nW', 'LatexBox_InComment()', line('w$') , 200)
 				if a:mode =~ 'h\|i'
 					execute '2match MatchParen /\%(\%' . lnum . 'l\%' . cnum . 'c' . open_pats[i] . '\|\%' . lnum2 . 'l\%' . cnum2 . 'c' . close_pats[i] . '\)/'
 				elseif a:mode =~ 'n\|v\|o'
@@ -125,7 +125,7 @@ function! s:FindMatchingPair(mode)
 				break
 			elseif delim =~# '^' . close_pat
 				" if on closing pattern, search for opening pattern
-				let [lnum2, cnum2] =  searchpairpos('\C' . open_pat, '', '\C\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!' . close_pat, 'bnW', 'LatexBox_InComment()', 0 , 300)
+				let [lnum2, cnum2] =  searchpairpos('\C' . open_pat, '', '\C\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!' . close_pat, 'bnW', 'LatexBox_InComment()', line('w0') , 200)
 				if a:mode =~ 'h\|i'
 					execute '2match MatchParen /\%(\%' . lnum2 . 'l\%' . cnum2 . 'c' . open_pats[i] . '\|\%' . lnum . 'l\%' . cnum . 'c' . close_pats[i] . '\)/'
 				elseif a:mode =~ 'n\|v\|o'
