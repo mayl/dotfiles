@@ -37,10 +37,10 @@ if !exists('g:LatexBox_not_fold')
                 \ ]
 endif
 
-function s:Detect_fold_level(delim)
+function! s:Detect_fold_level(delim)
     let s:LatexBox_fold_parts = []
     for i in range(len(g:LatexBox_fold_parts))
-        if search('\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{', 'n')
+        if search('\C^\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{', 'n')
             call add(s:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
         end
     endfor
@@ -57,19 +57,19 @@ function! LatexBox_FoldLevel(lnum)
 
     " Fold preamble
     if g:LatexBox_fold_preamble==1
-        if nlnum == lnum && line =~ '\s*\\documentclass'
-            if search('^\s*\\begin{document}', 'n') > nlnum +1
+        if nlnum == lnum && line =~# '\s*\\documentclass'
+            if search('\C^\s*\\begin{document}', 'n') > nlnum +1
                 return ">1"
             else
                 return 0
             endif
-        elseif nlnum > lnum && line =~ '^\s*\\begin{document}'
+        elseif nlnum > lnum && line =~# '^\s*\\begin{document}'
             return 0
         endif
     endif
 
     " reset foldlevel if \frontmatter \mainmatter \backmatter \appendix
-    if line =~ '^\s*\\\%('.join(g:LatexBox_not_fold, '\|') . '\)'
+    if line =~# '^\s*\\\%('.join(g:LatexBox_not_fold, '\|') . '\)'
         return 0
     endif
 
@@ -84,16 +84,16 @@ function! LatexBox_FoldLevel(lnum)
     endif
 
     " Fold environments
-    if line =~ '^\s*\\end\s*{document}'
+    if line =~# '^\s*\\end\s*{document}'
         return 0
     endif
     if g:LatexBox_fold_envs==1
         if nlnum == lnum
             " never fold document env
             if line !~ '^\s*\\\%(begin\|end\)\s*{document}'
-                if line =~ notcomment . notbslash . '\\begin\s*{.\{-}}'
+                if line =~# notcomment . notbslash . '\\begin\s*{.\{-}}'
                     return "a1"
-                elseif line =~ notcomment . notbslash . '\\end\s*{.\{-}}'
+                elseif line =~# notcomment . notbslash . '\\end\s*{.\{-}}'
                     return "s1"
                 endif
             endif
@@ -119,18 +119,18 @@ function! LatexBox_FoldText(lnum)
     let pretext = pretext . printf('%3i', (v:foldend-v:foldstart+1)) . ' lines: '
 
     " Preamble
-    if line =~ '\s*\\documentclass'
+    if line =~# '\s*\\documentclass'
         return pretext . "Preamble" . ' '
     endif
 
     " Parts and sections
-    if line =~ '\\\(\(sub\)*section\|part\|chapter\)'
+    if line =~# '\\\(\(sub\)*section\|part\|chapter\)'
         let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?\s*{\(.\{1,80}\)')
         return pretext . substitute(title[1], '^\(.\)' , '\u\1', '') . ': ' . substitute(title[2], '}\s*$', '', '') . ' '
     endif
 
     " Environments
-    if line =~ '\\begin'
+    if line =~# '\\begin'
         let env = matchstr(line,'\\begin\*\?\s*{\zs.\{-}\ze}')
         if env == 'document'
             return pretext. "Document"
@@ -140,11 +140,11 @@ function! LatexBox_FoldText(lnum)
         let env = '[' . env . ']'
         let i = v:foldstart
         while i <= v:foldend
-            if getline(i) =~ '^\s*\\label'
+            if getline(i) =~# '^\s*\\label'
                 let label = ' (' . matchstr(getline(i),
                             \ '^\s*\\label\s*{\zs.*\ze}') . ') '
             end
-            if getline(i) =~ '^\s*\\caption'
+            if getline(i) =~# '^\s*\\caption'
                 let env .=  ': '
                 let caption = matchstr(getline(i),
                             \ '^\s*\\caption\s*\(\[.*\]\)\?{\zs.\{1,30}')
