@@ -49,57 +49,65 @@ endfunction
 
 " {{{1 LatexBox_FoldLevel
 function! LatexBox_FoldLevel(lnum)
-    let nlnum = nextnonblank(a:lnum)
+    let lnum = a:lnum
+    let nlnum = nextnonblank(lnum)
     let line = getline(nlnum)
-    let baselevel = (g:LatexBox_fold_envs==1)
 	let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
 	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
 
     " Fold preamble
     if g:LatexBox_fold_preamble==1
-        if nlnum == a:lnum && line =~ '\s*\\documentclass'
+        if nlnum == lnum && line =~ '\s*\\documentclass'
             if search('^\s*\\begin{document}', 'n') > nlnum +1
                 return ">1"
             else
                 return 0
             endif
-        elseif nlnum > a:lnum && line =~ '^\s*\\begin{document}'
+        elseif nlnum > lnum && line =~ '^\s*\\begin{document}'
             return 0
         endif
     endif
 
     " reset foldlevel if \frontmatter \mainmatter \backmatter \appendix
     if line =~ '^\s*\\\%('.join(g:LatexBox_not_fold, '\|') . '\)'
-        return baselevel
+        return 0
     endif
 
     " Fold parts and sections
     let delim = matchstr(line, '^\s*\\\zs\%(' . join(g:LatexBox_fold_parts, '\|') . '\)\ze\*\?\s*{')
     if !empty(delim)
-        if  nlnum == a:lnum
-            return ">" . (s:Detect_fold_level(delim)+ baselevel + 1)
+        if  nlnum == lnum
+            return ">" . (s:Detect_fold_level(delim)+ 1)
         else
-            return (s:Detect_fold_level(delim)+ baselevel)
+            return (s:Detect_fold_level(delim))
         endif
     endif
 
     " Fold environments
     if line =~ '^\s*\\end\s*{document}'
-        return baselevel
+        return 0
     endif
     if g:LatexBox_fold_envs==1
-        if nlnum == a:lnum
-            if line =~ '^\s*\\begin\s*{document}'
-                return ">1"
-            elseif line =~ notcomment . notbslash . '\\begin\s*{.\{-}}'
-                return "a1"
-            elseif line =~ notcomment . notbslash . '\\end\s*{.\{-}}'
-                return "s1"
+        if nlnum == lnum
+            " never fold document env
+            if line !~ '^\s*\\\%(begin\|end\)\s*{document}'
+                if line =~ notcomment . notbslash . '\\begin\s*{.\{-}}'
+                    return "a1"
+                elseif line =~ notcomment . notbslash . '\\end\s*{.\{-}}'
+                    return "s1"
+                endif
             endif
         endif
     endif
 
-    return "="
+    " if foldlevel of previous line is known, return it
+    " if not, continue to search using "="
+    let lvl = foldlevel(lnum - 1)
+    if lvl >= 0
+        return lvl
+    else
+        return "="
+    endif
 endfunction
 
 " {{{1 LatexBox_FoldText
@@ -107,16 +115,8 @@ function! LatexBox_FoldText(lnum)
     let line = getline(a:lnum)
 
     " Define pretext
-    let pretext = '    '
-    if v:foldlevel == 1
-        let pretext = '>   '
-    elseif v:foldlevel == 2
-        let pretext = '->  '
-    elseif v:foldlevel == 3
-        let pretext = '--> '
-    elseif v:foldlevel >= 4
-        let pretext = printf('--%i ',v:foldlevel)
-    endif
+    let pretext = '+-' .  repeat('-', v:foldlevel)
+    let pretext = pretext . printf('%3i', (v:foldend-v:foldstart+1)) . ' lines: '
 
     " Preamble
     if line =~ '\s*\\documentclass'
