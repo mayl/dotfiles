@@ -63,7 +63,7 @@ function! LatexBox_FoldLevel(lnum)
             else
                 return 0
             endif
-        elseif nlnum > lnum && line =~# '^\s*\\begin{document}'
+        elseif line =~# '^\s*\\begin{document}'
             return 0
         endif
     endif
