@@ -1,109 +1,5 @@
 " LaTeX Box common functions
 
-" Settings {{{
-
-" Compilation {{{
-
-" g:vim_program {{{
-if !exists('g:vim_program')
-
-	if match(&shell, '/\(bash\|zsh\)$') >= 0
-		let ppid = '$PPID'
-	else
-		let ppid = '$$'
-	endif
-
-	" attempt autodetection of vim executable
-	let g:vim_program = ''
-	let tmpfile = tempname()
-	silent execute '!ps -o command= -p ' . ppid . ' > ' . tmpfile
-	for line in readfile(tmpfile)
-		let line = matchstr(line, '^\S\+\>')
-		if !empty(line) && executable(line)
-			let g:vim_program = line . ' -g'
-			break
-		endif
-	endfor
-	call delete(tmpfile)
-
-	if empty(g:vim_program)
-		if has('gui_macvim')
-			let g:vim_program = '/Applications/MacVim.app/Contents/MacOS/Vim -g'
-		else
-			let g:vim_program = v:progname
-		endif
-	endif
-endif
-" }}}
-
-if !exists('g:LatexBox_latexmk_options')
-	let g:LatexBox_latexmk_options = ''
-endif
-if !exists('g:LatexBox_output_type')
-	let g:LatexBox_output_type = 'pdf'
-endif
-if !exists('g:LatexBox_viewer')
-	let g:LatexBox_viewer = 'xdg-open'
-endif
-if !exists('g:LatexBox_autojump')
-	let g:LatexBox_autojump = 0
-endif
-" }}}
-
-" Completion {{{
-if !exists('g:LatexBox_completion_close_braces')
-	let g:LatexBox_completion_close_braces = 1
-endif
-if !exists('g:LatexBox_bibtex_wild_spaces')
-	let g:LatexBox_bibtex_wild_spaces = 1
-endif
-
-if !exists('g:LatexBox_cite_pattern')
-	"let g:LatexBox_cite_pattern = '\C\\cite\(p\|t\)\=\*\=\(\[[^\]]*\]\)*\_\s*{'
-	"Jpate suggestion for natbib package
-	let g:LatexBox_cite_pattern = '\C\\cite\(p\|t\|author\|year\|yearpart\)\=\*\=\(\[[^\]]*\]\)*\_\s*{'
-endif
-if !exists('g:LatexBox_ref_pattern')
-	let g:LatexBox_ref_pattern = '\C\\v\?\(eq\|page\)\?ref\*\?\_\s*{'
-endif
-
-if !exists('g:LatexBox_completion_environments')
-	let g:LatexBox_completion_environments = [
-		\ {'word': 'itemize',		'menu': 'bullet list' },
-		\ {'word': 'enumerate',		'menu': 'numbered list' },
-		\ {'word': 'description',	'menu': 'description' },
-		\ {'word': 'center',		'menu': 'centered text' },
-		\ {'word': 'figure',		'menu': 'floating figure' },
-		\ {'word': 'table',			'menu': 'floating table' },
-		\ {'word': 'equation',		'menu': 'equation (numbered)' },
-		\ {'word': 'align',			'menu': 'aligned equations (numbered)' },
-		\ {'word': 'align*',		'menu': 'aligned equations' },
-		\ {'word': 'document' },
-		\ {'word': 'abstract' },
-		\ ]
-endif
-
-if !exists('g:LatexBox_completion_commands')
-	let g:LatexBox_completion_commands = [
-		\ {'word': '\begin{' },
-		\ {'word': '\end{' },
-		\ {'word': '\item' },
-		\ {'word': '\label{' },
-		\ {'word': '\ref{' },
-		\ {'word': '\eqref{eq:' },
-		\ {'word': '\cite{' },
-		\ {'word': '\chapter{' },
-		\ {'word': '\section{' },
-		\ {'word': '\subsection{' },
-		\ {'word': '\subsubsection{' },
-		\ {'word': '\paragraph{' },
-		\ {'word': '\nonumber' },
-		\ {'word': '\bibliography' },
-		\ {'word': '\bibliographystyle' },
-		\ ]
-endif
-" }}}
-
 " Vim Windows {{{
 
 " width of vertical splits
@@ -117,10 +13,9 @@ if !exists('g:LatexBox_split_side')
 endif
 
 " }}}
-" }}}
 
 " Filename utilities {{{
-"
+
 function! LatexBox_GetMainTexFile()
 
 	" 1. check for the b:main_tex_file variable
@@ -137,10 +32,13 @@ function! LatexBox_GetMainTexFile()
 			let b:main_tex_file = substitute(linecontents, '.*root\s*=\s*', "", "")
 			let b:main_tex_file = substitute(b:main_tex_file, '\s*$', "", "")
 			let b:main_tex_file = fnamemodify(b:main_tex_file, ":p")
+			if b:main_tex_file !~ '\.tex$'
+				let b:main_tex_file .= '.tex'
+			endif
 			return b:main_tex_file
 		endif
 	endfor
-	
+
 	" 3. scan current file for "\begin{document}"
 	if &filetype == 'tex' && search('\C\\begin\_\s*{document}', 'nw') != 0
 		return expand('%:p')
@@ -293,7 +191,6 @@ function! LatexBox_GetCurrentEnvironment(...)
 
 endfunction
 " }}}
-
 
 " Tex To Tree {{{
 " stores nested braces in a tree structure

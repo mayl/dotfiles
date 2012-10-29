@@ -11,6 +11,54 @@ function! s:SIDWrap(func)
 endfunction
 " }}}
 
+" Compilation {{{
+
+" g:vim_program {{{
+if !exists('g:vim_program')
+
+	if match(&shell, '/\(bash\|zsh\)$') >= 0
+		let ppid = '$PPID'
+	else
+		let ppid = '$$'
+	endif
+
+	" attempt autodetection of vim executable
+	let g:vim_program = ''
+	let tmpfile = tempname()
+	silent execute '!ps -o command= -p ' . ppid . ' > ' . tmpfile
+	for line in readfile(tmpfile)
+		let line = matchstr(line, '^\S\+\>')
+		if !empty(line) && executable(line)
+			let g:vim_program = line . ' -g'
+			break
+		endif
+	endfor
+	call delete(tmpfile)
+
+	if empty(g:vim_program)
+		if has('gui_macvim')
+			let g:vim_program = '/Applications/MacVim.app/Contents/MacOS/Vim -g'
+		else
+			let g:vim_program = v:progname
+		endif
+	endif
+endif
+" }}}
+
+if !exists('g:LatexBox_latexmk_options')
+	let g:LatexBox_latexmk_options = ''
+endif
+if !exists('g:LatexBox_output_type')
+	let g:LatexBox_output_type = 'pdf'
+endif
+if !exists('g:LatexBox_viewer')
+	let g:LatexBox_viewer = 'xdg-open'
+endif
+if !exists('g:LatexBox_autojump')
+	let g:LatexBox_autojump = 0
+endif
+" }}}
+
 
 " dictionary of latexmk PID's (basename: pid)
 let s:latexmk_running_pids = {}
@@ -79,7 +127,7 @@ function! LatexBox_Latexmk(force)
 				\ ' latexmk ' . l:options	. ' ' . shellescape(LatexBox_GetMainTexFile())
 
 	" callback after latexmk is finished
-	let vimcmd = g:vim_program . ' --servername ' . v:servername . ' --remote-expr ' . 
+	let vimcmd = g:vim_program . ' --servername ' . v:servername . ' --remote-expr ' .
 				\ shellescape(callback) . '\(\"' . fnameescape(basename) . '\",$?\)'
 
 	silent execute '! ( ' . vimsetpid . ' ; ( ' . cmd . ' ) ; ' . vimcmd . ' ) >&/dev/null &'
