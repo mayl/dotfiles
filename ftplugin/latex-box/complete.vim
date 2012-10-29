@@ -1,5 +1,7 @@
 " LaTeX Box completion
 
+setlocal omnifunc=LatexBox_Complete
+
 " <SID> Wrap {{{
 function! s:GetSID()
 	return matchstr(expand('<sfile>'), '\zs<SNR>\d\+_\ze.*$')

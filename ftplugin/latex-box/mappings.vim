@@ -19,11 +19,6 @@ map <buffer> <LocalLeader>le :LatexErrors<CR>
 map <buffer> <LocalLeader>lv :LatexView<CR>
 " }}}
 
-" Error Format {{{
-" This assumes we're using the -file-line-error with [pdf]latex.
-setlocal efm=%E%f:%l:%m,%-Cl.%l\ %m,%-G
-" }}}
-
 " TOC {{{
 command! LatexTOC call LatexBox_TOC()
 map <silent> <buffer> <LocalLeader>lt :LatexTOC<CR>
@@ -43,8 +38,6 @@ omap <buffer> i$ :normal vi$<CR>
 omap <buffer> a$ :normal va$<CR>
 " }}}
 
-setlocal omnifunc=LatexBox_Complete
-
 finish
 
 " Suggested mappings:
@@ -54,6 +47,12 @@ map <silent> <buffer> ¶ :call LatexBox_JumpToNextBraces(0)<CR>
 map <silent> <buffer> § :call LatexBox_JumpToNextBraces(1)<CR>
 imap <silent> <buffer> ¶ <C-R>=LatexBox_JumpToNextBraces(0)<CR>
 imap <silent> <buffer> § <C-R>=LatexBox_JumpToNextBraces(1)<CR>
+imap <buffer> [[ 		\begin{
+imap <buffer> ]]		<Plug>LatexCloseCurEnv
+nmap <buffer> <F5>		<Plug>LatexChangeEnv
+vmap <buffer> <F7>		<Plug>LatexWrapSelection
+vmap <buffer> <S-F7>		<Plug>LatexEnvWrapSelection
+imap <buffer> (( 		\eqref{
 " }}}
 
 " vim:fdm=marker:ff=unix:noet:ts=4:sw=4
