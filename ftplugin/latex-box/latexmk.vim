@@ -71,15 +71,8 @@ endfunction
 
 " Callback {{{
 function! s:LatexmkCallback(basename, status)
-	"let pos = getpos('.')
-	if a:status
-		echomsg "latexmk exited with status " . a:status
-	else
-		echomsg "latexmk finished"
-	endif
 	call remove(s:latexmk_running_pids, a:basename)
-	call LatexBox_LatexErrors(g:LatexBox_autojump && a:status, a:basename)
-	"call setpos('.', pos)
+	call LatexBox_LatexErrors(a:status, a:basename)
 endfunction
 " }}}
 
@@ -242,7 +235,7 @@ endfunction
 
 " LatexErrors {{{
 " LatexBox_LatexErrors(jump, [basename])
-function! LatexBox_LatexErrors(jump, ...)
+function! LatexBox_LatexErrors(status, ...)
 	if a:0 >= 1
 		let log = a:1 . '.log'
 	else
@@ -257,11 +250,22 @@ function! LatexBox_LatexErrors(jump, ...)
 		execute 'cd ' . LatexBox_GetTexRoot()
 	endif
 
-	if (a:jump)
+	if (g:LatexBox_autojump)
 		execute 'cfile ' . fnameescape(log)
 	else
 		execute 'cgetfile ' . fnameescape(log)
 	endif
+	" always open quickfix when an error/warning is detected
+	ccl
+	cw
+	redraw!
+
+	if a:status
+		echomsg "latexmk exited with status " . a:status
+	else
+		echomsg "latexmk finished"
+	endif
+
 endfunction
 " }}}
 
