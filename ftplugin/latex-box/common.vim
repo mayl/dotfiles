@@ -1,8 +1,45 @@
 " LaTeX Box common functions
 
 " Error Format {{{
-" This assumes we're using the -file-line-error with [pdf]latex.
-setlocal efm=%E%f:%l:%m,%-Cl.%l\ %m,%-G
+let g:LatexBox_ignore_warnings =['Underfull', 'Overfull', 'specifier changed to']
+setlocal efm=
+" remove default error formats that cause issues
+" http://bugs.debian.org/582100
+setlocal efm-=%f:%l:%m
+setlocal efm-=%f:%l:%c:%m
+" ignore certain common warnings
+for i in range(len(g:LatexBox_ignore_warnings))
+	let warning = escape(substitute(g:LatexBox_ignore_warnings[i], '[\,]', '%\\\\&', 'g'), ' ')
+	exe 'setlocal efm+=%-G%.%#'. warning .'%.%#'
+endfor
+" see |errorformat-LaTeX|
+setlocal efm+=%E!\ LaTeX\ %trror:\ %m,
+			\%E!\ %m,
+			\%+WLaTeX\ %.%#Warning:\ %.%#line\ %l%.%#,
+			\%+W%.%#\ at\ lines\ %l--%*\\d,
+			\%WLaTeX\ %.%#Warning:\ %m,
+			\%Cl.%l\ %m,
+			\%+C\ \ %m.,
+			\%+C%.%#-%.%#,
+			\%+C%.%#[]%.%#,
+			\%+C[]%.%#,
+			\%+C%.%#%[{}\\]%.%#,
+			\%+C<%.%#>%.%#,
+			\%C\ \ %m,
+			\%-GSee\ the\ LaTeX%m,
+			\%-GType\ \ H\ <return>%m,
+			\%-G\ ...%.%#,
+			\%-G%.%#\ (C)\ %.%#,
+			\%-G(see\ the\ transcript%.%#),
+			\%-G\\s%#,
+			\%+O(%f)%r,
+			\%+P(%f%r,
+			\%+P\ %\\=(%f%r,
+			\%+P%*[^()](%f%r,
+			\%+P[%\\d%[^()]%#(%f%r,
+			\%+Q)%r,
+			\%+Q%*[^()])%r,
+			\%+Q[%\\d%*[^()])%r
 " }}}
 
 " Vim Windows {{{
