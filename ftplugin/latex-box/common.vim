@@ -65,7 +65,8 @@ if !exists('g:LatexBox_ref_pattern')
 	let g:LatexBox_ref_pattern = '\C\\v\?\(eq\|page\)\?ref\*\?\_\s*{'
 endif
 
-" only accept tex file when in completion searching
+" define input filename extentions
+" what if no file type extention ? Not allowed!!!
 if !exists('g:LatexBox_input_filename_pattern')
 	let g:LatexBox_input_filename_pattern = '
 				\[^}]*\.tex'
