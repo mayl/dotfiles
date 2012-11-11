@@ -2,25 +2,34 @@
 
 " Error Format {{{
 " This assumes we're using the -file-line-error with [pdf]latex.
-let g:LatexBox_ignore_warnings =['Underfull', 'Overfull', 'specifier changed to']
+if !exists("g:LatexBox_ignore_warnings")
+	let g:LatexBox_show_warnings = 1
+	let g:LatexBox_ignore_warnings =['Underfull', 'Overfull', 'specifier changed to']
+endif
+
+
 
 " ignore certain common warnings
-for i in range(len(g:LatexBox_ignore_warnings))
-	let warning = escape(substitute(g:LatexBox_ignore_warnings[i], '[\,]', '%\\\\&', 'g'), ' ')
-	if i==0
-		let opr = '='
-	else
-		let opr = '+='
-	endif
-	exe 'setlocal efm' . opr . '%-G%.%#'. warning .'%.%#'
-endfor
+if g:LatexBox_show_warnings
+	for i in range(len(g:LatexBox_ignore_warnings))
+		let warning = escape(substitute(g:LatexBox_ignore_warnings[i], '[\,]', '%\\\\&', 'g'), ' ')
+		if i==0
+			let opr = '='
+		else
+			let opr = '+='
+		endif
+		exe 'setlocal efm' . opr . '%-G%.%#'. warning .'%.%#'
+	endfor
+end
 " see |errorformat-LaTeX|
 setlocal efm+=%E!\ LaTeX\ %trror:\ %m
 setlocal efm+=%E!\ %m
 setlocal efm+=%E%f:%l:\ %m
-setlocal efm+=%+WLaTeX\ %.%#Warning:\ %.%#line\ %l%.%#
-setlocal efm+=%+W%.%#\ at\ lines\ %l--%*\\d
-setlocal efm+=%+WLaTeX\ %.%#Warning:\ %m
+if g:LatexBox_show_warnings
+	setlocal efm+=%+WLaTeX\ %.%#Warning:\ %.%#line\ %l%.%#
+	setlocal efm+=%+W%.%#\ at\ lines\ %l--%*\\d
+	setlocal efm+=%+WLaTeX\ %.%#Warning:\ %m
+endif
 "ignore unmatched lines
 setlocal efm+=%-G\\s%#
 setlocal efm+=%-G%.%#

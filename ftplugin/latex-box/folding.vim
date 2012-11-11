@@ -2,10 +2,10 @@
 "
 " Options
 " g:LatexBox_Folding       - Turn on/off folding
-" g:LatexBox_fold_parts    - Define which sections and parts to fold
 " g:LatexBox_fold_envs     - Turn on/off folding of environments
 " g:LatexBox_fold_preamble - Turn on/off folding of preamble
-"
+" g:LatexBox_fold_parts    - Define which sections and parts to fold
+" g:LatexBox_not_fold      - Define what to not fold
 
 " {{{1 Set options
 if exists('g:LatexBox_Folding')
