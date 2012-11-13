@@ -64,38 +64,39 @@ function! LatexBox_FoldLevel(lnum)
                 return 0
             endif
         elseif line =~# '^\s*\\begin{document}'
-            return 0
+            if nlnum==lnum
+                return ">". g:LatexBox_fold_envs
+            else
+                return 0
+            endif
         endif
     endif
 
     " reset foldlevel if \frontmatter \mainmatter \backmatter \appendix
     if line =~# '^\s*\\\%('.join(g:LatexBox_not_fold, '\|') . '\)'
-        return 0
+        return g:LatexBox_fold_envs
     endif
 
     " Fold parts and sections
     let delim = matchstr(line, '^\s*\\\zs\%(' . join(g:LatexBox_fold_parts, '\|') . '\)\ze\*\?\s*{')
     if !empty(delim)
         if  nlnum == lnum
-            return ">" . (s:Detect_fold_level(delim)+ 1)
+            return ">" . (s:Detect_fold_level(delim)+ 1 + g:LatexBox_fold_envs)
         else
-            return (s:Detect_fold_level(delim))
+            return (s:Detect_fold_level(delim) + g:LatexBox_fold_envs)
         endif
     endif
 
     " Fold environments
     if line =~# '^\s*\\end\s*{document}'
-        return 0
+        return g:LatexBox_fold_envs
     endif
     if g:LatexBox_fold_envs==1
         if nlnum == lnum
-            " never fold document env
-            if line !~ '^\s*\\\%(begin\|end\)\s*{document}'
-                if line =~# notcomment . notbslash . '\\begin\s*{.\{-}}'
-                    return "a1"
-                elseif line =~# notcomment . notbslash . '\\end\s*{.\{-}}'
-                    return "s1"
-                endif
+            if line =~# notcomment . notbslash . '\\begin\s*{.\{-}}'
+                return "a1"
+            elseif line =~# notcomment . notbslash . '\\end\s*{.\{-}}'
+                return "s1"
             endif
         endif
     endif
