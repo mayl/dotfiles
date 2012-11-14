@@ -78,7 +78,7 @@ function! LatexBox_FoldLevel(lnum)
     endif
 
     " Fold parts and sections
-    let delim = matchstr(line, '^\s*\\\zs\%(' . join(g:LatexBox_fold_parts, '\|') . '\)\ze\*\?\s*{')
+    let delim = matchstr(line, '^\s*\\\zs\%(' . join(g:LatexBox_fold_parts, '\|') . '\)\ze\*\?\>')
     if !empty(delim)
         if  nlnum == lnum
             return ">" . (s:Detect_fold_level(delim)+ 1 + g:LatexBox_fold_envs)
@@ -126,8 +126,15 @@ function! LatexBox_FoldText(lnum)
 
     " Parts and sections
     if line =~# '\\\(\(sub\)*section\|part\|chapter\)'
+        let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?\s*\[\(.\{1,80}\)')
+        if !empty(title)
+            return pretext . substitute(title[1], '^\(.\)' , '\u\1', '') . ': ' . substitute(title[2], '\].\{-}$', '', '') . ' '
+        endif
         let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?\s*{\(.\{1,80}\)')
-        return pretext . substitute(title[1], '^\(.\)' , '\u\1', '') . ': ' . substitute(title[2], '}\s*$', '', '') . ' '
+        if !empty(title)
+            return pretext . substitute(title[1], '^\(.\)' , '\u\1', '') . ': ' . substitute(title[2], '}.\{-}$', '', '') . ' '
+        endif
+        return pretext. line. ' '
     endif
 
     " Environments
