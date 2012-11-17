@@ -57,6 +57,9 @@ endif
 if !exists('g:LatexBox_autojump')
 	let g:LatexBox_autojump = 0
 endif
+if ! exists("g:LatexBox_quickfix")
+	let g:LatexBox_quickfix = 1
+endif
 " }}}
 
 
@@ -255,10 +258,13 @@ function! LatexBox_LatexErrors(status, ...)
 	else
 		execute 'cgetfile ' . fnameescape(log)
 	endif
-	" always open quickfix when an error/warning is detected
-	ccl
-	cw
-	redraw!
+
+	if(g:LatexBox_quickfix==1)
+		" always open quickfix when an error/warning is detected
+		ccl
+		cw
+		redraw!
+	endif
 
 	if a:status
 		echomsg "latexmk exited with status " . a:status

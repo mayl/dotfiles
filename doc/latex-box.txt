@@ -383,6 +383,10 @@ Compilation ~
 
 	Viewer application for the output file, e.g., "xpdf".
 
+*g:LatexBox_quickfix*		Default: 1
+
+	If set to 0, disable automatic quickfix window.
+
 *g:LatexBox_autojump*		Default: 0
 
 	Automatically jump to first error after calling latexmk.
