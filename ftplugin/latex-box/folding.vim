@@ -58,12 +58,12 @@ function! LatexBox_FoldLevel(lnum)
     " Fold preamble
     if g:LatexBox_fold_preamble==1
         if nlnum == lnum && line =~# '\s*\\documentclass'
-            if search('\C^\s*\\begin{document}', 'n') > nlnum +1
+            if search('\C^\s*\\begin\s*{\s*document\s*}', 'n') > nlnum +1
                 return ">1"
             else
                 return 0
             endif
-        elseif line =~# '^\s*\\begin{document}'
+        elseif line =~# '^\s*\\begin\s*{\s*document\s*}'
             if nlnum==lnum
                 return ">". g:LatexBox_fold_envs
             else
