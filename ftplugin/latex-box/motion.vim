@@ -420,7 +420,7 @@ function! LatexBox_TOC()
 	endfor
 	call append('$', ["", "<Esc>/q: close", "<Space>: jump", "<Enter>: jump and close"])
 
-	0delete
+	0delete _
 
 	" syntax
 	syntax match helpText /^<.*/
