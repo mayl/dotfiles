@@ -64,7 +64,7 @@ let maplocalleader="\\"
 nnoremap <silent><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 nnoremap <silent><S-Space> @=(foldlevel('.')?'zA':"\<Space>")<CR>
 vnoremap <Space> zf
-nnoremap <leader>z gg<S-v><S-g>z<S-o>``
+nnoremap <leader>z gg<S-v><S-g>z<S-o>`` 
 
 "fix search, map ,<space> to clear hl
 nnoremap / /\v
