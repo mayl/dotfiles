@@ -10,7 +10,7 @@ if has ('gui_running')
 	colorscheme base16
 
 "font
-	set guifont=Source\ Code\ Pro\ Heavy\ 10
+	set guifont=Source\ Code\ Pro\ 10
 endif
 
 "GUI

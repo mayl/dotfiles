@@ -62,7 +62,7 @@ alias gofmt="gofmt -w"
 alias t="python ~/dotfiles/t/t.py --task-dir ~/Dropbox/tasks --list tasks"
 
 #deal with dumbass vim bug
-alias gvim="gvim -f"
+#alias gvim="gvim -f"
 alias nautilus="nautilus ."
 #other aliases
 alias open="xdg-open"
