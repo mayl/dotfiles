@@ -8,12 +8,16 @@ if has ('gui_running')
 	set background=dark
 	set t_Co=256
 	colorscheme base16
+"window size
+	set lines=100
+	set columns=90
 
 "font
 	set guifont=Source\ Code\ Pro\ 10
 endif
 
 "GUI
+set guioptions-=m
 set guioptions-=T 
 set guioptions-=r
 set guioptions-=R
