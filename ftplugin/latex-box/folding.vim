@@ -2,10 +2,11 @@
 "
 " Options
 " g:LatexBox_Folding       - Turn on/off folding
-" g:LatexBox_fold_envs     - Turn on/off folding of environments
 " g:LatexBox_fold_preamble - Turn on/off folding of preamble
 " g:LatexBox_fold_parts    - Define which sections and parts to fold
+" g:LatexBox_fold_envs     - Turn on/off folding of environments
 " g:LatexBox_not_fold      - Define what to not fold
+"
 
 " {{{1 Set options
 if exists('g:LatexBox_Folding')
@@ -16,9 +17,6 @@ endif
 if !exists('g:LatexBox_fold_preamble')
     let g:LatexBox_fold_preamble=1
 endif
-if !exists('g:LatexBox_fold_envs')
-    let g:LatexBox_fold_envs=1
-endif
 if !exists('g:LatexBox_fold_parts')
     let g:LatexBox_fold_parts=[
                 \ "part",
@@ -27,6 +25,9 @@ if !exists('g:LatexBox_fold_parts')
                 \ "subsection",
                 \ "subsubsection"
                 \ ]
+endif
+if !exists('g:LatexBox_fold_envs')
+    let g:LatexBox_fold_envs=1
 endif
 if !exists('g:LatexBox_not_fold')
     let g:LatexBox_not_fold=[
@@ -52,8 +53,8 @@ function! LatexBox_FoldLevel(lnum)
     let lnum = a:lnum
     let nlnum = nextnonblank(lnum)
     let line = getline(nlnum)
-	let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
-	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
+    let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
+    let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
 
     " Fold preamble
     if g:LatexBox_fold_preamble==1
@@ -72,19 +73,20 @@ function! LatexBox_FoldLevel(lnum)
         endif
     endif
 
-    " reset foldlevel if \frontmatter \mainmatter \backmatter \appendix
+    " Reset foldlevel if \frontmatter \mainmatter \backmatter \appendix
     if line =~# '^\s*\\\%('.join(g:LatexBox_not_fold, '\|') . '\)'
         return g:LatexBox_fold_envs
     endif
 
     " Fold parts and sections
-    let delim = matchstr(line, '^\s*\\\zs\%(' . join(g:LatexBox_fold_parts, '\|') . '\)\ze\*\?\>')
+    let delim = matchstr(line, '^\s*\\\zs\%('
+                \ . join(g:LatexBox_fold_parts, '\|') . '\)\ze\*\?\>')
     if !empty(delim)
-        if  nlnum == lnum
-            return ">" . (s:Detect_fold_level(delim)+ 1 + g:LatexBox_fold_envs)
-        else
-            return (s:Detect_fold_level(delim) + g:LatexBox_fold_envs)
-        endif
+       if  nlnum == lnum
+           return ">" . (s:Detect_fold_level(delim) + 1 + g:LatexBox_fold_envs)
+       else
+           return (s:Detect_fold_level(delim) + g:LatexBox_fold_envs)
+       endif
     endif
 
     " Fold environments
@@ -101,14 +103,8 @@ function! LatexBox_FoldLevel(lnum)
         endif
     endif
 
-    " if foldlevel of previous line is known, return it
-    " if not, continue to search using "="
-    let lvl = foldlevel(lnum - 1)
-    if lvl >= 0
-        return lvl
-    else
-        return "="
-    endif
+    " Return foldlevel of previous line
+    return "="
 endfunction
 
 " {{{1 LatexBox_FoldText
