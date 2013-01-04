@@ -38,39 +38,31 @@ if !exists('g:LatexBox_not_fold')
                 \ ]
 endif
 
-function! s:Detect_fold_level(delim)
-    let s:LatexBox_fold_parts = []
-    for i in range(len(g:LatexBox_fold_parts))
-        if search('\C^\\' . g:LatexBox_fold_parts[i] . '\*\?\s*{', 'n')
-            call add(s:LatexBox_fold_parts, g:LatexBox_fold_parts[i])
-        end
-    endfor
-    return index(s:LatexBox_fold_parts, a:delim)
-endfunction
-
 " {{{1 LatexBox_FoldLevel
 function! LatexBox_FoldLevel(lnum)
-    let lnum = a:lnum
-    let nlnum = nextnonblank(lnum)
-    let line = getline(nlnum)
-    let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
-    let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
+    let lnum  = a:lnum
+    let line  = getline(lnum)
+    let nline = getline(lnum + 1)
 
     " Fold preamble
     if g:LatexBox_fold_preamble==1
-        if nlnum == lnum && line =~# '\s*\\documentclass'
-            if search('\C^\s*\\begin\s*{\s*document\s*}', 'n') > nlnum +1
-                return ">1"
-            else
-                return 0
-            endif
+        if line =~# '\s*\\documentclass'
+            return ">1"
+        elseif nline =~# '^\s*\\begin\s*{\s*document\s*}'
+            return "<1"
         elseif line =~# '^\s*\\begin\s*{\s*document\s*}'
-            if nlnum==lnum
-                return ">". g:LatexBox_fold_envs
-            else
-                return 0
-            endif
+            return "0"
         endif
+    endif
+
+    " Never fold \end{document}
+    if nline =~ '\s*\\end{document}'
+        return "<1"
+    endif
+
+    " Fake sections
+    if line  =~ '^\s*% Fakesection'
+        return ">1"
     endif
 
     " Reset foldlevel if \frontmatter \mainmatter \backmatter \appendix
@@ -79,27 +71,22 @@ function! LatexBox_FoldLevel(lnum)
     endif
 
     " Fold parts and sections
-    let delim = matchstr(line, '^\s*\\\zs\%('
-                \ . join(g:LatexBox_fold_parts, '\|') . '\)\ze\*\?\>')
-    if !empty(delim)
-       if  nlnum == lnum
-           return ">" . (s:Detect_fold_level(delim) + 1 + g:LatexBox_fold_envs)
-       else
-           return (s:Detect_fold_level(delim) + g:LatexBox_fold_envs)
-       endif
-    endif
+    let level = 1
+    for part in g:LatexBox_fold_parts
+        if line  =~ '^\s*\\' . part . '\*\?{'
+            return ">" . level
+        endif
+        let level += 1
+    endfor
 
     " Fold environments
-    if line =~# '^\s*\\end\s*{document}'
-        return g:LatexBox_fold_envs
-    endif
+    let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
+    let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
     if g:LatexBox_fold_envs==1
-        if nlnum == lnum
-            if line =~# notcomment . notbslash . '\\begin\s*{.\{-}}'
-                return "a1"
-            elseif line =~# notcomment . notbslash . '\\end\s*{.\{-}}'
-                return "s1"
-            endif
+        if line =~# notcomment . notbslash . '\\begin\s*{.\{-}}'
+            return "a1"
+        elseif line =~# notcomment . notbslash . '\\end\s*{.\{-}}'
+            return "s1"
         endif
     endif
 
