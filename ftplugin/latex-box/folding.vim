@@ -12,7 +12,7 @@
 if exists('g:LatexBox_Folding')
     setl foldmethod=expr
     setl foldexpr=LatexBox_FoldLevel(v:lnum)
-    setl foldtext=LatexBox_FoldText(v:foldstart)
+    setl foldtext=LatexBox_FoldText()
 endif
 if !exists('g:LatexBox_fold_preamble')
     let g:LatexBox_fold_preamble=1
@@ -94,61 +94,120 @@ function! LatexBox_FoldLevel(lnum)
     return "="
 endfunction
 
-" {{{1 LatexBox_FoldText
-function! LatexBox_FoldText(lnum)
-    let line = getline(a:lnum)
+" {{{1 LatexBox_FoldText help functions
+function! s:LabelEnv()
+    let i = v:foldend
+    while i >= v:foldstart
+        if getline(i) =~ '^\s*\\label'
+            return matchstr(getline(i), '^\s*\\label{\zs.*\ze}')
+        end
+        let i -= 1
+    endwhile
+    return ""
+endfunction
 
-    " Define pretext
-    let pretext = '+-' .  repeat('-', v:foldlevel)
-    let pretext = pretext . printf('%3i', (v:foldend-v:foldstart+1)) . ' lines: '
+function! s:CaptionEnv()
+    let i = v:foldend
+    while i >= v:foldstart
+        if getline(i) =~ '^\s*\\caption'
+            return matchstr(getline(i), '^\s*\\caption\(\[.*\]\)\?{\zs.\+')
+        end
+        let i -= 1
+    endwhile
+    return ""
+endfunction
 
-    " Preamble
-    if line =~# '\s*\\documentclass'
-        return pretext . "Preamble" . ' '
-    endif
+function! s:CaptionTable()
+    let i = v:foldstart
+    while i <= v:foldend
+        if getline(i) =~ '^\s*\\caption'
+            return matchstr(getline(i), '^\s*\\caption\(\[.*\]\)\?{\zs.\+')
+        end
+        let i += 1
+    endwhile
+    return ""
+endfunction
 
-    " Parts and sections
-    if line =~# '\\\(\(sub\)*section\|part\|chapter\)'
-        let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?\s*\[\(.\{1,80}\)')
-        if !empty(title)
-            return pretext . substitute(title[1], '^\(.\)' , '\u\1', '') . ': ' . substitute(title[2], '\].\{-}$', '', '') . ' '
-        endif
-        let title = matchlist(line, '^\s*\\\(\%(sub\)*section\|part\|chapter\)\*\?\s*{\(.\{1,80}\)')
-        if !empty(title)
-            return pretext . substitute(title[1], '^\(.\)' , '\u\1', '') . ': ' . substitute(title[2], '}.\{-}$', '', '') . ' '
-        endif
-        return pretext. line. ' '
-    endif
+function! s:CaptionFrame(line)
+    " Test simple variant first
+    let caption = matchstr(a:line,'\\begin\*\?{.*}{\zs.\+')
 
-    " Environments
-    if line =~# '\\begin'
-        let env = matchstr(line,'\\begin\*\?\s*{\zs.\{-}\ze}')
-        if env == 'document'
-            return pretext. "Document"
-        endif
-        let label = ' '
-        let caption = ''
-        let env = '[' . env . ']'
+    if ! caption == ''
+        return caption
+    else
         let i = v:foldstart
         while i <= v:foldend
-            if getline(i) =~# '^\s*\\label'
-                let label = ' (' . matchstr(getline(i),
-                            \ '^\s*\\label\s*{\zs.*\ze}') . ') '
-            end
-            if getline(i) =~# '^\s*\\caption'
-                let env .=  ': '
-                let caption = matchstr(getline(i),
-                            \ '^\s*\\caption\s*\(\[.*\]\)\?{\zs.\{1,30}')
-                let caption = substitute(caption, '}\s*$', '','')
-
+            if getline(i) =~ '^\s*\\frametitle'
+                return matchstr(getline(i),
+                            \ '^\s*\\frametitle\(\[.*\]\)\?{\zs.\+')
             end
             let i += 1
         endwhile
-        return pretext . env . caption . label
+
+        return ""
+    endif
+endfunction
+
+" {{{1 LatexBox_FoldText
+function! LatexBox_FoldText()
+    " Initialize
+    let line = getline(v:foldstart)
+    let nlines = v:foldend - v:foldstart + 1
+    let level = ''
+    let title = 'Not defined'
+
+    " Fold level
+    let level = strpart(repeat('-', v:foldlevel-1) . '*',0,3)
+    if v:foldlevel > 3
+        let level = strpart(level, 1) . v:foldlevel
+    endif
+    let level = printf('%-3s', level)
+
+    " Preamble
+    if line =~ '\s*\\documentclass'
+        let title = "Preamble"
     endif
 
-    " Not defined
-    return "Fold text not defined"
+    " Parts, sections and fake sections
+    if line =~ '\\\(\(sub\)*section\|part\|chapter\)'
+        let title =  matchstr(line,
+                    \ '^\s*\\\(\(sub\)*section\|part\|chapter\)\*\?{\zs.*\ze}')
+    elseif line =~ 'Fakesection:'
+        let title = matchstr(line, 'Fakesection:\s*\zs.*')
+    elseif line =~ 'Fakesection'
+        let title = "Fakesection"
+        return title
+    endif
+
+    " Environments
+    if line =~ '\\begin'
+        let env = matchstr(line,'\\begin\*\?{\zs\w*\*\?\ze}')
+        if env == 'frame'
+            let label = ''
+            let caption = s:CaptionFrame(line)
+        elseif env == 'table'
+            let label = s:LabelEnv()
+            let caption = s:CaptionTable()
+        else
+            let label = s:LabelEnv()
+            let caption = s:CaptionEnv()
+        endif
+        if caption . label == ''
+            let title = env
+        elseif label == ''
+            let title = printf('%-12s%s', env . ':',
+                        \ substitute(caption, '}\s*$', '',''))
+        elseif caption == ''
+            let title = printf('%-12s%57s', env, '(' . label . ')')
+        else
+            let title = printf('%-12s%-35s %-21s', env . ':',
+                        \ strpart(substitute(caption, '}\s*$', '',''),0,35),
+                        \ '(' . label . ')')
+        endif
+    endif
+
+    let title = strpart(title, 0, 68)
+    return printf('%-3s %-68s #%5d', level, title, nlines)
 endfunction
 
 " {{{1 Footer
