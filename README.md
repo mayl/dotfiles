@@ -40,7 +40,7 @@ Add `Bundle 'LaTeX-Box-Team/LaTeX-Box'` to your ~/.vimrc and run
 `:BundleInstall` in a vim buffer. Add `!` to the command to update.
 
 ### With pathogen
-_https://github.com/tpope/vim-pathogen
+_https://github.com/tpope/vim-pathogen_
 
 Add the LaTeX-Box bundle to your bundle directory, for instance with `git
 clone`.  This will typically be enough:
