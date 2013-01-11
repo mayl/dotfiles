@@ -72,10 +72,6 @@ if !exists('g:LatexBox_input_filename_pattern')
 				\[^}]*\.tex'
 endif
 
-" These three vars are just for completion of inline eq in numbered eq env.
-" g:LatexBox_doc_structure_pattern
-" g:LatexBox_numbered_eq_end_pattern
-" g:LatexBox_numbered_eq_begin_pattern 
 if !exists('g:LatexBox_doc_structure_pattern')
 	let g:LatexBox_doc_structure_pattern = '
 				\\\begin\s*{document}\|
@@ -84,7 +80,6 @@ if !exists('g:LatexBox_doc_structure_pattern')
 				\\\subsection\*\?\s*{\|
 				\\\subsubsection\*\?\s*{'
 endif
-
 
 if !exists('g:LatexBox__eq_env_patterns')
 	let g:LatexBox_eq_env_patterns = 'equation\|gather\|multiline\|align\|flalign\|alignat\|eqnarray'

@@ -77,7 +77,6 @@ function! LatexBox_Complete(findstart, base)
 		elseif cursor_single_dollar >= 0
 			" complete inline eq in numbered env by ASSUMING \begin eq and \end eq are in diff lines
 
-			let inline0numbered1 = 0
 			let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
 			while line_pos > 0
 				let line = getline(line_pos)
@@ -88,37 +87,32 @@ function! LatexBox_Complete(findstart, base)
 					echomsg 'meet doc pattern or \end{eq_env}, inline completion'
 					echomsg 'line' . line_pos . ': ' . line
 
-					let inline0numbered1 = 0
+					let g:dollar_bracket_parenthesis_empty = '$'
+					let pos = cursor_single_dollar
+
 					break
 				elseif line =~ notcomment . '\\begin\s*{\(' . g:LatexBox_eq_env_patterns . '\)\*\?}'
 					echomsg 'meet \begin{eq_env}, completion in eq env'
 					echomsg 'line' . line_pos . ': ' . line
+
+					let g:dollar_bracket_parenthesis_empty = ''
+					let pos = cursor_single_dollar-1
 					
-					let inline0numbered1 = 1
 					break
 				endif
 
 				let line_pos -= 1
 			endwhile
 
-			if inline0numbered1 == 0
-				" inline-equation completion, 
-				let s:completion_type = 'inline-equation'
-				let g:dollar_bracket_parenthesis = '$'
-				let pos = cursor_single_dollar
-			elseif inline0numbered1 == 1
-				" Start with $ to write inline eq in numbered env, 
-				" but leave eq without $ after completion.
-				let s:completion_type = 'inline2numbered-equation'
-				let pos = cursor_single_dollar-1
-			endif
+			let s:completion_type = 'inline-equation'
+
 		elseif cursor_open_parenthesis >= 0
 			let s:completion_type = 'inline-equation'
-			let g:dollar_bracket_parenthesis = '\)'
+			let g:dollar_bracket_parenthesis_empty = '\)'
 			let pos = cursor_open_parenthesis
 		elseif cursor_open_bracket >= 0
 			let s:completion_type = 'inline-equation'
-			let g:dollar_bracket_parenthesis = '\]'
+			let g:dollar_bracket_parenthesis_empty = '\]'
 			let pos = cursor_open_bracket
 		else
 			let s:completion_type = 'command'
@@ -172,8 +166,6 @@ function! LatexBox_Complete(findstart, base)
 			let suggestions = LatexBox_BibComplete(a:base)
 		elseif s:completion_type == 'inline-equation'
 			let suggestions = s:CompleteInlineEquations(a:base)
-		elseif s:completion_type == 'inline2numbered-equation'
-			let suggestions = s:CompleteInline2numberedEquations(a:base)
 		endif
 		if !has('gui_running')
 			redraw!
@@ -375,6 +367,7 @@ function! s:CompleteLabels(regex, ...)
 endfunction
 " }}}
 
+
 " Complete inline euqation{{{ 
 " the optional argument is the file name to be searched
 function! s:CompleteInlineEquations(regex, ...)
@@ -389,146 +382,67 @@ function! s:CompleteInlineEquations(regex, ...)
 		return ''
 	endif
 
-	let inlinePattern1 = '\$\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '[^$]*\)\$'
-	let inlinePattern2 = '\\(\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '.*\)\\)'
- 	
+	if g:dollar_bracket_parenthesis_empty == ''
+		let inlinePattern1 = '\$\s*\(' . escape(substitute(a:regex[1:], '^\s\+', '', ""), '\.*^') . '[^$]*\)\$'
+		let inlinePattern2 = '\\(\s*\(' . escape(substitute(a:regex[1:], '^\s\+', '', ""), '\.*^') . '.*\)\\)'
+	else
+		let inlinePattern1 = '\$\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '[^$]*\)\$'
+		let inlinePattern2 = '\\(\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '.*\)\\)'
+	endif
+
 	let suggestions = []
 	let lineNum = 0
 	for line in readfile(file)
 		let lineNum = lineNum + 1
 
-		" search for inline equations
-		" additional space between $ and cursor is allowed before c-x c-o are pressed, but removed in 'matches'
-
-		" find all inline eqs in one line
-		" case 1: $ ... $ 
-		let start = 0
- 		while 1
-			let matches = matchlist(line, inlinePattern1, start)
- 			if !empty(matches)
-
- 				" show eq line number
- 				let entry = {'word': matches[1], 'menu': '(' . lineNum . ')'}
-
- 				if g:LatexBox_completion_close_braces && !s:NextCharsMatch('^\s\{,3}\$')
- 					let entry = copy(entry)
- 					let entry.abbr = entry.word
- 					let entry.word = entry.word . g:dollar_bracket_parenthesis
- 				endif
- 				call add(suggestions, entry)
-
-				" update start
-				let start = matchend(line, inlinePattern1, start)
-			else
-				break
- 			endif
-		endwhile
-
-		" case 2: \( .. \)
-		let start = 0
- 		while 1
-			let matches = matchlist(line, inlinePattern2, start)
- 			if !empty(matches)
-
- 				" show eq line number
- 				let entry = {'word': matches[1], 'menu': '(' . lineNum . ')'}
-
- 				if g:LatexBox_completion_close_braces && !s:NextCharsMatch('^\s\{,3}\$')
- 					let entry = copy(entry)
- 					let entry.abbr = entry.word
- 					let entry.word = entry.word . g:dollar_bracket_parenthesis
- 				endif
- 				call add(suggestions, entry)
-
-				" update start
-				let start = matchend(line, inlinePattern2, start)
-			else
-				break
- 			endif
-		endwhile
-		" end of searching inline eq
+		let suggestions += s:mathlist(line,inlinePattern1 , lineNum) +  s:mathlist( line,inlinePattern2, lineNum)
 
  		" search for included files
- 		let included_file = matchstr(line, '^\\@input{\zs' . g:LatexBox_input_filename_pattern . '\ze}')
-" 		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
+ 		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
  		if included_file != ''
  			let included_file = LatexBox_kpsewhich(included_file)
  			call extend(suggestions, s:CompleteInlineEquations(a:regex, included_file))
  		endif
  	endfor
 
- 	return sort(suggestions)
- 
+"	return filter(copy(suggestions), 'index(suggestions, v:val, v:key+1)==-1') 
+	return suggestions
 endfunction
 " }}}
 
-" Complete 'inline' eq in a numbered env {{{
-function! s:CompleteInline2numberedEquations(regex, ...)
 
-	if a:0 == 0
-		let file = LatexBox_GetMainTexFile()
-	else
-		let file = a:1
-	endif
+fun s:mathlist(line,inlinePattern1, lineNum )
+	let start = 0
+	let suggestions = []
+	while 1
+		let matches = matchlist(a:line, a:inlinePattern1, start)
+		if !empty(matches)
 
-	if empty(glob(file, 1))
-		return ''
-	endif
+			" show eq line number
+			let entry = {'word': matches[1], 'menu': '(' . a:lineNum . ')'}
 
-	" a little different from CompleteInlineEquations: a:regex[1:], to remove $
-	let inlinePattern1 = '\$\s*\(' . escape(substitute(a:regex[1:], '^\s\+', '', ""), '\.*^') . '[^$]*\)\$'
-	let inlinePattern2 = '\\(\s*\(' . escape(substitute(a:regex[1:], '^\s\+', '', ""), '\.*^') . '.*\)\\)'
-
- 	let suggestions = []
-	let lineNum = 0
-	for line in readfile(file)
-		let lineNum = lineNum + 1
-
-
-		" case 1
-		let start = 0
-		while 1
-			let matches = matchlist(line, inlinePattern1, start) 
-
-	 		if !empty(matches)
- 				let entry = {'word': matches[1], 'menu': '(' . lineNum . ')'}
-				" diff from CompleteInlineEquations, no '$' added
-	 			call add(suggestions, entry)
-				let start = matchend(line, inlinePattern1, start)
-			else
-				break
+			"if g:LatexBox_completion_close_braces && !s:NextCharsMatch('^\s\{,3}' . g:dollar_bracket_parenthesis_empty)
+			if g:LatexBox_completion_close_braces 
+			" if g:LatexBox_completion_eq_env_close
+				" !s:NextCharsMatch('^\s*\\)') " \(\$\|\\]\|\\)\)
+				let entry = copy(entry)
+				let entry.abbr = entry.word
+				let entry.word = entry.word . g:dollar_bracket_parenthesis_empty
 			endif
-		endwhile
+			call add(suggestions, entry)
 
-		" case 2
-		let start = 0
-		while 1
-			let matches = matchlist(line, inlinePattern2, start) 
+			" update start
+			let start = matchend(a:line, a:inlinePattern1, start)
+		else
+			break
+		endif
+	endwhile
 
-	 		if !empty(matches)
- 				let entry = {'word': matches[1], 'menu': '(' . lineNum . ')'}
-				" diff from CompleteInlineEquations, no '$' added
-	 			call add(suggestions, entry)
-				let start = matchend(line, inlinePattern2, start)
-			else
-				break
-			endif
-		endwhile
+	return suggestions
+endf
 
 
- 		" search for included files
-" 		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
-		let included_file = matchstr(line, '^\\@input{\zs' . g:LatexBox_input_filename_pattern . '\ze}')
- 		if included_file != ''
- 			let included_file = LatexBox_kpsewhich(included_file)
- 			call extend(suggestions, s:CompleteInlineEquations(a:regex, included_file))
- 		endif
- 	endfor
 
- 	return sort(suggestions)
- 
-endfunction
-" }}}
 
 " Close Current Environment {{{
 function! s:CloseCurEnv()
