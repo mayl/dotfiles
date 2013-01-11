@@ -21,12 +21,10 @@ if !exists('g:LatexBox_bibtex_wild_spaces')
 endif
 
 if !exists('g:LatexBox_cite_pattern')
-	"let g:LatexBox_cite_pattern = '\C\\cite\(p\|t\)\=\*\=\(\[[^\]]*\]\)*\_\s*{'
-	"Jpate suggestion for natbib package
-	let g:LatexBox_cite_pattern = '\C\\cite\(p\|t\|author\|year\|yearpart\)\=\*\=\(\[[^\]]*\]\)*\_\s*{'
+	let g:LatexBox_cite_pattern = '\c\\\a*cite\a*\*\?\(\[[^\]]*\]\)\_\s*{'
 endif
 if !exists('g:LatexBox_ref_pattern')
-	let g:LatexBox_ref_pattern = '\C\\v\?\(eq\|page\)\?ref\*\?\_\s*{'
+	let g:LatexBox_ref_pattern = '\C\\v\?\(eq\|page\|[cC]\)\?ref\*\?\_\s*{'
 endif
 
 if !exists('g:LatexBox_completion_environments')

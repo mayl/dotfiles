@@ -1,4 +1,4 @@
-*latex-box.txt*  	LaTeX Box
+*latex-box.txt*	LaTeX Box
 *latex-box*
 
 This plugin consists of a set of tools to help editing LaTeX documents.
@@ -48,7 +48,7 @@ This plugin provides:
 
 ==============================================================================
 
-COMPLETION						*latex-box-completion*
+COMPLETION					*latex-box-completion*
 
 Completion is achieved through omni completion |compl-omni|, with default
 bindings <CTRL-X><CTRL-O>. There are four types of completion:
@@ -94,9 +94,9 @@ Labels ~
 
 Label completion is triggered by '\ref{' or '\eqref{'.  For example, >
 	\ref{sec:<CTRL-X><CTRL-O>
-offers a list of all matching labels, with their associated value and page number.
-Labels are read from the aux file, so label completion works only after
-compilation.
+offers a list of all matching labels, with their associated value and page
+number.  Labels are read from the aux file, so label completion works only
+after compilation.
 
 It matches:
 	1. labels: >
@@ -117,8 +117,8 @@ Associated settings:
 						*latex-box-completion-bibtex*
 BibTeX entries ~
 
-BibTeX completion is triggered by '\cite{', '\citep{' or '\citet{'.
-For example, assume you have in your .bib files an entry looking like: >
+BibTeX completion is triggered by '\cite{', '\citep{' or '\citet{'.  For
+example, assume you have in your .bib files an entry looking like: >
 
 	@book {	knuth1981,
 		author = "Donald E. Knuth",
@@ -141,11 +141,11 @@ Associated settings:
 
 ==============================================================================
 
-COMMANDS						*latex-box-commands*
+COMMANDS					*latex-box-commands*
 
 ------------------------------------------------------------------------------
 
-							*latex-box-commands-compilation*
+						*latex-box-commands-compilation*
 Compilation ~
 
 *:Latexmk*
@@ -173,7 +173,7 @@ number). To navigate through the errors, you can use the |:cc|, |:cn| and
 
 ------------------------------------------------------------------------------
 
-							*latex-box-commands-viewing*
+						*latex-box-commands-viewing*
 Viewing ~
 
 *:LatexView*
@@ -182,7 +182,7 @@ Viewing ~
 
 ------------------------------------------------------------------------------
 
-							*latex-box-commands-motion*
+						*latex-box-commands-motion*
 Motion ~
 
 *:LatexTOC*
@@ -196,7 +196,7 @@ Associated setting:
 
 ==============================================================================
 
-MOTION							*latex-box-motion*
+MOTION						*latex-box-motion*
 
 The function LatexBox_JumpToNextBraces({backward}) allows to jump outside of
 the current brace/bracket pair, or inside of the next opening braces/brackets.
@@ -204,11 +204,11 @@ the current brace/bracket pair, or inside of the next opening braces/brackets.
 
 ==============================================================================
 
-MAPPINGS						*latex-box-mappings*
+MAPPINGS					*latex-box-mappings*
 
 ------------------------------------------------------------------------------
 
-							*latex-box-mappings-compilation*
+						*latex-box-mappings-compilation*
 Compilation ~
 
 <LocalLeader>ll		|:Latexmk|
@@ -232,7 +232,7 @@ Compilation ~
 
 ------------------------------------------------------------------------------
 
-							*latex-box-mappings-viewing*
+						*latex-box-mappings-viewing*
 Viewing ~
 
 <LocalLeader>lv		|:LatexView|
@@ -240,7 +240,7 @@ Viewing ~
 
 ------------------------------------------------------------------------------
 
-							*latex-box-mappings-insertion*
+						*latex-box-mappings-insertion*
 Insertion ~
 
 
@@ -270,7 +270,7 @@ Suggested mappings to put in ~/.vim/ftplugin/tex.vim: >
 <
 ------------------------------------------------------------------------------
 
-							*latex-box-mappings-motion*
+						*latex-box-mappings-motion*
 Motion ~
 
 <LocalLeader>lt		|:LatexTOC|
@@ -292,7 +292,7 @@ Suggested bindings: >
 
 ==============================================================================
 
-SETTINGS						*latex-box-settings*
+SETTINGS					*latex-box-settings*
 
 
 ------------------------------------------------------------------------------
@@ -331,16 +331,22 @@ Completion ~
 	|latex-box-completion-commands|.
 	See |complete-items|.
 
-*g:LatexBox_cite_pattern*		Default: '\\cite\(p\|t\)\?\*\?\_\s*{'
-*g:LatexBox_ref_pattern*		Default: '\\v\?\(eq\|page\)\?ref\*\?\_\s*{'
+*g:LatexBox_cite_pattern*  Default: '\c\\\a*cite\a*\*\?\(\[[^\]]*\]\)\_\s*{'
+*g:LatexBox_ref_pattern*   Default: '\C\\v\?\(eq\|page\|[cC]\)\?ref\*\?\_\s*{'
 
-	Patterns to match \cite and \ref commands for BibTeX and label completion.
-	Must include the trailing '{'.
-	To match all commands that contain 'cite' (case insensitive), use: >
-		let LatexBox_cite_pattern = '\c\\\a*cite\a*\*\?\_\s*{'
-<	To match all commands that end with 'ref' (case insensitive): >
+	Patterns to match \cite and \ref commands for BibTeX and label
+	completion.  They must include the trailing '{'.  The default settings
+	should work for most standard LaTeX packages.
+
+	Examples:
+
+	To match only the 'cite' command (case insensitive), use: >
+		let LatexBox_cite_pattern = '\c\\cite\*\?\_\s*{'
+
+	To match all commands that end with 'ref' (case insensitive), use: >
 		let LatexBox_ref_pattern = '\c\\\a*ref\*\?\_\s*{'
-<	Both examples match commands with a trailing star too.
+
+	Both examples match commands with a trailing star too.
 
 
 ------------------------------------------------------------------------------
@@ -355,8 +361,6 @@ Templates (DEPRECATED) ~
 	I think it is better to leave this task to plug-ins oriented to do
 	this well, like snipMate:
 	http://www.vim.org/scripts/script.php?script_id=2540
-
-	
 
 
 ------------------------------------------------------------------------------
