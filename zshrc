@@ -61,4 +61,11 @@ alias t="python ~/dotfiles/t/t.py --task-dir ~/Dropbox/tasks --list tasks"
 alias nautilus="nautilus ."
 #other aliases
 alias open="xdg-open"
-alias mm="freemind ~/Dropbox/Mindmaps/Larry.mm &"
+alias mm="freemind ~/Dropbox/Mindmaps/Larry.mm & \r"
+
+#plan9
+export PLAN9=/home/larry/plan9
+export PATH=$PATH:$PLAN9/bin
+
+#redshift
+alias rs="gtk-redshift -l 38.731950:-77.182701 &"
