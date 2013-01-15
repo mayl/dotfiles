@@ -472,8 +472,8 @@ endfunction
 function! s:LatexBox_complete_inlineMath_or_not()
 
     " env names that can't appear in an eq env
-	if !exists('s:LatexBox_doc_structure_pattern')
-		let s:LatexBox_doc_structure_pats = '\%(' .  '\\begin\s*{document}\|' .
+	if !exists('s:LatexBox_doc_structure_patterns')
+		let s:LatexBox_doc_structure_patterns = '\%(' .  '\\begin\s*{document}\|' .
 					\ '\\\%(chapter\|section\|subsection\|subsubsection\)\*\?\s*{' . '\)'
 	endif
 
@@ -481,8 +481,8 @@ function! s:LatexBox_complete_inlineMath_or_not()
 		let s:LatexBox_eq_env_patterns = 'equation\|gather\|multiline\|align\|flalign\|alignat\|eqnarray'
 	endif
 
-	if !exists('s:LatexBox_eq_env_open_pats')
-		let s:LatexBox_eq_env_open_pats = ['\\(','\\\[',
+	if !exists('s:LatexBox_eq_env_open_patterns')
+		let s:LatexBox_eq_env_open_patterns = ['\\(','\\\[',
 					\'\\begin\s*{equation}',
 					\'\\begin\s*{gather}',
 					\'\\begin\s*{multiline}',
@@ -499,8 +499,8 @@ function! s:LatexBox_complete_inlineMath_or_not()
 					\'\\begin\s*{eqnarray*}']
 	endif
 
-	if !exists('s:LatexBox_eq_env_close_pats')
-		let s:LatexBox_eq_env_close_pats = ['\\)','\\\]',
+	if !exists('s:LatexBox_eq_env_close_patterns')
+		let s:LatexBox_eq_env_close_patterns = ['\\)','\\\]',
 					\'\\end\s*{equation}',
 					\'\\end\s*{gather}',
 					\'\\end\s*{multiline}',
@@ -540,10 +540,10 @@ function! s:LatexBox_complete_inlineMath_or_not()
 
 		" check current line
 		let lnum = line('.')
-		for i in range(0, (len(s:LatexBox_eq_env_open_pats)-1))
+		for i in range(0, (len(s:LatexBox_eq_env_open_patterns)-1))
 			call cursor(lnum_saved, cnum_saved)
-			let cnum_close = searchpos(''. s:LatexBox_eq_env_close_pats[i].'', 'cbW', lnum_saved)[1]
-			let cnum_open = matchend(line_start_2_cnum_saved, s:LatexBox_eq_env_open_pats[i], cnum_close)
+			let cnum_close = searchpos(''. s:LatexBox_eq_env_close_patterns[i].'', 'cbW', lnum_saved)[1]
+			let cnum_open = matchend(line_start_2_cnum_saved, s:LatexBox_eq_env_open_patterns[i], cnum_close)
 			if cnum_open >= 0
 				let s:eq_dollar_parenthesis_bracket_empty = ''
 				let s:eq_pos = cursor_single_dollar - 1
@@ -555,7 +555,7 @@ function! s:LatexBox_complete_inlineMath_or_not()
 		let lnum -= 1
 		while lnum > 0
 			let line = getline(lnum)
-			if line =~ notcomment . '\(' . s:LatexBox_doc_structure_pattern .
+			if line =~ notcomment . '\(' . s:LatexBox_doc_structure_patterns .
 						\ '\|' . '\\end\s*{\(' . s:LatexBox_eq_env_patterns . '\)\*\?}\)'
 				let s:eq_dollar_parenthesis_bracket_empty = '$'
 				let s:eq_pos = cursor_single_dollar
