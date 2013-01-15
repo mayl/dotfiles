@@ -470,69 +470,133 @@ endfunction
 " 1, can't find $, \(, \[, or \begin{eq-env}. 
 " 2, something like \section, \chapter is found.
 function! s:LatexBox_complete_inlineMath_or_not()
-    " trigger: $, \(, \[, or eq-env [part-of-eq] Ctrl-x Ctrl-o 
 
-	let eq_env_pats = '\%(equation\|gather\|multiline\|align\|flalign\|alignat\|eqnarray\)'
+    " env names that can't appear in an eq env
+	if !exists('s:LatexBox_doc_structure_pattern')
+		let s:LatexBox_doc_structure_pats = '\%(' .  '\\begin\s*{document}\|' .
+					\ '\\\%(chapter\|section\|subsection\|subsubsection\)\*\?\s*{' . '\)'
+	endif
 
-    " eq_env_pats with \[ \( , but no $
-    let begin_eq_pats = '\%(' . 
-                \ '\\begin\s*{' . eq_env_pats . '\*\?}' .
-                \ '\|' . '\\\[' . '\|' . '\\(' . 
-                \ '\)'
+	if !exists('s:LatexBox_eq_env_patterns')
+		let s:LatexBox_eq_env_patterns = 'equation\|gather\|multiline\|align\|flalign\|alignat\|eqnarray'
+	endif
 
-    " add env-name that can't occur in an eq env
-    let doc_structure_pats = '\%(' .
-                \ '\\begin\s*{document}\|' .
-                \ '\\\%(chapter\|section\|subsection\|subsubsection\)\*\?\s*{' .
-                \ '\)'
-    let stop_search_eq_pats = '\%(' . 
-                \ doc_structure_pats . '\|' . 
-                \ '\\end\s*{\(' . eq_env_pats . '\)\*\?}' .
-                \ '\|' . '\\\]' . '\|' . '\\)' . 
-                \ '\)'
+	if !exists('s:LatexBox_eq_env_open_pats')
+		let s:LatexBox_eq_env_open_pats = ['\\(','\\\[',
+					\'\\begin\s*{equation}',
+					\'\\begin\s*{gather}',
+					\'\\begin\s*{multiline}',
+					\'\\begin\s*{align}',
+					\'\\begin\s*{flalign}',
+					\'\\begin\s*{alignat}',
+					\'\\begin\s*{eqnarray}',
+					\'\\begin\s*{equation*}',
+					\'\\begin\s*{gather*}',
+					\'\\begin\s*{multiline*}',
+					\'\\begin\s*{align*}',
+					\'\\begin\s*{flalign*}',
+					\'\\begin\s*{alignat*}',
+					\'\\begin\s*{eqnarray*}']
+	endif
+
+	if !exists('s:LatexBox_eq_env_close_pats')
+		let s:LatexBox_eq_env_close_pats = ['\\)','\\\]',
+					\'\\end\s*{equation}',
+					\'\\end\s*{gather}',
+					\'\\end\s*{multiline}',
+					\'\\end\s*{align}',
+					\'\\end\s*{flalign}',
+					\'\\end\s*{alignat}',
+					\'\\end\s*{eqnarray}',
+					\'\\end\s*{equation*}',
+					\'\\end\s*{gather*}',
+					\'\\end\s*{multiline*}',
+					\'\\end\s*{align*}',
+					\'\\end\s*{flalign*}',
+					\'\\end\s*{alignat*}',
+					\'\\end\s*{eqnarray*}']
+	endif
 
 	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
 
 	let lnum_saved = line('.')
     let cnum_saved = col('.') -1
 
-    let lnum = line('.')
+    let line = getline('.')
+	let line_start_2_cnum_saved = line[:cnum_saved]
 
-    " check $, \(, \[ on the current line, return suggestions ended with $, \), or \]
-    " !! check $, on the current line only 
-    let line = getline(lnum)
-    if line =~ notcomment . '\%('.'\%(\$\)'.'\|'.'\%(\\(\)'.'\|'.'\%(\\\[\)'.'\)' . '\s*'
-        let [pos, which_match] = searchpos('\(\$\)\|\(\\(\)\|\(\\\[\)' . '\s*', 'cbWp' , lnum)[1:]
-        " which_match: 2, 3, 4 
-        echomsg "which_match:" . which_match
-        let s:eq_dollar_parenthesis_bracket_empty = ['$', '\)', '\]'][which_match-2]
-        let s:eq_pos = pos + [1, 2, 2][which_match-2] -1
+	" determine whether there is a single $ before cursor
+	let cursor_dollar_pair = 0
+	while matchend(line_start_2_cnum_saved, '\$[^$]\+\$', cursor_dollar_pair) >= 0
+		" find the end of dollar pair
+		let cursor_dollar_pair = matchend(line_start_2_cnum_saved, '\$[^$]\+\$', cursor_dollar_pair)
+	endwhile
+	" find single $ after cursor_dollar_pair
+	let cursor_single_dollar = matchend(line_start_2_cnum_saved, '\$', cursor_dollar_pair)
 
-        return 1
-    endif
-    
-    " search backward, looking for begin_eq_pats
-    while lnum > 0
-        let line = getline(lnum)
-        if line =~ notcomment . stop_search_eq_pats
-            echomsg "stop_search_eq_pats: line " . lnum
-            return 0
-        elseif line =~ notcomment . begin_eq_pats
-            echomsg "begin_eq_pats: line " . lnum
-            call cursor(lnum_saved, cnum_saved)
-            let s:eq_pos = searchpos('\s\|\t', 'cbW', lnum_saved)[1]
-            let s:eq_dollar_parenthesis_bracket_empty = ''
-            return 1
+	" if single $ is found
+	if cursor_single_dollar >= 0
+		" whether $ is in \(...\), \[...\], or \begin{eq}...\end{eq}
 
-            " TODO ? : check end of eq env, only complete in closed eq-env
-            " Conflict: In current version, we can \end{eq-env} no longer complete
-            " eq-env with omni
-        endif
+		" check current line
+		let lnum = line('.')
+		for i in range(0, (len(s:LatexBox_eq_env_open_pats)-1))
+			call cursor(lnum_saved, cnum_saved)
+			let cnum_close = searchpos(''. s:LatexBox_eq_env_close_pats[i].'', 'cbW', lnum_saved)[1]
+			let cnum_open = matchend(line_start_2_cnum_saved, s:LatexBox_eq_env_open_pats[i], cnum_close)
+			if cnum_open >= 0
+				let s:eq_dollar_parenthesis_bracket_empty = ''
+				let s:eq_pos = cursor_single_dollar - 1
+				return 1
+			end
+		endfor
+	
+		" check the lines above
+		let lnum -= 1
+		while lnum > 0
+			let line = getline(lnum)
+			if line =~ notcomment . '\(' . s:LatexBox_doc_structure_pattern .
+						\ '\|' . '\\end\s*{\(' . s:LatexBox_eq_env_patterns . '\)\*\?}\)'
+				let s:eq_dollar_parenthesis_bracket_empty = '$'
+				let s:eq_pos = cursor_single_dollar
+				break
+			elseif line =~ notcomment . '\\begin\s*{\(' . s:LatexBox_eq_env_patterns . '\)\*\?}'
+				let s:eq_dollar_parenthesis_bracket_empty = ''
+				let s:eq_pos = cursor_single_dollar - 1 
+				break
+			endif
+			let lnum -= 1
+		endwhile
 
-        let lnum -= 1
-    endwhile
+		return 1
+	else
+		" no $, then search for \( or \[ in current line
+		" 1, whether there is \(
+		call cursor(lnum_saved, cnum_saved)
+		let cnum_parenthesis_close = searchpos('\\)', 'cbW', lnum_saved)[1]
+		let cnum_parenthesis_open = matchend(line_start_2_cnum_saved, '\\(', cnum_parenthesis_close)
+		if cnum_parenthesis_open >= 0
+			let s:eq_dollar_parenthesis_bracket_empty = '\)'
+			let s:eq_pos = cnum_parenthesis_open 
+			return 1
+		end
+
+		" 2, whether there is \[
+		call cursor(lnum_saved, cnum_saved)
+		let cnum_bracket_close = searchpos('\\\]', 'cbW', lnum_saved)[1]
+		let cnum_bracket_open = matchend(line_start_2_cnum_saved, '\\\[', cnum_bracket_close)
+		if cnum_bracket_open >= 0
+			let s:eq_dollar_parenthesis_bracket_empty = '\]'
+			let s:eq_pos = cnum_bracket_open
+			return 1
+		end
+
+		" not eq completion
+		return 0
+	endif
 
 endfunction
+" }}}
 
 " Complete inline euqation{{{ 
 function! s:LatexBox_inlineMath_completion(regex, ...)
@@ -547,19 +611,23 @@ function! s:LatexBox_inlineMath_completion(regex, ...)
 		return ''
 	endif
 
-	let inline_pattern1 = '\$\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '[^$]*\)\s*\$'
-	let inline_pattern2 = '\\(\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '.*\)\s*\\)'
- 	
+	if empty(s:eq_dollar_parenthesis_bracket_empty)
+		let inline_pattern1 = '\$\s*\(' . escape(substitute(a:regex[1:], '^\s\+', '', ""), '\.*^') . '[^$]*\)\s*\$'
+		let inline_pattern2 = '\\(\s*\(' . escape(substitute(a:regex[1:], '^\s\+', '', ""), '\.*^') . '.*\)\s*\\)'
+	else
+		let inline_pattern1 = '\$\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '[^$]*\)\s*\$'
+		let inline_pattern2 = '\\(\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '.*\)\s*\\)'
+	endif
+
     " TODO: make it search backward for just a certain num of lines ?
     "       complete some {{math}} that appears for the first time in an eq env ?
 
 	let suggestions = []
 	let line_num = 0
-    let in_eq_env_or_not = 0
 	for line in readfile(file)
 		let line_num = line_num + 1
 
-		let suggestions += s:mathlist(line,inline_pattern1 , line_num) +  s:mathlist( line,inline_pattern2, line_num)
+		let suggestions += s:LatexBox_inlineMath_mathlist(line,inline_pattern1 , line_num) +  s:LatexBox_inlineMath_mathlist( line,inline_pattern2, line_num)
 
  		" search for included files
  		let included_file = matchstr(line, '^\\@input{\zs[^}]*\ze}')
@@ -577,7 +645,7 @@ endfunction
 
 " Search for inline maths {{{
 " ( search for $ ... $ and \( ... \) in each line )
-function s:mathlist(line,inline_pattern, line_num)
+function! s:LatexBox_inlineMath_mathlist(line,inline_pattern, line_num)
 	let col_start = 0
 	let suggestions = []
 	while 1
