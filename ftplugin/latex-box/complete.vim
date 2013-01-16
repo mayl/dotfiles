@@ -21,7 +21,7 @@ if !exists('g:LatexBox_bibtex_wild_spaces')
 endif
 
 if !exists('g:LatexBox_cite_pattern')
-	let g:LatexBox_cite_pattern = '\c\\\a*cite\a*\*\?\(\[[^\]]*\]\)\_\s*{'
+	let g:LatexBox_cite_pattern = '\C\\\a*cite\a*\*\?\(\[[^\]]*\]\)*\_\s*{'
 endif
 if !exists('g:LatexBox_ref_pattern')
 	let g:LatexBox_ref_pattern = '\C\\v\?\(eq\|page\|[cC]\)\?ref\*\?\_\s*{'
