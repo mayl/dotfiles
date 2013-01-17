@@ -62,6 +62,11 @@ if !exists('g:LatexBox_completion_commands')
 		\ {'word': '\bibliographystyle' },
 		\ ]
 endif
+
+if !exists('g:LatexBox_eq_env_patterns')
+	let g:LatexBox_eq_env_patterns = 'equation\|gather\|multiline\|align\|flalign\|alignat\|eqnarray'
+endif
+
 " }}}
 
 "LatexBox_kpsewhich {{{
@@ -477,45 +482,43 @@ function! s:LatexBox_complete_inlineMath_or_not()
 					\ '\\\%(chapter\|section\|subsection\|subsubsection\)\*\?\s*{' . '\)'
 	endif
 
-	if !exists('s:LatexBox_eq_env_patterns')
-		let s:LatexBox_eq_env_patterns = 'equation\|gather\|multiline\|align\|flalign\|alignat\|eqnarray'
-	endif
-
+	" Other eq-env are commented because when \begin{eq-env} and \end{eq-env}
+	" are in the same line. Omni-completion will perform a 'begin' completion.
 	if !exists('s:LatexBox_eq_env_open_patterns')
-		let s:LatexBox_eq_env_open_patterns = ['\\(','\\\[',
-					\'\\begin\s*{equation}',
-					\'\\begin\s*{gather}',
-					\'\\begin\s*{multiline}',
-					\'\\begin\s*{align}',
-					\'\\begin\s*{flalign}',
-					\'\\begin\s*{alignat}',
-					\'\\begin\s*{eqnarray}',
-					\'\\begin\s*{equation*}',
-					\'\\begin\s*{gather*}',
-					\'\\begin\s*{multiline*}',
-					\'\\begin\s*{align*}',
-					\'\\begin\s*{flalign*}',
-					\'\\begin\s*{alignat*}',
-					\'\\begin\s*{eqnarray*}']
+		let s:LatexBox_eq_env_open_patterns = ['\\(','\\\[']
 	endif
+"					\'\\begin\s*{equation}',
+"					\'\\begin\s*{gather}',
+"					\'\\begin\s*{multiline}',
+"					\'\\begin\s*{align}',
+"					\'\\begin\s*{flalign}',
+"					\'\\begin\s*{alignat}',
+"					\'\\begin\s*{eqnarray}',
+"					\'\\begin\s*{equation*}',
+"					\'\\begin\s*{gather*}',
+"					\'\\begin\s*{multiline*}',
+"					\'\\begin\s*{align*}',
+"					\'\\begin\s*{flalign*}',
+"					\'\\begin\s*{alignat*}',
+"					\'\\begin\s*{eqnarray*}']
 
 	if !exists('s:LatexBox_eq_env_close_patterns')
-		let s:LatexBox_eq_env_close_patterns = ['\\)','\\\]',
-					\'\\end\s*{equation}',
-					\'\\end\s*{gather}',
-					\'\\end\s*{multiline}',
-					\'\\end\s*{align}',
-					\'\\end\s*{flalign}',
-					\'\\end\s*{alignat}',
-					\'\\end\s*{eqnarray}',
-					\'\\end\s*{equation*}',
-					\'\\end\s*{gather*}',
-					\'\\end\s*{multiline*}',
-					\'\\end\s*{align*}',
-					\'\\end\s*{flalign*}',
-					\'\\end\s*{alignat*}',
-					\'\\end\s*{eqnarray*}']
+		let s:LatexBox_eq_env_close_patterns = ['\\)','\\\]']
 	endif
+"					\'\\end\s*{equation}',
+"					\'\\end\s*{gather}',
+"					\'\\end\s*{multiline}',
+"					\'\\end\s*{align}',
+"					\'\\end\s*{flalign}',
+"					\'\\end\s*{alignat}',
+"					\'\\end\s*{eqnarray}',
+"					\'\\end\s*{equation*}',
+"					\'\\end\s*{gather*}',
+"					\'\\end\s*{multiline*}',
+"					\'\\end\s*{align*}',
+"					\'\\end\s*{flalign*}',
+"					\'\\end\s*{alignat*}',
+"					\'\\end\s*{eqnarray*}']
 
 	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
 
@@ -556,11 +559,11 @@ function! s:LatexBox_complete_inlineMath_or_not()
 		while lnum > 0
 			let line = getline(lnum)
 			if line =~ notcomment . '\(' . s:LatexBox_doc_structure_patterns .
-						\ '\|' . '\\end\s*{\(' . s:LatexBox_eq_env_patterns . '\)\*\?}\)'
+						\ '\|' . '\\end\s*{\(' . g:LatexBox_eq_env_patterns . '\)\*\?}\)'
 				let s:eq_dollar_parenthesis_bracket_empty = '$'
 				let s:eq_pos = cursor_single_dollar
 				break
-			elseif line =~ notcomment . '\\begin\s*{\(' . s:LatexBox_eq_env_patterns . '\)\*\?}'
+			elseif line =~ notcomment . '\\begin\s*{\(' . g:LatexBox_eq_env_patterns . '\)\*\?}'
 				let s:eq_dollar_parenthesis_bracket_empty = ''
 				let s:eq_pos = cursor_single_dollar - 1 
 				break
@@ -642,7 +645,6 @@ function! s:LatexBox_inlineMath_completion(regex, ...)
 endfunction
 " }}}
 
-
 " Search for inline maths {{{
 " ( search for $ ... $ and \( ... \) in each line )
 function! s:LatexBox_inlineMath_mathlist(line,inline_pattern, line_num)
@@ -672,7 +674,6 @@ function! s:LatexBox_inlineMath_mathlist(line,inline_pattern, line_num)
 	return suggestions
 endfunction
 " }}}
-
 
 " Close Current Environment {{{
 function! s:CloseCurEnv()
