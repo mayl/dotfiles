@@ -482,43 +482,13 @@ function! s:LatexBox_complete_inlineMath_or_not()
 					\ '\\\%(chapter\|section\|subsection\|subsubsection\)\*\?\s*{' . '\)'
 	endif
 
-	" Other eq-env are commented because when \begin{eq-env} and \end{eq-env}
-	" are in the same line. Omni-completion will perform a 'begin' completion.
 	if !exists('s:LatexBox_eq_env_open_patterns')
 		let s:LatexBox_eq_env_open_patterns = ['\\(','\\\[']
 	endif
-"					\'\\begin\s*{equation}',
-"					\'\\begin\s*{gather}',
-"					\'\\begin\s*{multiline}',
-"					\'\\begin\s*{align}',
-"					\'\\begin\s*{flalign}',
-"					\'\\begin\s*{alignat}',
-"					\'\\begin\s*{eqnarray}',
-"					\'\\begin\s*{equation*}',
-"					\'\\begin\s*{gather*}',
-"					\'\\begin\s*{multiline*}',
-"					\'\\begin\s*{align*}',
-"					\'\\begin\s*{flalign*}',
-"					\'\\begin\s*{alignat*}',
-"					\'\\begin\s*{eqnarray*}']
 
 	if !exists('s:LatexBox_eq_env_close_patterns')
 		let s:LatexBox_eq_env_close_patterns = ['\\)','\\\]']
 	endif
-"					\'\\end\s*{equation}',
-"					\'\\end\s*{gather}',
-"					\'\\end\s*{multiline}',
-"					\'\\end\s*{align}',
-"					\'\\end\s*{flalign}',
-"					\'\\end\s*{alignat}',
-"					\'\\end\s*{eqnarray}',
-"					\'\\end\s*{equation*}',
-"					\'\\end\s*{gather*}',
-"					\'\\end\s*{multiline*}',
-"					\'\\end\s*{align*}',
-"					\'\\end\s*{flalign*}',
-"					\'\\end\s*{alignat*}',
-"					\'\\end\s*{eqnarray*}']
 
 	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
 
