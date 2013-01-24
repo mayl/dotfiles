@@ -149,7 +149,10 @@ InlineMaths ~
 InlineMaths completion is triggered by '$', '\(' or '\[', and can also be
 triggered by '$' that locates in math environment '\(...\)', '\[...\]', or
 '\begin{eq-env} ... \end{eq-env}'. It suggests the inline maths you write in
-'$' pairs and in '\( ... \)'. 
+'$' pairs and in '\( ... \)' and the corresponding line number.
+
+Note that an inline math with open and close symbols on different lines will
+not be suggested.
 
 For example, assume you have in your .tex files two in line maths looking
 like: >

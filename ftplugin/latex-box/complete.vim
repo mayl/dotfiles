@@ -466,14 +466,11 @@ endfunction
 " }}}
 
 " Complete Inline Math Or Not {{{
-" Return 1: 
-" cursor is in a math env:
-" 1, there is a single $ in the current line on the left of cursor
-" 2, there is an open-eq-env on/above the current line 
-" (open-eq-env : \(, \[, and \begin{eq-env} )
-" Return 0:
-" 1, can't find $, \(, \[, or \begin{eq-env}. 
-" 2, something like \section, \chapter is found.
+" Return 1, when cursor is in a math env:
+" 	1, there is a single $ in the current line on the left of cursor
+" 	2, there is an open-eq-env on/above the current line 
+" 		(open-eq-env : \(, \[, and \begin{eq-env} )
+" Return 0, when cursor is not in a math env
 function! s:LatexBox_complete_inlineMath_or_not()
 
     " env names that can't appear in an eq env
@@ -485,7 +482,6 @@ function! s:LatexBox_complete_inlineMath_or_not()
 	if !exists('s:LatexBox_eq_env_open_patterns')
 		let s:LatexBox_eq_env_open_patterns = ['\\(','\\\[']
 	endif
-
 	if !exists('s:LatexBox_eq_env_close_patterns')
 		let s:LatexBox_eq_env_close_patterns = ['\\)','\\\]']
 	endif
@@ -509,9 +505,10 @@ function! s:LatexBox_complete_inlineMath_or_not()
 
 	" if single $ is found
 	if cursor_single_dollar >= 0
-		" whether $ is in \(...\), \[...\], or \begin{eq}...\end{eq}
+		" check whether $ is in \(...\), \[...\], or \begin{eq}...\end{eq}
 
-		" check current line
+		" check current line, 
+		" search for LatexBox_eq_env_close_patterns: \[ and \(
 		let lnum = line('.')
 		for i in range(0, (len(s:LatexBox_eq_env_open_patterns)-1))
 			call cursor(lnum_saved, cnum_saved)
@@ -525,15 +522,19 @@ function! s:LatexBox_complete_inlineMath_or_not()
 		endfor
 	
 		" check the lines above
+		" search for s:LatexBox_doc_structure_patterns, and end-of-math-env
 		let lnum -= 1
 		while lnum > 0
 			let line = getline(lnum)
 			if line =~ notcomment . '\(' . s:LatexBox_doc_structure_patterns .
 						\ '\|' . '\\end\s*{\(' . g:LatexBox_eq_env_patterns . '\)\*\?}\)'
+				" when s:LatexBox_doc_structure_patterns or g:LatexBox_eq_env_patterns 
+				" are found first, complete math, leave with $ at both sides
 				let s:eq_dollar_parenthesis_bracket_empty = '$'
 				let s:eq_pos = cursor_single_dollar
 				break
 			elseif line =~ notcomment . '\\begin\s*{\(' . g:LatexBox_eq_env_patterns . '\)\*\?}'
+				" g:LatexBox_eq_env_patterns is found, complete math, remove $ 
 				let s:eq_dollar_parenthesis_bracket_empty = ''
 				let s:eq_pos = cursor_single_dollar - 1 
 				break
@@ -543,7 +544,7 @@ function! s:LatexBox_complete_inlineMath_or_not()
 
 		return 1
 	else
-		" no $, then search for \( or \[ in current line
+		" no $ is found, then search for \( or \[ in current line
 		" 1, whether there is \(
 		call cursor(lnum_saved, cnum_saved)
 		let cnum_parenthesis_close = searchpos('\\)', 'cbW', lnum_saved)[1]
@@ -564,7 +565,7 @@ function! s:LatexBox_complete_inlineMath_or_not()
 			return 1
 		end
 
-		" not eq completion
+		" not inline math completion
 		return 0
 	endif
 
@@ -592,8 +593,6 @@ function! s:LatexBox_inlineMath_completion(regex, ...)
 		let inline_pattern2 = '\\(\s*\(' . escape(substitute(a:regex, '^\s\+', '', ""), '\.*^') . '.*\)\s*\\)'
 	endif
 
-    " TODO: make it search backward for just a certain num of lines ?
-    "       complete some {{math}} that appears for the first time in an eq env ?
 
 	let suggestions = []
 	let line_num = 0
@@ -610,13 +609,12 @@ function! s:LatexBox_inlineMath_completion(regex, ...)
  		endif
  	endfor
 
-"	return filter(copy(suggestions), 'index(suggestions, v:val, v:key+1)==-1') 
 	return suggestions
 endfunction
 " }}}
 
 " Search for inline maths {{{
-" ( search for $ ... $ and \( ... \) in each line )
+" search for $ ... $ and \( ... \) in each line
 function! s:LatexBox_inlineMath_mathlist(line,inline_pattern, line_num)
 	let col_start = 0
 	let suggestions = []
@@ -624,8 +622,8 @@ function! s:LatexBox_inlineMath_mathlist(line,inline_pattern, line_num)
 		let matches = matchlist(a:line, a:inline_pattern, col_start)
 		if !empty(matches)
 
-			" show eq line number
-			let entry = {'word': matches[1], 'menu': '[' . a:line_num . ' line]'}
+			" show line number of inline math
+			let entry = {'word': matches[1], 'menu': '[' . a:line_num . ']'}
             
             if  s:eq_dollar_parenthesis_bracket_empty != ''
                 let entry = copy(entry)
