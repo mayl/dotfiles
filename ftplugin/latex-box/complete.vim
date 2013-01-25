@@ -63,6 +63,10 @@ if !exists('g:LatexBox_completion_commands')
 		\ ]
 endif
 
+if !exists('g:LatexBox_complete_inlineMath')
+	let g:LatexBox_complete_inlineMath = 0
+endif
+
 if !exists('g:LatexBox_eq_env_patterns')
 	let g:LatexBox_eq_env_patterns = 'equation\|gather\|multiline\|align\|flalign\|alignat\|eqnarray'
 endif
@@ -472,6 +476,11 @@ endfunction
 " 		(open-eq-env : \(, \[, and \begin{eq-env} )
 " Return 0, when cursor is not in a math env
 function! s:LatexBox_complete_inlineMath_or_not()
+
+	" switch of inline math completion feature
+	if g:LatexBox_complete_inlineMath == 0
+		return 0
+	endif
 
     " env names that can't appear in an eq env
 	if !exists('s:LatexBox_doc_structure_patterns')

@@ -224,6 +224,7 @@ ATTENTION: do not try to complete inline maths when
 
 Associated setting: >
 	
+	g:LatexBox_complete_inlineMath
 	g:LatexBox_eq_env_patterns
 
 ==============================================================================
@@ -435,6 +436,11 @@ Completion ~
 
 	Both examples match commands with a trailing star too.
 
+*g:LatexBox_complete_inlineMath* Default: 0
+	Switch for inline math completion.
+*g:LatexBox_eq_env_patterns* 
+	Equation environments besides '$...$', '\(...\)', and '\[...\]' that 
+	support inline math completion.
 
 ------------------------------------------------------------------------------
 
