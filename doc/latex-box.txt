@@ -154,10 +154,12 @@ triggered by '$' that locates in math environment '\(...\)', '\[...\]', or
 Note that an inline math with open and close symbols on different lines will
 not be suggested.
 
-For example, assume you have in your .tex files two in line maths looking
-like: >
+For example, you type two in line maths looking like: >
 
-       $hello$, \(world\)
+	$hello$, \(world\)
+
+And you save them before trying to complete elsewhere: >
+	:w
 
 You type '$', '\(' or '\[', and part of 'hello': >
 
