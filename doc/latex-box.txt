@@ -440,9 +440,12 @@ Completion ~
 
 *g:LatexBox_complete_inlineMath* Default: 0
 	Switch for inline math completion.
-*g:LatexBox_eq_env_patterns* 
+*g:LatexBox_eq_env_patterns* Default: 'equation\|gather\|multiline\|align\|flalign\|alignat\|eqnarray'
 	Equation environments besides '$...$', '\(...\)', and '\[...\]' that 
 	support inline math completion.
+
+	Note that 'eq-env-name*' will also be supported if we add 'eq-env-name' in the list.
+
 
 ------------------------------------------------------------------------------
 
