@@ -393,6 +393,19 @@ Mappings ~
 	If this variable is defined, the default keyboard mappings will not be
 	loaded.
 
+*g:LatexBox_open_pats*
+*g:LatexBox_close_pats*
+	These variables define the patterns that LatexBox use to detect
+	matching pair of braces, parantheses, environments, and similar.  The
+	default values are >
+
+	let g:LatexBox_open_pats  = [ '\\{','{','\\(','(','\\\[','\[',
+		\ '\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\.\|\\\a*\)']
+
+	let g:LatexBox_close_pats = [ '\\}','}','\\)',')','\\\]','\]',
+		\ '\\end\s*{.\{-}}',   '\\right\s*\%([^\\]\|\\.\|\\\a*\)']
+<
+
 
 						*latex-box-settings-completion*
 Completion ~

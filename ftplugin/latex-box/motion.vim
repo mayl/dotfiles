@@ -55,12 +55,12 @@ function! s:FindMatchingPair(mode)
 	if LatexBox_InComment() | return | endif
 
 	" open/close pairs (dollars signs are treated apart)
-	let open_pats  = ['\\{','{','\\(','(','\\\[','\[','\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\.\|\\\a*\)']
-	let close_pats = ['\\}','}','\\)',')','\\\]','\]','\\end\s*{.\{-}}',  '\\right\s*\%([^\\]\|\\.\|\\\a*\)']
 	let dollar_pat = '\$'
 	let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
 	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
-	let anymatch =  '\(' . join(open_pats + close_pats, '\|') . '\|' . dollar_pat . '\)'
+	let anymatch =  '\(' 
+				\ . join(g:LatexBox_open_pats + g:LatexBox_close_pats, '\|')
+				\ . '\|' . dollar_pat . '\)'
 
 	let lnum = line('.')
 	let cnum = searchpos('\A', 'cbnW', lnum)[1]
@@ -106,27 +106,39 @@ function! s:FindMatchingPair(mode)
 
 	else
 		" match other pairs
-		for i in range(len(open_pats))
-			let open_pat = notbslash . open_pats[i]
-			let close_pat = notbslash . close_pats[i]
+		for i in range(len(g:LatexBox_open_pats))
+			let open_pat = notbslash . g:LatexBox_open_pats[i]
+			let close_pat = notbslash . g:LatexBox_close_pats[i]
 
 			if delim =~# '^' . open_pat
 				" if on opening pattern, search for closing pattern
-				let [lnum2, cnum2] = searchpairpos('\C' . open_pat, '', '\C' . close_pat, 'nW', 'LatexBox_InComment()', line('w$')*(a:mode =~ 'h\|i') , 200)
+				let [lnum2, cnum2] = searchpairpos('\C' . open_pat, '', '\C'
+							\ . close_pat, 'nW', 'LatexBox_InComment()',
+							\ line('w$')*(a:mode =~ 'h\|i') , 200)
 				if a:mode =~ 'h\|i'
-					execute '2match MatchParen /\%(\%' . lnum . 'l\%' . cnum . 'c' . open_pats[i] . '\|\%' . lnum2 . 'l\%' . cnum2 . 'c' . close_pats[i] . '\)/'
+					execute '2match MatchParen /\%(\%' . lnum . 'l\%' . cnum
+								\ . 'c' . g:LatexBox_open_pats[i] . '\|\%'
+								\ . lnum2 . 'l\%' . cnum2 . 'c'
+								\ . g:LatexBox_close_pats[i] . '\)/'
 				elseif a:mode =~ 'n\|v\|o'
 					call cursor(lnum2,cnum2)
 					if strlen(close_pat)>1 && a:mode =~ 'o'
-						call cursor(lnum2, matchend(getline('.'), '\C' . close_pat, col('.')-1))
+						call cursor(lnum2, matchend(getline('.'), '\C'
+									\ . close_pat, col('.')-1))
 					endif
 				endif
 				break
 			elseif delim =~# '^' . close_pat
 				" if on closing pattern, search for opening pattern
-				let [lnum2, cnum2] =  searchpairpos('\C' . open_pat, '', '\C\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!' . close_pat, 'bnW', 'LatexBox_InComment()', line('w0')*(a:mode =~ 'h\|i') , 200)
+				let [lnum2, cnum2] =  searchpairpos('\C' . open_pat, '',
+							\ '\C\%(\%'. lnum . 'l\%' . cnum . 'c\)\@!'
+							\ . close_pat, 'bnW', 'LatexBox_InComment()',
+							\ line('w0')*(a:mode =~ 'h\|i') , 200)
 				if a:mode =~ 'h\|i'
-					execute '2match MatchParen /\%(\%' . lnum2 . 'l\%' . cnum2 . 'c' . open_pats[i] . '\|\%' . lnum . 'l\%' . cnum . 'c' . close_pats[i] . '\)/'
+					execute '2match MatchParen /\%(\%' . lnum2 . 'l\%' . cnum2
+								\ . 'c' . g:LatexBox_open_pats[i] . '\|\%'
+								\ . lnum . 'l\%' . cnum . 'c'
+								\ . g:LatexBox_close_pats[i] . '\)/'
 				elseif a:mode =~ 'n\|v\|o'
 					call cursor(lnum2,cnum2)
 				endif

@@ -3,6 +3,12 @@
 if exists("g:LatexBox_no_mappings")
 	finish
 endif
+if !exists('g:LatexBox_open_pats')
+	let g:LatexBox_open_pats  = [ '\\{','{','\\(','(','\\\[','\[',
+				\ '\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\.\|\\\a*\)']
+	let g:LatexBox_close_pats = [ '\\}','}','\\)',')','\\\]','\]',
+				\ '\\end\s*{.\{-}}',   '\\right\s*\%([^\\]\|\\.\|\\\a*\)']
+endif
 
 " latexmk {{{
 map <buffer> <LocalLeader>ll :Latexmk<CR>
