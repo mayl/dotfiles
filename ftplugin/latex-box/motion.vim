@@ -258,9 +258,7 @@ endfunction
 
 " Special UTF-8 conversion
 function! s:ConvertBack(line)
-
 	let line = a:line
-
 	if !exists('g:LatexBox_plaintext_toc')
 		let line = substitute(line, "\\\\IeC\s*{\\\\'a}", 'á', 'g')
 		let line = substitute(line, "\\\\IeC\s*{\\\\`a}", 'à', 'g')
@@ -321,18 +319,15 @@ function! s:ConvertBack(line)
 		let line = substitute(line, "\\\\IeC\s*{\\\\^U}", 'Û', 'g')
 		let line = substitute(line, "\\\\IeC\s*{\\\\¨U}", 'Ü', 'g')
 		let line = substitute(line, "\\\\IeC\s*{\\\\\"U}", 'Ü', 'g')
-
 	else
 		" substitute stuff like '\IeC{\"u}' (utf-8 umlauts in section heading)
 		" to plain 'u'
 		let line = substitute(line, "\\\\IeC\s*{\\\\.\\(.\\)}", '\1', 'g')
 	endif
 	return line
-
 endfunction
 
 function! s:ReadTOC(auxfile, ...)
-
 	let texfile = fnamemodify(substitute(a:auxfile, '\.aux$', '.tex', ''), ':p')
 	let prefix = fnamemodify(a:auxfile, ':p:h')
 
@@ -345,11 +340,8 @@ function! s:ReadTOC(auxfile, ...)
 		let fileindices[ texfile ] = []
 	endif
 
-
 	for line in readfile(a:auxfile)
-
 		let included = matchstr(line, '^\\@input{\zs[^}]*\ze}')
-
 		if included != ''
 			" append the input TOX to `toc` and `fileindices`
 			call s:ReadTOC(prefix . '/' . included, toc, fileindices)
@@ -361,7 +353,8 @@ function! s:ReadTOC(auxfile, ...)
 		" \@writefile{toc}{\contentsline {section}{\tocsection {}{1}{Section Title}}{pagenumber}}
 		" \@writefile{toc}{\contentsline {section}{\numberline {secnum}Section Title}{pagenumber}{otherstuff}}
 
-		let line = matchstr(line, '\\@writefile{toc}{\\contentsline\s*\zs.*\ze}\s*$')
+		let line = matchstr(line, 
+					\ '\\@writefile{toc}{\\contentsline\s*\zs.*\ze}\s*$')
 		if empty(line)
 			continue
 		endif
@@ -402,7 +395,11 @@ function! s:ReadTOC(auxfile, ...)
 
 		" add TOC entry
 		call add(fileindices[texfile], len(toc))
-		call add(toc, {'file': texfile, 'level': level, 'number': secnum, 'text': text, 'page': page})
+		call add(toc, {'file': texfile, 
+					\ 'level': level, 
+					\ 'number': secnum,
+					\ 'text': text,
+					\ 'page': page})
 	endfor
 
 	return [toc, fileindices]
@@ -411,22 +408,25 @@ endfunction
 
 function! LatexBox_TOC()
 
-	" check if window already exists
+	" Check if window already exists
 	let winnr = bufwinnr(bufnr('LaTeX TOC'))
 	if winnr >= 0
 		silent execute winnr . 'wincmd w'
 		return
 	endif
 
-	" read TOC
+	" Read TOC
 	let [toc, fileindices] = s:ReadTOC(LatexBox_GetAuxFile())
 	let calling_buf = bufnr('%')
 
-	" find closest section in current buffer
+	" Find closest section in current buffer
 	let closest_index = s:FindClosestSection(toc,fileindices)
 
-	" create TOC window and set local settings
-	execute g:LatexBox_split_side g:LatexBox_split_width . 'vnew LaTeX\ TOC'
+	" Create TOC window and set local settings
+	silent exe g:LatexBox_split_side g:LatexBox_split_width . 'vnew LaTeX\ TOC'
+	let b:toc = toc
+	let b:toc_numbers = 1
+	let b:calling_win = bufwinnr(calling_buf)
 	setlocal buftype=nofile
 				\ bufhidden=wipe
 				\ nobuflisted
@@ -436,18 +436,12 @@ function! LatexBox_TOC()
 				\ nonumber
 				\ nolist
 				\ tabstop=8
+				\ cole=0
+				\ cocu=nvic
 
-	" add TOC entries
-	for entry in toc
-		call append('$', entry['number'] . "\t" . entry['text'])
-	endfor
-	call append('$', ["", "<Esc>/q: close",
-				\ "<Space>: jump", "<Enter>: jump and close"])
-	0delete _
-
-	" syntax
-	syntax match helpText /^<.*/
-	syntax match secNum /^\S\+/ contained
+	" Set syntax highlighting
+	syntax match helpText /^.*: .*/
+	syntax match secNum /^\S\+\(\.\S\+\)\?\s*/ contained conceal
 	syntax match secLine /^\S\+\t\S\+/ contains=secNum
 	syntax match mainSecLine /^[^\.]\+\t.*/ contains=secNum
 	syntax match ssubSecLine /^[^\.]\+\.[^\.]\+\.[^\.]\+\t.*/ contains=secNum
@@ -456,7 +450,8 @@ function! LatexBox_TOC()
 	highlight link mainSecLine	Title
 	highlight link ssubSecLine	Comment
 
-	" mappings
+	" Set local mappings
+	map <buffer> <silent> s			:call <SID>TOCToggleNumbers()<CR>
 	map <buffer> <silent> q			:bwipeout<CR>
 	map <buffer> <silent> <Esc>		:bwipeout<CR>
 	map <buffer> <silent> <Space> 	:call <SID>TOCActivate(0)<CR>
@@ -469,15 +464,31 @@ function! LatexBox_TOC()
 	map <buffer> <silent> OC l
 	map <buffer> <silent> OD h
 
-	" lock buffer
-	setlocal nomodifiable
+	" Add TOC entries and jump to the closest section
+	for entry in toc
+		call append('$', entry['number'] . "\t" . entry['text'])
+	endfor
+	call append('$', "")
+	call append('$', "<Esc>/q: close")
+	call append('$', "<Space>: jump")
+	call append('$', "<Enter>: jump and close")
+	call append('$', "s:       hide numbering")
+	0delete _
 
-	let b:toc = toc
-	let b:calling_win = bufwinnr(calling_buf)
-
-	" jump to closest section
 	execute 'normal! ' . (closest_index + 1) . 'G'
 
+	" Lock buffer
+	setlocal nomodifiable
+endfunction
+
+function! s:TOCToggleNumbers()
+	if b:toc_numbers
+		setlocal conceallevel=3
+		let b:toc_numbers = 0
+	else
+		setlocal conceallevel=0
+		let b:toc_numbers = 1
+	endif
 endfunction
 
 " Binary search for the closest section
