@@ -92,18 +92,18 @@ endfunction
 " }}}
 
 " Mappings {{{
-map <buffer> <silent> s	:call <SID>TOCToggleNumbers()<CR>
-map <buffer> <silent> q	:bwipeout<CR>
-map <buffer> <silent> <Esc> :bwipeout<CR>
-map <buffer> <silent> <Space> :call <SID>TOCActivate(0)<CR>
-map <buffer> <silent> <CR> :call <SID>TOCActivate(1)<CR>
+noremap <buffer> <silent> s :call <SID>TOCToggleNumbers()<CR>
+noremap <buffer> <silent> q :bwipeout<CR>
+noremap <buffer> <silent> <Esc> :bwipeout<CR>
+noremap <buffer> <silent> <Space> :call <SID>TOCActivate(0)<CR>
+noremap <buffer> <silent> <CR> :call <SID>TOCActivate(1)<CR>
 nnoremap <silent> <buffer> <leftrelease> :call <SID>TOCActivate(0)<cr>
 nnoremap <silent> <buffer> <2-leftmouse> :call <SID>TOCActivate(1)<cr>
 nnoremap <buffer> <silent> G G4k
-map <buffer> <silent> OA k
-map <buffer> <silent> OB j
-map <buffer> <silent> OC l
-map <buffer> <silent> OD h
+noremap <buffer> <silent> OA k
+noremap <buffer> <silent> OB j
+noremap <buffer> <silent> OC l
+noremap <buffer> <silent> OD h
 " }}}
 
 " vim:fdm=marker:ff=unix:noet:ts=4:sw=4
