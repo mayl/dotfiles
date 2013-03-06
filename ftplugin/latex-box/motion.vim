@@ -444,18 +444,6 @@ function! LatexBox_TOC(...)
 	let b:toc_numbers = 1
 	let b:calling_win = bufwinnr(calling_buf)
 	setlocal filetype=latextoc
-	setlocal buftype=nofile
-				\ bufhidden=wipe
-				\ nobuflisted
-				\ noswapfile
-				\ nowrap
-				\ cursorline
-				\ nonumber
-				\ nolist
-				\ tabstop=8
-				\ cole=0
-				\ cocu=nvic
-
 	" Set local mappings
 	map <buffer> <silent> s			:call <SID>TOCToggleNumbers()<CR>
 	map <buffer> <silent> q			:bwipeout<CR>
