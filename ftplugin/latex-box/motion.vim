@@ -443,6 +443,7 @@ function! LatexBox_TOC(...)
 	let b:toc = toc
 	let b:toc_numbers = 1
 	let b:calling_win = bufwinnr(calling_buf)
+	setlocal filetype=latextoc
 	setlocal buftype=nofile
 				\ bufhidden=wipe
 				\ nobuflisted
@@ -454,17 +455,6 @@ function! LatexBox_TOC(...)
 				\ tabstop=8
 				\ cole=0
 				\ cocu=nvic
-
-	" Set syntax highlighting
-	syntax match helpText /^.*: .*/
-	syntax match secNum /^\S\+\(\.\S\+\)\?\s*/ contained conceal
-	syntax match secLine /^\S\+\t\S\+/ contains=secNum
-	syntax match mainSecLine /^[^\.]\+\t.*/ contains=secNum
-	syntax match ssubSecLine /^[^\.]\+\.[^\.]\+\.[^\.]\+\t.*/ contains=secNum
-	highlight link helpText		PreProc
-	highlight link secNum		Number
-	highlight link mainSecLine	Title
-	highlight link ssubSecLine	Comment
 
 	" Set local mappings
 	map <buffer> <silent> s			:call <SID>TOCToggleNumbers()<CR>
