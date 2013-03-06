@@ -54,6 +54,13 @@ function! s:FindMatchingPair(mode)
 
 	if LatexBox_InComment() | return | endif
 
+	if !exists('g:LatexBox_open_pats')
+		let g:LatexBox_open_pats  = [ '\\{','{','\\(','(','\\\[','\[',
+					\ '\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\.\|\\\a*\)']
+		let g:LatexBox_close_pats = [ '\\}','}','\\)',')','\\\]','\]',
+					\ '\\end\s*{.\{-}}',   '\\right\s*\%([^\\]\|\\.\|\\\a*\)']
+	endif
+
 	" open/close pairs (dollars signs are treated apart)
 	let dollar_pat = '\$'
 	let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
@@ -585,6 +592,10 @@ function! s:TOCActivate(close)
 		execute toc_wnr . 'wincmd w'
 	endif
 endfunction
+" }}}
+
+" TOC Command {{{
+command! LatexTOC call LatexBox_TOC()
 " }}}
 
 " vim:fdm=marker:ff=unix:noet:ts=4:sw=4
