@@ -1,5 +1,15 @@
 " LaTeX Box motion functions
 
+" Motion options {{{
+" Opening and closing patterns
+if !exists('g:LatexBox_open_pats')
+	let g:LatexBox_open_pats  = [ '\\{','{','\\(','(','\\\[','\[',
+				\ '\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\.\|\\\a*\)']
+	let g:LatexBox_close_pats = [ '\\}','}','\\)',')','\\\]','\]',
+				\ '\\end\s*{.\{-}}',   '\\right\s*\%([^\\]\|\\.\|\\\a*\)']
+endif
+" }}}
+
 " HasSyntax {{{
 " s:HasSyntax(syntaxName, [line], [col])
 function! s:HasSyntax(syntaxName, ...)
@@ -53,13 +63,6 @@ function! s:FindMatchingPair(mode)
 	endif
 
 	if LatexBox_InComment() | return | endif
-
-	if !exists('g:LatexBox_open_pats')
-		let g:LatexBox_open_pats  = [ '\\{','{','\\(','(','\\\[','\[',
-					\ '\\begin\s*{.\{-}}', '\\left\s*\%([^\\]\|\\.\|\\\a*\)']
-		let g:LatexBox_close_pats = [ '\\}','}','\\)',')','\\\]','\]',
-					\ '\\end\s*{.\{-}}',   '\\right\s*\%([^\\]\|\\.\|\\\a*\)']
-	endif
 
 	" open/close pairs (dollars signs are treated apart)
 	let dollar_pat = '\$'
