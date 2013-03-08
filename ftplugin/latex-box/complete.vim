@@ -77,18 +77,13 @@ endif
 function! LatexBox_kpsewhich(file)
 	let old_dir = getcwd()
 	execute 'lcd ' . fnameescape(LatexBox_GetTexRoot())
-	redir => out
-	silent execute '!kpsewhich ' . a:file
-	redir END
+	let out = system('kpsewhich "' . a:file . '"')
 
+	" If kpsewhich has found something, it returns a non-empty string with a
+	" newline at the end; otherwise the string is empty
 	if len(out)
-		" kpsewhich has found something
-		let out = split(out, "\<NL>")[-1]
-		let out = substitute(out, '\r', '', 'g')
-		let out = glob(fnamemodify(out, ':p'), 1)
-	else
-		" kpsewhich hasn't found anything
-		let out = ''
+		" Remove the trailing newline
+		let out = fnamemodify(out[:-2], ':p')
 	endif
 
 	execute 'lcd ' . fnameescape(old_dir)
