@@ -81,9 +81,15 @@ function! LatexBox_kpsewhich(file)
 	silent execute '!kpsewhich ' . a:file
 	redir END
 
-	let out = split(out, "\<NL>")[-1]
-	let out = substitute(out, '\r', '', 'g')
-	let out = glob(fnamemodify(out, ':p'), 1)
+	if len(out)
+		" kpsewhich has found something
+		let out = split(out, "\<NL>")[-1]
+		let out = substitute(out, '\r', '', 'g')
+		let out = glob(fnamemodify(out, ':p'), 1)
+	else
+		" kpsewhich hasn't found anything
+		let out = ''
+	endif
 
 	execute 'lcd ' . fnameescape(old_dir)
 
@@ -378,7 +384,8 @@ function! s:ExtractInputs()
 		let [inline, inbegin] = searchpos( '\\@input{', 'ecW' )
 	endwhile
 
-	return matches
+	" Remove empty strings for nonexistant .aux files
+	return filter(matches, 'v:val != ""')
 endfunction
 "}}}
 
