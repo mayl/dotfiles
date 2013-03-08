@@ -416,9 +416,15 @@ function! s:GetLabelCache(file)
 		exe '1sp +let\ labels=<SID>ExtractLabels()|quit! ' . fid
 		exe '1sp +let\ inputs=<SID>ExtractInputs()|quit! ' . fid
 		let s:LabelCache[fid] = [ getftime(fid), labels, inputs ]
-	else
-		let labels = s:LabelCache[fid][1]
 	endif
+
+	" We need to create a copy of s:LabelCache[fid][1], otherwise all inputs'
+	" labels would be added to the current file's label cache upon each
+	" completion call, leading to duplicates/triplicates/etc. and decreased
+	" performance.
+	" Also, because we don't anything with the list besides matching copies,
+	" we can get away with a shallow copy for now.
+	let labels = copy(s:LabelCache[fid][1])
 
 	for input in s:LabelCache[fid][2]
 		let labels += s:GetLabelCache(input)
