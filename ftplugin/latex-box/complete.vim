@@ -406,6 +406,10 @@ let s:LabelCache = {}
 function! s:GetLabelCache(file)
 	let fid = fnamemodify(a:file, ':p')
 
+	if !filereadable(fid)
+		return []
+	endif
+
 	let labels = []
 	if !has_key(s:LabelCache , fid) || s:LabelCache[fid][0] != getftime(fid)
 		" Open file in temporary split window for label extraction.
@@ -432,10 +436,6 @@ function! s:CompleteLabels(regex, ...)
 		let file = LatexBox_GetAuxFile()
 	else
 		let file = a:1
-	endif
-
-	if !filereadable(file)
-		return []
 	endif
 
 	let labels = s:GetLabelCache(file)
