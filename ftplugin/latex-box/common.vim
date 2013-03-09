@@ -1,38 +1,50 @@
 " LaTeX Box common functions
 
 " Error Format {{{
-" This assumes we're using the -file-line-error with [pdf]latex.
+" The error formats assume we're using the -file-line-error with [pdf]latex.
+
+" Check for options
+if !exists("g:LatexBox_show_warnings")
+	let g:LatexBox_show_warnings=1
+endif
 if !exists("g:LatexBox_ignore_warnings")
-	let g:LatexBox_show_warnings = 1
-	let g:LatexBox_ignore_warnings =['Underfull', 'Overfull', 'specifier changed to']
+	let g:LatexBox_ignore_warnings =
+				\['Underfull',
+				\ 'Overfull',
+				\ 'specifier changed to']
 endif
 
-
-
-" ignore certain common warnings
-if g:LatexBox_show_warnings
-	for i in range(len(g:LatexBox_ignore_warnings))
-		let warning = escape(substitute(g:LatexBox_ignore_warnings[i], '[\,]', '%\\\\&', 'g'), ' ')
-		if i==0
-			let opr = '='
-		else
-			let opr = '+='
-		endif
-		exe 'setlocal efm' . opr . '%-G%.%#'. warning .'%.%#'
-	endfor
-end
-" see |errorformat-LaTeX|
-setlocal efm+=%E!\ LaTeX\ %trror:\ %m
-setlocal efm+=%E!\ %m
+" See |errorformat-LaTeX|
+setlocal efm=%E!\ LaTeX\ %trror:\ %m
 setlocal efm+=%E%f:%l:\ %m
+
+" Show or ignore warnings
 if g:LatexBox_show_warnings
+	for w in g:LatexBox_ignore_warnings
+		let warning = escape(substitute(w, '[\,]', '%\\\\&', 'g'), ' ')
+		exe 'setlocal efm+=%-G%.%#'. warning .'%.%#'
+	endfor
 	setlocal efm+=%+WLaTeX\ %.%#Warning:\ %.%#line\ %l%.%#
 	setlocal efm+=%+W%.%#\ at\ lines\ %l--%*\\d
 	setlocal efm+=%+WLaTeX\ %.%#Warning:\ %m
+	setlocal efm+=%+W%.%#%.%#Warning:\ %m
+else
+	setlocal efm+=%-WLaTeX\ %.%#Warning:\ %.%#line\ %l%.%#
+	setlocal efm+=%-W%.%#\ at\ lines\ %l--%*\\d
+	setlocal efm+=%-WLaTeX\ %.%#Warning:\ %m
+	setlocal efm+=%-W%.%#%.%#Warning:\ %m
 endif
-"ignore unmatched lines
+
+" Consider the remaining statements that starts with "!" as errors
+setlocal efm+=%E!\ %m
+
+" Push file to file stack
+setlocal efm+=%+P**%f
+
+" Ignore unmatched lines
 setlocal efm+=%-G\\s%#
 setlocal efm+=%-G%.%#
+
 " }}}
 
 " Vim Windows {{{
