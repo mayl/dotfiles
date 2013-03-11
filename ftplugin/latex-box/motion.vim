@@ -68,7 +68,7 @@ function! s:FindMatchingPair(mode)
 	let dollar_pat = '\$'
 	let notbslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
 	let notcomment = '\%(\%(\\\@<!\%(\\\\\)*\)\@<=%.*\)\@<!'
-	let anymatch =  '\(' 
+	let anymatch =  '\('
 				\ . join(g:LatexBox_open_pats + g:LatexBox_close_pats, '\|')
 				\ . '\|' . dollar_pat . '\)'
 
@@ -337,8 +337,8 @@ function! s:ConvertBack(line)
 	return line
 endfunction
 
-function! s:ReadTOC(auxfile, ...)
-	let texfile = fnamemodify(substitute(a:auxfile, '\.aux$', '.tex', ''), ':p')
+function! s:ReadTOC(auxfile, texfile, ...)
+	let texfile = a:texfile
 	let prefix = fnamemodify(a:auxfile, ':p:h')
 
 	if a:0 != 2
@@ -354,7 +354,10 @@ function! s:ReadTOC(auxfile, ...)
 		let included = matchstr(line, '^\\@input{\zs[^}]*\ze}')
 		if included != ''
 			" append the input TOX to `toc` and `fileindices`
-			call s:ReadTOC(prefix . '/' . included, toc, fileindices)
+			let newaux = prefix . '/' . included
+			call s:ReadTOC(newaux,
+						\ fnamemodify(substitute(newaux, '\.aux$', '.tex', ''), ':p'),
+						\ toc, fileindices)
 			continue
 		endif
 
@@ -363,7 +366,7 @@ function! s:ReadTOC(auxfile, ...)
 		" \@writefile{toc}{\contentsline {section}{\tocsection {}{1}{Section Title}}{pagenumber}}
 		" \@writefile{toc}{\contentsline {section}{\numberline {secnum}Section Title}{pagenumber}{otherstuff}}
 
-		let line = matchstr(line, 
+		let line = matchstr(line,
 					\ '\\@writefile{toc}{\\contentsline\s*\zs.*\ze}\s*$')
 		if empty(line)
 			continue
@@ -405,8 +408,8 @@ function! s:ReadTOC(auxfile, ...)
 
 		" add TOC entry
 		call add(fileindices[texfile], len(toc))
-		call add(toc, {'file': texfile, 
-					\ 'level': level, 
+		call add(toc, {'file': texfile,
+					\ 'level': level,
 					\ 'number': secnum,
 					\ 'text': text,
 					\ 'page': page})
@@ -432,7 +435,8 @@ function! LatexBox_TOC(...)
 	endif
 
 	" Read TOC
-	let [toc, fileindices] = s:ReadTOC(LatexBox_GetAuxFile())
+	let [toc, fileindices] = s:ReadTOC(LatexBox_GetAuxFile(),
+									 \ LatexBox_GetMainTexFile())
 	let calling_buf = bufnr('%')
 
 	" Find closest section in current buffer

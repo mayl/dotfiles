@@ -135,14 +135,14 @@ function! LatexBox_GetTexBasename(with_dir)
 endfunction
 
 function! LatexBox_GetAuxFile()
-	" 1. check for b:aux_dir variable
-	if exists('b:aux_dir') && filereadable(b:aux_dir)
-		return b:aux_dir . '/' . LatexBox_GetTexBasename(0) . '.aux'
+	" 1. check for b:build_dir variable
+	if exists('b:build_dir') && isdirectory(b:build_dir)
+		return b:build_dir . '/' . LatexBox_GetTexBasename(0) . '.aux'
 	endif
 
-	" 2. check for g:LatexBox_aux_file variable
-	if exists('g:LatexBox_aux_dir') && filereadable(g:LatexBox_aux_dir)
-		return g:LatexBox_aux_dir . '/' . LatexBox_GetTexBasename(0) . '.aux'
+	" 2. check for g:LatexBox_build_dir variable
+	if exists('g:LatexBox_build_dir') && isdirectory(g:LatexBox_build_dir)
+		return g:LatexBox_build_dir . '/' . LatexBox_GetTexBasename(0) . '.aux'
 	endif
 
 	" 3. use the base name of main tex file
@@ -150,6 +150,17 @@ function! LatexBox_GetAuxFile()
 endfunction
 
 function! LatexBox_GetLogFile()
+	" 1. check for b:build_dir variable
+	if exists('b:build_dir') && isdirectory(b:build_dir)
+		return b:build_dir . '/' . LatexBox_GetTexBasename(0) . '.log'
+	endif
+
+	" 2. check for g:LatexBox_build_dir variable
+	if exists('g:LatexBox_build_dir') && isdirectory(g:LatexBox_build_dir)
+		return g:LatexBox_build_dir . '/' . LatexBox_GetTexBasename(0) . '.log'
+	endif
+
+	" 3. use the base name of main tex file
 	return LatexBox_GetTexBasename(1) . '.log'
 endfunction
 

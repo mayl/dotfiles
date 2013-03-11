@@ -523,6 +523,15 @@ Compilation ~
  
 	A list of warnings to be ignored. 
 
+*g:LatexBox_build_dir*		Default: ""
+
+	Set output directory for build files.
+
+*b:build_dir*			Default: ""
+
+	Set output directory for build files.  This overrides the global
+	setting.
+
 ------------------------------------------------------------------------------
 
 						*latex-box-settings-windows*
