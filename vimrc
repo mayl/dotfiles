@@ -5,7 +5,7 @@ filetype plugin indent on
 
 if has ('gui_running')
 "colors
-	set background=dark
+	set background=light
 	set t_Co=256
 	colorscheme base16
 "window size

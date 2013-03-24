@@ -69,3 +69,6 @@ export PATH=$PATH:$PLAN9/bin
 
 #redshift
 alias rs="gtk-redshift -l 38.731950:-77.182701 &"
+
+#powertop always needs root
+alias powertop="sudo powertop"
