@@ -5,8 +5,8 @@ filetype plugin indent on
 
 if has ('gui_running')
 "colors
-	set background=light
 	set t_Co=256
+	set background=dark
 	colorscheme base16
 "window size
 	set lines=100
@@ -14,14 +14,18 @@ if has ('gui_running')
 
 "font
 	set guifont=Source\ Code\ Pro\ 10
+else
+	set t_Co=256
+	set background=dark
+	colorscheme ir_black
 endif
 
 "GUI
-set guioptions-=m
-set guioptions-=T 
-set guioptions-=r
+set guioptions-=m "no menu
+set guioptions-=T "no toolbar
+set guioptions-=r "no right
 set guioptions-=R
-set guioptions-=l
+set guioptions-=l "no left
 set guioptions-=L
 
 "general usability
@@ -94,7 +98,7 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-nnoremap ; :
+"nnoremap ; :
 
 au FocusLost * :wa
 
