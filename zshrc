@@ -61,7 +61,7 @@ alias t="python ~/dotfiles/t/t.py --task-dir ~/Dropbox/tasks --list tasks"
 alias nautilus="nautilus ."
 #other aliases
 alias open="xdg-open"
-alias mm="freemind ~/Dropbox/Mindmaps/Larry.mm & \r"
+alias mm="freemind ~/Dropbox/mindmaps/Larry.mm & \r"
 
 #plan9
 export PLAN9=/home/larry/plan9
@@ -72,3 +72,6 @@ alias rs="gtk-redshift -l 38.731950:-77.182701 &"
 
 #powertop always needs root
 alias powertop="sudo powertop"
+
+#arduino Burner
+alias arduinoburner="python ~/code/python/ArduinoBurner/ArduinoBurner.py"
