@@ -4,6 +4,8 @@ from sh import peat
 from sh import evince
 from sh import gvim
 from sh import echo
+from sh import cd
+from sh import pwd
 
 import argparse
 
@@ -13,6 +15,18 @@ parser.add_argument('filename', metavar='f',  help='name of tex file to work on'
 args = parser.parse_args()
 "get just the name without any extension"
 filename = args.filename.split('.')[0]
+
+"get the directories leading to the file, without the filename"
+filepath = args.filename.split('/')[1:-1]
+path = ""
+"concatonate all the directories to build the path"
+for directory in filepath:
+	path = path + "/" + directory
+
+"if the path was empty, we are already in the right directory, otherwise:"
+if path: 
+	"change working directory to project directory"
+	cd(path)
 
 "open a viewer for the output, a peat instance to watch the input and vim to edit the source"
 evince(filename+".dvi",_bg=True)

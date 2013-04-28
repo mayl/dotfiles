@@ -77,7 +77,7 @@ alias powertop="sudo powertop"
 export PATH=$PATH:~/dotfiles/peat
 
 #setup latex
-export PATH=$PATH:~/dotfiles/latexSession
+alias latexSession="gvim; latexmk -pvc"
 
 #arduino Burner
 alias arduinoburner="python ~/code/python/ArduinoBurner/ArduinoBurner.py"
