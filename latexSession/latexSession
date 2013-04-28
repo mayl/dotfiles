@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+
+from sh import peat
+from sh import evince
+from sh import gvim
+from sh import echo
+
+import argparse
+
+"get the file to work on"
+parser = argparse.ArgumentParser(description="Starts up a latex editing session")
+parser.add_argument('filename', metavar='f',  help='name of tex file to work on')
+args = parser.parse_args()
+"get just the name without any extension"
+filename = args.filename.split('.')[0]
+
+"open a viewer for the output, a peat instance to watch the input and vim to edit the source"
+evince(filename+".dvi",_bg=True)
+peat(echo(filename+".tex"), "latexmk", _bg=True)
+gvim(filename+".tex")
