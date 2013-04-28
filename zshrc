@@ -61,7 +61,7 @@ alias t="python ~/dotfiles/t/t.py --task-dir ~/Dropbox/tasks --list tasks"
 alias nautilus="nautilus ."
 #other aliases
 alias open="xdg-open"
-alias mm="freemind ~/Dropbox/Mindmaps/Larry.mm & \r"
+alias mm="freemind ~/Dropbox/mindmaps/Larry.mm & \r"
 
 #plan9
 export PLAN9=/home/larry/plan9
@@ -78,3 +78,6 @@ export PATH=$PATH:~/dotfiles/peat
 
 #setup latex
 export PATH=$PATH:~/dotfiles/latexSession
+
+#arduino Burner
+alias arduinoburner="python ~/code/python/ArduinoBurner/ArduinoBurner.py"
