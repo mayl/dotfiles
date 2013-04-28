@@ -72,3 +72,9 @@ alias rs="gtk-redshift -l 38.731950:-77.182701 &"
 
 #powertop always needs root
 alias powertop="sudo powertop"
+
+#setup peat
+export PATH=$PATH:~/dotfiles/peat
+
+#setup latex
+export PATH=$PATH:~/dotfiles/latexSession

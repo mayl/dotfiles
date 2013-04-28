@@ -137,3 +137,6 @@ inoremap <silent> <F3> <ESC>:YRShow<cr>
 
 "Gundo
 nnoremap <F5> :GundoToggle<cr>
+
+"ctrl-p open in buffer mode
+nnoremap <C-b> :CtrlPBuffer<cr> 
