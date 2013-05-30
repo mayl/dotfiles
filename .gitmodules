@@ -64,3 +64,6 @@
 [submodule "peat"]
 	path = peat
 	url = https://github.com/sjl/peat
+[submodule "vim/bundle/LaTexBox"]
+	path = vim/bundle/LaTexBox
+	url = https://github.com/LaTeX-Box-Team/LaTeX-Box.git
