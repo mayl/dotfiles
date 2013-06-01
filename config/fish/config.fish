@@ -3,6 +3,9 @@ set -x GOROOT $HOME/go
 set -x PATH $PATH $GOROOT/bin
 alias gofmt "go fmt -w"
 
+#use trash instead of rm
+alias rm "trash"
+
 #setup t
 alias t "python ~/dotfiles/t/t.py --task-dir ~/Dropbox/tasks --list tasks"
 
