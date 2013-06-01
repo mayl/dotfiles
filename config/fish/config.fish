@@ -22,3 +22,6 @@ set -x PATH $PATH ~/dotfiles/peat
 
 #arduino Burner
 alias arduinoburner "python ~/code/python/ArduinoBurner/ArduinoBurner.py"
+
+#unison
+alias unison "sudo unison-gtk"

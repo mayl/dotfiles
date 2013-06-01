@@ -1,0 +1,25 @@
+<linux>
+trash-cli
+git
+git-gui
+mercurial
+vim
+vim-gnome
+vim-syntax-go
+unison-all-gtk
+dropbox
+firefox
+chromium-browser
+inkscape
+gimp
+libre office
+lyx
+keepass
+-xdotool
+freemind
+redshift
+terminator
+
+#firefox addons
+vimperator
+clearly
