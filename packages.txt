@@ -14,11 +14,14 @@ inkscape
 gimp
 libre office
 lyx
+latexmk
 keepass
 -xdotool
 freemind
 redshift
 terminator
+kicad
+freecad
 
 #firefox addons
 vimperator
