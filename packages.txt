@@ -20,8 +20,10 @@ keepass
 freemind
 redshift
 terminator
+htop
 kicad
 freecad
+exuberant-ctags
 
 #firefox addons
 vimperator

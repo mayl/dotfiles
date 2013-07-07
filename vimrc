@@ -20,6 +20,9 @@ else
 	colorscheme ir_black
 endif
 
+"Shell
+set shell=/usr/bin/zsh
+
 "GUI
 set guioptions-=m "no menu
 set guioptions-=T "no toolbar
@@ -125,6 +128,10 @@ vmap <Down> ]egv
 "NERDtree
 nnoremap <F2> :NERDTreeToggle<cr>
 inoremap <F2> <esc>:NERDTreeToggle<cr>
+
+"Tagbar
+nnoremap <F4> :TagbarToggle<cr><C-w>l
+inoremap <F4> <esc>:TagbarToggle<cr>
 
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$']
