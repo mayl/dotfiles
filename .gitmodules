@@ -73,3 +73,6 @@
 [submodule "vim/bundle/vim-openscad"]
 	path = vim/bundle/vim-openscad
 	url = https://github.com/torrancew/vim-openscad
+[submodule "vim/bundle/tagbar"]
+	path = vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar
