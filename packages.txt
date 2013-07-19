@@ -15,11 +15,16 @@ gimp
 libre office
 scribus
 lyx
+latexmk
 keepass
 -xdotool
 freemind
 redshift
 terminator
+htop
+kicad
+freecad
+exuberant-ctags
 
 #firefox addons
 vimperator
