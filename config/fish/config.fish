@@ -25,3 +25,6 @@ alias arduinoburner "python ~/code/python/ArduinoBurner/ArduinoBurner.py"
 
 #unison
 alias unison "sudo unison-gtk"
+
+#ack
+alias ack "ack-grep"

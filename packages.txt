@@ -13,6 +13,7 @@ chromium-browser
 inkscape
 gimp
 libre office
+scribus
 lyx
 keepass
 -xdotool

@@ -20,6 +20,9 @@ else
 	colorscheme ir_black
 endif
 
+"Shell
+set shell=/bin/bash
+
 "GUI
 set guioptions-=m "no menu
 set guioptions-=T "no toolbar
