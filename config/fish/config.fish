@@ -1,5 +1,6 @@
 #GOPATHS
 set -x GOROOT $HOME/go 
+set -x GOPATH $HOME/config/go
 set -x PATH $PATH $GOROOT/bin
 alias gofmt "go fmt -w"
 
