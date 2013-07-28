@@ -3,6 +3,7 @@ set -x GOROOT $HOME/go
 set -x GOPATH $HOME/config/go
 set -x PATH $PATH $GOROOT/bin
 alias gofmt "go fmt -w"
+alias godoc_web "echo open localhost:6060; godoc -http=:6060"
 
 #use trash instead of rm
 alias rm "trash"
@@ -29,3 +30,6 @@ alias unison "sudo unison-gtk"
 
 #ack
 alias ack "ack-grep"
+
+#camlistore
+set -x PATH $PATH ~/code/camlistore/bin/
