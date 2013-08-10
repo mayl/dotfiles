@@ -130,7 +130,7 @@ nnoremap <F2> :NERDTreeToggle<cr>
 inoremap <F2> <esc>:NERDTreeToggle<cr>
 
 "Tagbar
-nnoremap <F4> :TagbarToggle<cr><C-w>l
+nnoremap <F4> :TagbarToggle<cr>
 inoremap <F4> <esc>:TagbarToggle<cr>
 
 let NERDTreeHighlightCursorline=1
