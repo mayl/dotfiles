@@ -1,9 +1,13 @@
 #GOPATHS
 set -x GOROOT $HOME/go 
-set -x GOPATH $HOME/config/go
+set -x GOPATH $HOME/code/go
 set -x PATH $PATH $GOROOT/bin
 alias gofmt "go fmt -w"
-alias godoc_web "echo open localhost:6060; godoc -http=:6060"
+function godoc_web
+	echo "open localhost:6060"
+	godoc -http=:6060 &
+end
+
 
 #use trash instead of rm
 alias rm "trash"
@@ -17,7 +21,9 @@ function mm
 end
 
 #redshift
-alias rs "gtk-redshift -l 38.731950:-77.182701 &"
+function rs
+	gtk-redshift -l 38.731950:-77.182701 &
+end
 
 #setup peat
 set -x PATH $PATH ~/dotfiles/peat
