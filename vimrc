@@ -13,12 +13,15 @@ if has ('gui_running')
 	set columns=90
 
 "font
-	set guifont=Source\ Code\ Pro\ 10
+	set guifont=SourceCodePro-Regular\ 9
 else
 	set t_Co=256
 	set background=dark
 	colorscheme ir_black
 endif
+
+syntax on
+
 
 "Shell
 set shell=/bin/bash
