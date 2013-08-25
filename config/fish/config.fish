@@ -2,6 +2,7 @@
 set -x GOROOT $HOME/go 
 set -x GOPATH $HOME/code/go
 set -x PATH $PATH $GOROOT/bin
+set -x PATH $PATH $GOPATH/bin
 alias gofmt "go fmt -w"
 
 #stats godoc server up in background and displays a reminder
