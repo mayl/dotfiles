@@ -1,0 +1,29 @@
+snippet func "Go Function" !b
+func ${1:funcName}(${2:parameters})(${3:returnTypes}){
+	${4:funcBody}
+}
+endsnippet
+
+snippet method "Go Method" !b
+func (${1:methodType}) ${2:funcName}(${3:parameters})(${4:returnTypes}){
+	${5:funcBody}
+}
+endsnippet
+
+snippet for "loop" !b
+for ${1:initialization}; ${2:condition}; ${3:increment}{
+	${4:body}
+}
+endsnippet
+
+snippet iter "iteration" !b
+for ${1:optional initialization}; ${2:i}=range ; ${3:increment}{
+	${4:body}
+}
+endsnippet
+
+snippet biter "iteration" !b
+for ${1:optional initialization}; ${2:i}:=range ; ${3:increment}{
+	${4:body}
+}
+endsnippet
