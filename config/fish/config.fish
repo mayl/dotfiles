@@ -41,4 +41,21 @@ alias unison "sudo unison-gtk"
 alias ack "ack-grep"
 
 #camlistore
-set -x PATH $PATH ~/code/camlistore/bin/
+set -x PATH $PATH ~/camlistore-0.4/bin/
+
+#antares
+set -x ANTARES_INSTALL_DIR ~/code/c/antares
+
+#i3 mute
+function muteToggle
+	if pacmd list-sinks | grep "muted: yes"
+		pactl set-sink-mute 1 0
+		echo "Muted"
+	else
+		pactl set-sink-mute 1 1
+		echo "Not Muted"
+	end
+end
+
+#scanner
+set -x SANE_DEFAULT_DEVICE "brother4:bus9;dev1"
