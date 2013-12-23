@@ -109,7 +109,3 @@ inoremap <silent> <F3> <ESC>:YRShow<cr>
 
 "Gundo
 nnoremap <F5> :GundoToggle<cr>
-
-
-
-

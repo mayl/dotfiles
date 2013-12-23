@@ -1,9 +1,13 @@
 #GOPATHS
 set -x GOROOT $HOME/go 
+set -x TERM $HOME/go 
 set -x GOPATH $HOME/code/go
 set -x PATH $PATH $GOROOT/bin
 set -x PATH $PATH $GOPATH/bin
 alias gofmt "go fmt -w"
+
+#TERM variable
+set -x TERM screen-256color
 
 #stats godoc server up in background and displays a reminder
 function godoc_web
