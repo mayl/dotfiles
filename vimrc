@@ -13,7 +13,7 @@ if has ('gui_running')
 	set columns=90
 
 "font
-	set guifont=SourceCodePro-Regular\ 11
+	set guifont=Source\ Code\ Pro\ Semi-Bold\ 11
 else
 	set t_Co=256
 	set background=dark
