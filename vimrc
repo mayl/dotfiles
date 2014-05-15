@@ -6,14 +6,14 @@ filetype plugin indent on
 if has ('gui_running')
 "colors
 	set t_Co=256
-	set background=dark
-	colorscheme base16
+	set background=light
+	colorscheme solarized
 "window size
 	set lines=100
 	set columns=90
 
 "font
-	set guifont=SourceCodePro-Regular\ 9
+	set guifont=SourceCodePro-Regular\ 11
 else
 	set t_Co=256
 	set background=dark
