@@ -63,3 +63,6 @@ end
 
 #scanner
 set -x SANE_DEFAULT_DEVICE "brother4:bus9;dev1"
+
+#ipython notebook
+alias ipyNotebook "ipython notebook --notebook-dir=~/Dropbox/Projects/ipythonNotebooks &"

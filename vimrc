@@ -158,3 +158,6 @@ nnoremap <C-b> :CtrlPBuffer<cr>
 let g:UltiSnipsExpandTrigger = "<c-j>"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+
+"spell"
+nnoremap <leader>s :setlocal spell spelllang=en_us<cr>
