@@ -12,7 +12,7 @@ git("submodule", "update")
 newdir = "/dotfiles"
 olddir = "/dotfiles_old"
 
-files = ["bashrc", "vimrc",  "vim", "Xresources", "/config/fish/config.fish"]
+files = ["bashrc", "vimrc",  "vim", "Xresources", "/config/fish/config.fish", "/nvpy"]
 folders = ["/config/fish, /fonts"]
 
 

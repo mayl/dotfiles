@@ -6,14 +6,14 @@ filetype plugin indent on
 if has ('gui_running')
 "colors
 	set t_Co=256
-	set background=dark
-	colorscheme base16
+	set background=light
+	colorscheme solarized
 "window size
 	set lines=100
 	set columns=90
 
 "font
-	set guifont=SourceCodePro-Regular\ 9
+	set guifont=Source\ Code\ Pro\ Semi-Bold\ 11
 else
 	set t_Co=256
 	set background=dark
@@ -76,10 +76,12 @@ let mapleader=","
 let maplocalleader="\\"
 
 "folds
+set foldmethod=syntax
 nnoremap <silent><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 nnoremap <silent><S-Space> @=(foldlevel('.')?'zA':"\<Space>")<CR>
 vnoremap <Space> zf
-nnoremap <leader>z gg<S-v><S-g>z<S-o>`` 
+"open all folds shortcut
+nnoremap <leader>z gg<S-v><S-g>z<S-o>``  
 
 "fix search, map ,<space> to clear hl
 nnoremap / /\v
@@ -156,3 +158,6 @@ nnoremap <C-b> :CtrlPBuffer<cr>
 let g:UltiSnipsExpandTrigger = "<c-j>"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+
+"spell"
+nnoremap <leader>s :setlocal spell spelllang=en_us<cr>

@@ -1,0 +1,21 @@
+2014-09-04 21:54:12,274 - DEBUG - nvpy logging initialized
+2014-09-04 21:54:12,294 - DEBUG - config read from []
+2014-09-04 21:54:37,724 - DEBUG - title "" resync
+2014-09-04 21:56:58,780 - DEBUG - nvpy logging initialized
+2014-09-04 21:56:58,781 - DEBUG - config read from ['/home/larry/.nvpy.cfg']
+2014-09-07 15:16:55,398 - DEBUG - title "test does st" resync
+2014-09-07 15:16:57,458 - DEBUG - title "test does stuff I ad" resync
+2014-09-07 15:16:59,467 - DEBUG - title "test does stuff I add here bec" resync
+2014-09-07 15:17:01,472 - DEBUG - title "t" resync
+2014-09-07 15:17:03,481 - DEBUG - title "the whole first l" resync
+2014-09-07 15:17:05,488 - DEBUG - title "the whole first line is the title" resync
+2014-09-07 15:18:07,532 - DEBUG - title "test2" resync
+2014-09-21 15:49:03,757 - DEBUG - nvpy logging initialized
+2014-09-21 15:49:03,779 - DEBUG - config read from ['/home/larry/.nvpy.cfg']
+2014-09-21 15:49:18,382 - DEBUG - modifydate "test2" resync
+2014-09-21 16:19:00,995 - DEBUG - nvpy logging initialized
+2014-09-21 16:19:00,996 - DEBUG - config read from ['/home/larry/.nvpy.cfg']
+2014-09-21 16:19:05,040 - DEBUG - nvpy logging initialized
+2014-09-21 16:19:05,040 - DEBUG - config read from ['/home/larry/.nvpy.cfg']
+2014-09-21 16:33:33,161 - DEBUG - nvpy logging initialized
+2014-09-21 16:33:33,161 - DEBUG - config read from ['/home/larry/.nvpy.cfg']

@@ -45,7 +45,11 @@ alias unison "sudo unison-gtk"
 alias ack "ack-grep"
 
 #camlistore
+<<<<<<< HEAD
 set -x PATH $PATH ~/camlistore-0.6/bin/
+=======
+set -x PATH $PATH ~/camlistore-0.7/bin
+>>>>>>> c0d5100a0213cd0cc1106a6ec6959cabe0ac983b
 
 #antares
 set -x ANTARES_INSTALL_DIR ~/code/c/antares
@@ -63,3 +67,6 @@ end
 
 #scanner
 set -x SANE_DEFAULT_DEVICE "brother4:bus9;dev1"
+
+#ipython notebook
+alias ipyNotebook "ipython notebook --notebook-dir=~/Dropbox/Projects/ipythonNotebooks &"
