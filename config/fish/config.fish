@@ -45,7 +45,7 @@ alias unison "sudo unison-gtk"
 alias ack "ack-grep"
 
 #camlistore
-set -x PATH $PATH ~/camlistore-0.4/bin/
+set -x PATH $PATH ~/camlistore-0.6/bin/
 
 #antares
 set -x ANTARES_INSTALL_DIR ~/code/c/antares
