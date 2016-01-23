@@ -6,7 +6,7 @@ filetype plugin indent on
 if has ('gui_running')
 "colors
 	set t_Co=256
-	set background=light
+	set background=dark
 	colorscheme solarized
 "window size
 	set lines=100
@@ -22,6 +22,11 @@ endif
 
 syntax on
 
+"Tabstops
+set tabstop=4
+set shiftwidth=4
+set smarttab
+set expandtab
 
 "Shell
 set shell=/bin/bash
