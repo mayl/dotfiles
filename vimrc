@@ -166,3 +166,6 @@ let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
 
 "spell"
 nnoremap <leader>s :setlocal spell spelllang=en_us<cr>
+
+"configure haskell"
+let g:haddock_browser="/usr/bin/google-chrome"
