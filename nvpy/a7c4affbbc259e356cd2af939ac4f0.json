@@ -1,0 +1,13 @@
+{
+  "modifydate": 1455631115.024628, 
+  "tags": [
+    "bash", 
+    "shell", 
+    "unix"
+  ], 
+  "createdate": 1455630920.060633, 
+  "syncdate": 0, 
+  "systemtags": [], 
+  "content": "fish shell\n\nuse chsh to set shell to /usr/bin/sh\n\ninstall z-fish: https://github.com/sjl/z-fish", 
+  "savedate": 1455631111.339559
+}

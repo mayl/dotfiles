@@ -88,3 +88,6 @@
 [submodule "vim/bundle/haskellMode"]
 	path = vim/bundle/haskellMode
 	url = https://github.com/lukerandall/haskellmode-vim.git
+[submodule "vim/bundle/cumino"]
+	path = vim/bundle/cumino
+	url = https://github.com/adinapoli/cumino
