@@ -1,22 +1,115 @@
-"load plugins with pathogen
+"setup vundle
+set nocompatible
 filetype off
-call pathogen#runtime_append_all_bundles()
+
+"set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let vundle manage vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'sjl/badwolf'
+
+Plugin 'kien/ctrlp.vim.git'
+
+Plugin 'sjl/gundo'
+
+Plugin 'tomasr/molokai'
+
+Plugin 'scrooloose/nerdtree'
+
+Plugin 'klen/python-mode.git'
+
+Plugin 'jnwiteh/vim-golang'
+
+Plugin 'tpope/vim-surround'
+
+Plugin 'vim-scripts/YankRing'
+
+Plugin 'ervandew/supertab'
+
+Plugin 'Lokaltog/vim-powerline'
+
+Plugin 'tpope/vim-unimpaired'
+
+Plugin 'tpope/fugitive'
+
+Plugin 'tpope/fugitive'
+
+Plugin 'tpope/vim-repeat'
+
+Plugin 'tpope/vim-vividchalk'
+
+Plugin 'tpope/vim-commentary'
+
+Plugin 'chriskempson/base16-vim'
+
+Plugin 'Shougo/neocomplache'
+
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
+
+Plugin 'tpope/vim-eunuch'
+
+Plugin 'torrancew/vim-openscad'
+
+Plugin 'sjl/splice'
+
+Plugin 'majutsushi/tagbar'
+
+Plugin 'Valloric/YouCompleteMe'
+
+Plugin 'SirVer/ultisnips'
+
+Plugin 'altercation/vim-colors-solarized'
+
+Plugin 'lukerandall/haskellmode-vim'
+
+Plugin 'adinapoli/cumino'
+
+Plugin 'rdnetto/YCM-Generator'
+
+"All plugins must come before this line
+call vundle#end()
 filetype plugin indent on
 
+if has ('gui_running')
 "colors
-set background=dark
-set t_Co=256
-colorscheme badwolf
+	set t_Co=256
+	set background=dark
+	colorscheme solarized
+"window size
+	set lines=100
+	set columns=90
+
+"font
+	set guifont=Source\ Code\ Pro\ Semi-Bold\ 11
+else
+	set t_Co=256
+	set background=dark
+	colorscheme molokai
+endif
+
+syntax on
+
+"Tabstops
+set tabstop=4
+set shiftwidth=4
+set smarttab
+set expandtab
+
+"Shell
+set shell=/bin/bash
 
 "GUI
-set guioptions-=T 
-set guioptions-=r
+set guioptions-=m "no menu
+set guioptions-=T "no toolbar
+set guioptions-=r "no right
 set guioptions-=R
-set guioptions-=l
+set guioptions-=l "no left
 set guioptions-=L
 
 "general usability
-set nocompatible
 set modelines=0
 set encoding=utf-8
 set scrolloff=3
@@ -31,6 +124,7 @@ set ruler
 set backspace=indent,eol,start
 set laststatus=2
 set relativenumber
+set number
 set undofile
 set autoread
 
@@ -51,10 +145,17 @@ set directory=~/.vim/tmp/swap//
 set backup
 set noswapfile
 
-
 "leader
 let mapleader=","
 let maplocalleader="\\"
+
+"folds
+set foldmethod=syntax
+nnoremap <silent><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+nnoremap <silent><S-Space> @=(foldlevel('.')?'zA':"\<Space>")<CR>
+vnoremap <Space> zf
+"open all folds shortcut
+nnoremap <leader>z gg<S-v><S-g>z<S-o>``  
 
 "fix search, map ,<space> to clear hl
 nnoremap / /\v
@@ -80,7 +181,7 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-nnoremap ; :
+"nnoremap ; :
 
 au FocusLost * :wa
 
@@ -94,9 +195,23 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+"line indents
+nmap <Left> <<
+nmap <Right> >>
+nmap <Up> [e
+nmap <Down> ]e
+vmap <Left> <gv
+vmap <Right> >gv
+vmap <Up> [egv
+vmap <Down> ]egv
+
 "NERDtree
 nnoremap <F2> :NERDTreeToggle<cr>
 inoremap <F2> <esc>:NERDTreeToggle<cr>
+
+"Tagbar
+nnoremap <F4> :TagbarToggle<cr>
+inoremap <F4> <esc>:TagbarToggle<cr>
 
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$']
@@ -109,3 +224,17 @@ inoremap <silent> <F3> <ESC>:YRShow<cr>
 
 "Gundo
 nnoremap <F5> :GundoToggle<cr>
+
+"ctrl-p open in buffer mode
+nnoremap <C-b> :CtrlPBuffer<cr> 
+
+"ultisnips"
+let g:UltiSnipsExpandTrigger = "<c-j>"
+let g:UltiSnipsJumpForwardTrigger = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+
+"spell"
+nnoremap <leader>s :setlocal spell spelllang=en_us<cr>
+
+"configure haskell"
+let g:haddock_browser="/usr/bin/google-chrome"

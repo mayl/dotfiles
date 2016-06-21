@@ -1,0 +1,96 @@
+[submodule "vim/bundle/badwolf"]
+	path = vim/bundle/badwolf
+	url = https://github.com/sjl/badwolf.git
+[submodule "vim/bundle/ctrlp.vim"]
+	path = vim/bundle/ctrlp.vim
+	url = https://github.com/kien/ctrlp.vim.git
+[submodule "vim/bundle/gundo"]
+	path = vim/bundle/gundo
+	url = https://github.com/sjl/gundo.vim.git
+[submodule "vim/bundle/molokai"]
+	path = vim/bundle/molokai
+	url = https://github.com/tomasr/molokai.git
+[submodule "vim/bundle/nerdtree"]
+	path = vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "vim/bundle/python-mode"]
+	path = vim/bundle/python-mode
+	url = https://github.com/klen/python-mode.git
+[submodule "vim/bundle/vim-golang"]
+	path = vim/bundle/vim-golang
+	url = https://github.com/jnwhiteh/vim-golang.git
+[submodule "vim/bundle/vim-surround"]
+	path = vim/bundle/vim-surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "vim/bundle/YankRing"]
+	path = vim/bundle/YankRing
+	url = https://github.com/vim-scripts/YankRing.vim.git
+[submodule "vim/bundle/supertab"]
+	path = vim/bundle/supertab
+	url = https://github.com/ervandew/supertab.git
+[submodule "powerline"]
+	path = vim/bundle/vim-powerline
+	url = https://github.com/Lokaltog/vim-powerline.git
+[submodule "z"]
+	path = z
+	url = https://github.com/rupa/z.git
+[submodule "vim/bundle/vim-unimpaired"]
+	path = vim/bundle/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired.git
+[submodule "fasd"]
+	path = fasd
+	url = https://github.com/clvv/fasd
+[submodule "vim/bundle/fugitive"]
+	path = vim/bundle/fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/bundle/vim-repeat"]
+	path = vim/bundle/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "vim/bundle/vim-vividchalk"]
+	path = vim/bundle/vim-vividchalk
+	url = https://github.com/tpope/vim-vividchalk.git
+[submodule "vim/bundle/vim-commentary"]
+	path = vim/bundle/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule "vim/bundle/base16"]
+	path = vim/bundle/base16
+	url = https://github.com/chriskempson/base16-vim.git
+[submodule "vim/bundle/neocomplcache"]
+	path = vim/bundle/neocomplcache
+	url = https://github.com/Shougo/neocomplcache.git
+[submodule "peat"]
+	path = peat
+	url = https://github.com/sjl/peat
+[submodule "vim/bundle/LaTexBox"]
+	path = vim/bundle/LaTexBox
+	url = https://github.com/LaTeX-Box-Team/LaTeX-Box.git
+[submodule "vim/bundle/vim-eunuch"]
+	path = vim/bundle/vim-eunuch
+	url = https://github.com/tpope/vim-eunuch.git
+[submodule "vim/bundle/vim-openscad"]
+	path = vim/bundle/vim-openscad
+	url = https://github.com/torrancew/vim-openscad
+[submodule "vim/bundle/splice"]
+	path = vim/bundle/splice
+	url = https://github.com/sjl/splice.vim.git
+[submodule "vim/bundle/tagbar"]
+	path = vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar
+[submodule "vim/bundle/YouCompleteMe"]
+	path = vim/bundle/YouCompleteMe
+	url = https://github.com/Valloric/YouCompleteMe
+[submodule "vim/bundle/ultisnips"]
+	path = vim/bundle/ultisnips
+	url = https://github.com/SirVer/ultisnips
+[submodule "vim/bundle/solarized"]
+	path = vim/bundle/solarized
+	url = git://github.com/altercation/vim-colors-solarized.git
+[submodule "vim/bundle/haskellMode"]
+	path = vim/bundle/haskellMode
+	url = https://github.com/lukerandall/haskellmode-vim.git
+[submodule "vim/bundle/cumino"]
+	path = vim/bundle/cumino
+	url = https://github.com/adinapoli/cumino
+[submodule "vim/bundle/YCM-Generator"]
+	path = vim/bundle/YCM-Generator
+	url = https://github.com/rdnetto/YCM-Generator
