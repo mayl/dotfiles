@@ -3,17 +3,17 @@ set nocompatible
 filetype off
 
 "set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+set rtp+=$HOME/.vim/bundle/Vundle.vim
+call vundle#begin('$HOME/.vimplugins')
 
 " let vundle manage vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'sjl/badwolf'
 
-Plugin 'kien/ctrlp.vim.git'
+Plugin 'kien/ctrlp.vim'
 
-Plugin 'sjl/gundo'
+Plugin 'sjl/gundo.vim'
 
 Plugin 'tomasr/molokai'
 
@@ -21,11 +21,11 @@ Plugin 'scrooloose/nerdtree'
 
 Plugin 'klen/python-mode.git'
 
-Plugin 'jnwiteh/vim-golang'
+Plugin 'fatih/vim-go'
 
 Plugin 'tpope/vim-surround'
 
-Plugin 'vim-scripts/YankRing'
+"Plugin 'vim-scripts/YankRing.vim'
 
 Plugin 'ervandew/supertab'
 
@@ -33,9 +33,7 @@ Plugin 'Lokaltog/vim-powerline'
 
 Plugin 'tpope/vim-unimpaired'
 
-Plugin 'tpope/fugitive'
-
-Plugin 'tpope/fugitive'
+Plugin 'tpope/vim-fugitive'
 
 Plugin 'tpope/vim-repeat'
 
@@ -45,7 +43,7 @@ Plugin 'tpope/vim-commentary'
 
 Plugin 'chriskempson/base16-vim'
 
-Plugin 'Shougo/neocomplache'
+Plugin 'Shougo/neocomplete'
 
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
 
@@ -53,11 +51,9 @@ Plugin 'tpope/vim-eunuch'
 
 Plugin 'torrancew/vim-openscad'
 
-Plugin 'sjl/splice'
+Plugin 'sjl/splice.vim'
 
 Plugin 'majutsushi/tagbar'
-
-Plugin 'Valloric/YouCompleteMe'
 
 Plugin 'SirVer/ultisnips'
 
