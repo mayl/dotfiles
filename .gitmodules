@@ -91,3 +91,6 @@
 [submodule "vim/bundle/cumino"]
 	path = vim/bundle/cumino
 	url = https://github.com/adinapoli/cumino
+[submodule "vim/bundle/YCM-Generator"]
+	path = vim/bundle/YCM-Generator
+	url = https://github.com/rdnetto/YCM-Generator

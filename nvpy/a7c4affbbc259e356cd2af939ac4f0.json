@@ -1,5 +1,5 @@
 {
-  "modifydate": 1455631115.024628, 
+  "modifydate": 1455678029.059453, 
   "tags": [
     "bash", 
     "shell", 
@@ -8,6 +8,6 @@
   "createdate": 1455630920.060633, 
   "syncdate": 0, 
   "systemtags": [], 
-  "content": "fish shell\n\nuse chsh to set shell to /usr/bin/sh\n\ninstall z-fish: https://github.com/sjl/z-fish", 
-  "savedate": 1455631111.339559
+  "content": "fish shell\n\nuse chsh to set shell to /usr/bin/sh\n\ninstall fasd: https://jurriaan.ninja/2014/12/21/fish-shell-and-fasd.html\n\nfunction -e fish_preexec _run_fasd\n  fasd --proc (fasd --sanitize \"$argv\") > \"/dev/null\" 2>&1\nend\n\nfunction j\n  cd (fasd -d -e 'printf %s' \"$argv\")\nend\n\nhttps://github.com/fish-shell/fish-shell/issues/1358\n\n\ninstall z-fish: https://github.com/sjl/z-fish", 
+  "savedate": 1455678020.274249
 }

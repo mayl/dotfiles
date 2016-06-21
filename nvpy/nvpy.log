@@ -45,3 +45,12 @@
 2016-02-16 08:58:52,008 - DEBUG - Trying to convert a7c4affbbc259e356cd2af939ac4f0 to html.
 2016-02-16 08:58:52,009 - DEBUG - Convert note a7c4affbbc259e356cd2af939ac4f0 to html.
 2016-02-16 08:58:52,044 - DEBUG - Convert done.
+2016-02-16 20:41:21,783 - DEBUG - nvpy logging initialized
+2016-02-16 20:41:21,787 - DEBUG - config read from []
+2016-02-16 20:41:32,987 - DEBUG - modifydate "fish shell" resync
+2016-02-16 22:00:07,713 - DEBUG - nvpy logging initialized
+2016-02-16 22:00:07,734 - DEBUG - config read from []
+2016-02-16 22:00:18,263 - DEBUG - modifydate "fish shell" resync
+2016-02-16 22:25:12,750 - DEBUG - modifydate "you complete me" resync
+2016-02-16 22:25:18,838 - DEBUG - tags "you complete me" resync
+2016-02-16 22:30:03,134 - DEBUG - modifydate "you complete me" resync

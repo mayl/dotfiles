@@ -1,0 +1,10 @@
+{
+  "modifydate": 1455679850.159976, 
+  "tags": [
+    "vim"
+  ], 
+  "createdate": 1455679451.730472, 
+  "syncdate": 0, 
+  "content": "you complete me\n\nhttps://github.com/Valloric/YouCompleteMe\n\nvim package for autocompletion.  Needs to be compiled before it is used. Needs an extra flags file per project for the GoTo commands to work - haven't gotten this all set up yet.\n\nThere is a generator that is supposed to make the ycm_extra_conf file automatically?\nhttps://github.com/rdnetto/YCM-Generator", 
+  "savedate": 1455679849.203139
+}
