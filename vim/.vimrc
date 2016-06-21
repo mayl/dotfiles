@@ -73,7 +73,7 @@ if has ('gui_running')
 "colors
 	set t_Co=256
 	set background=dark
-	colorscheme solarized
+	colorscheme base16-monokai
 "window size
 	set lines=100
 	set columns=90
@@ -135,9 +135,9 @@ set wildignore+=*.sw?
 set wildignore+=*.pyc
 
 "backups
-set undodir=~/.vim/tmp/undo//
-set backupdir=~/.vim/tmp/backup//
-set directory=~/.vim/tmp/swap//
+set undodir=~/.vimtmp/undo//
+set backupdir=~/.vimtmp/backup//
+set directory=~/.vimtmp/swap//
 set backup
 set noswapfile
 
