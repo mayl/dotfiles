@@ -75,3 +75,6 @@ set -gx RUST_SRC_PATH /usr/local/src/rust/src/rustc-1.9.0/src/
 #emacs
 alias emacsKill "emacsclient -e '(kill-emacs)'"
 alias emacsRestart "emacsclient -e '(kill-emacs)' ; emacs --daemon"
+
+#ada
+set -x PATH $PATH /usr/local/spark2014/bin
