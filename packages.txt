@@ -26,6 +26,12 @@ kicad
 freecad
 exuberant-ctags
 
+#programing
+rustup
+cargo
+    racer
+
+
 #firefox addons
 vimperator
 clearly

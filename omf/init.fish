@@ -70,7 +70,8 @@ alias ipyNotebook "ipython notebook --notebook-dir=~/Dropbox/Projects/ipythonNot
 
 #rust
 set -x PATH $PATH ~/.cargo/bin/
-set -gx RUST_SRC_PATH /usr/local/src/rust/src/rustc-1.9.0/src/
+set -gx RUST_SRC_PATH (rustc --print sysroot)/lib/rustlib/src/rust/src
+#set -gx RUST_SRC_PATH /usr/local/src/rust/src/rustc-1.9.0/src/
 
 #emacs
 alias emacsKill "emacsclient -e '(kill-emacs)'"
@@ -78,3 +79,6 @@ alias emacsRestart "emacsclient -e '(kill-emacs)' ; emacs --daemon"
 
 #ada
 set -x PATH $PATH /usr/local/spark2014/bin
+
+#wifi
+alias wifiRestart "sudo service network-manager restart"

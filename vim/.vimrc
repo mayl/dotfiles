@@ -65,6 +65,8 @@ Plugin 'adinapoli/cumino'
 
 Plugin 'rdnetto/YCM-Generator'
 
+Plugin 'racer-rust/vim-racer'
+
 "All plugins must come before this line
 call vundle#end()
 filetype plugin indent on
@@ -234,3 +236,8 @@ nnoremap <leader>s :setlocal spell spelllang=en_us<cr>
 
 "configure haskell"
 let g:haddock_browser="/usr/bin/google-chrome"
+
+"configure rust-racer"
+set hidden
+let g:racer_cmd = "~/.cargo/bin/racer"
+let $RUST_SRC_PATH = "~/.cargo/src/"
