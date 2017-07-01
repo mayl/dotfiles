@@ -47,6 +47,7 @@ Plugin 'SirVer/ultisnips'
 Plugin 'rust-lang/rust.vim'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'lambdatoast/elm.vim'
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
 
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
