@@ -9,7 +9,10 @@
     ~/.vimrc: vim/vimrc
     ~/.ghc/ghci.conf: haskell/ghci.conf
     ~/.config/fish: fish
+    ~/.fonts: fonts
 
+- clean: ['~']
+- clean: [~/.config]
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
