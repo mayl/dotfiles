@@ -48,6 +48,8 @@ Plugin 'rust-lang/rust.vim'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'lambdatoast/elm.vim'
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
+Plugin 'phildawes/racer'
+
 
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -180,3 +182,6 @@ nnoremap <C-p> :CtrlP<cr>
 
 "Markdown
 let g:vim_markdown_folding_disabled = 1
+
+"Racer"
+"TODO: add g:racer_cmd and $RUST_SRC_PATH"
