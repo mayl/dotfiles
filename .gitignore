@@ -1,6 +1,8 @@
 #ignore oh-my-zsh
 oh-my-zsh/
+
 vim/.netrwhist
+vim/bunde/*
 /*/.hg/*
 /*/.hg*
 =======
