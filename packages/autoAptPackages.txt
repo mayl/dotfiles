@@ -6,3 +6,4 @@ vim-gnome
 latexmk
 htop
 exuberant-ctags
+fish
