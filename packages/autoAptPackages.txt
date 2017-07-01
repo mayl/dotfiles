@@ -1,0 +1,8 @@
+trash-cli
+git
+git-gui
+vim
+vim-gnome
+latexmk
+htop
+exuberant-ctags
