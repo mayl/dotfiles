@@ -1,9 +1,7 @@
-<<<<<<< HEAD
 #ignore oh-my-zsh
 oh-my-zsh/
 vim/.netrwhist
 /*/.hg/*
 /*/.hg*
-=======
 doc/tags
->>>>>>> 65d94361e583fd0895bcd7f2bfa45e7effc0ea36
+fish_history
