@@ -7,7 +7,3 @@ vim/bundle/*
 /*/.hg*
 =======
 doc/tags
-
-#ignore fish history
-fish_history
-fish/fishd.*

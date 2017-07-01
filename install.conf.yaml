@@ -8,9 +8,9 @@
     ~/.vim: vim
     ~/.vimrc: vim/vimrc
     ~/.ghc/ghci.conf: haskell/ghci.conf
-    ~/.config/fish: fish
     ~/.fonts: fonts
     ~/.gitconfig: git/gitconfig
+    ~/.config/fish/config.fish: fish/config.fish
 
 - clean: ['~']
 - clean: [~/.config]
