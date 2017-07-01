@@ -9,6 +9,7 @@
     ~/.vimrc: vim/vimrc
     ~/.ghc/ghci.conf: haskell/ghci.conf
     ~/.config/fish: fish
+    ~/.gitconfig: git/gitconfig
 
 
 - shell:
