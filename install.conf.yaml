@@ -10,6 +10,7 @@
     ~/.ghc/ghci.conf: haskell/ghci.conf
     ~/.config/fish: fish
     ~/.fonts: fonts
+    ~/.gitconfig: git/gitconfig
 
 - clean: ['~']
 - clean: [~/.config]
