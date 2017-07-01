@@ -1,9 +1,9 @@
-scripts:
-- apt-packages.sh
-* apt installs some basic packages on the system
-- install.sh
-* runs dotbot to symlink all dotfiles
+#scripts:
+* apt-packages.sh
+    * apt installs some basic packages on the system
+* install.sh
+    * runs dotbot to symlink all dotfiles
 
-TODO:
+#TODO:
 * add emacs
 * setup racer
