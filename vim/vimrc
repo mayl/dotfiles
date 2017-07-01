@@ -49,6 +49,7 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'lambdatoast/elm.vim'
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
 Plugin 'phildawes/racer'
+Plugin 'tpope/vim-unimpaired'
 
 
 " " All of your Plugins must be added before the following line
@@ -135,6 +136,19 @@ set hlsearch
 nnoremap <leader><space> :noh<cr>
 nnoremap <tab> %
 vnoremap <tab> %
+
+"setup tabs
+set tabstop=4
+set expandtab
+nmap <Right> >>
+nmap <Left>  <<
+vmap <Right> >gv
+vmap <Left>  <gv
+nmap <Up> [e
+nmap <Down> ]e
+vmap <Up> [egv
+vmap <Down> ]egv
+
 
 "set line length
 set wrap
