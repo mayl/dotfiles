@@ -10,6 +10,7 @@
     ~/.ghc/ghci.conf: haskell/ghci.conf
     ~/.fonts: fonts
     ~/.gitconfig: git/gitconfig
+    ~/.githelpers: git/githelpers
     ~/.config/fish/omf: fish/omf
 
 - clean: ['~']
