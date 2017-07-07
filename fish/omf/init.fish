@@ -1,13 +1,13 @@
 #GOPATHS
-set -x GOROOT $HOME/go 
-set -x TERM $HOME/go 
-set -x GOPATH $HOME/code/go
-set -x PATH $PATH $GOROOT/bin
-set -x PATH $PATH $GOPATH/bin
+set -xg GOROOT $HOME/go 
+set -xg TERM $HOME/go 
+set -xg GOPATH $HOME/code/go
+set -xg PATH $PATH $GOROOT/bin
+set -xg PATH $PATH $GOPATH/bin
 alias gofmt "go fmt -w"
 
 #TERM variable
-set -x TERM screen-256color
+set -xg TERM screen-256color
 
 #stats godoc server up in background and displays a reminder
 function godoc_web
@@ -33,7 +33,7 @@ function rs
 end
 
 #setup peat
-set -x PATH $PATH ~/dotfiles/peat
+set -xg PATH $PATH ~/dotfiles/peat
 
 #arduino Burner
 alias arduinoburner "python ~/code/python/ArduinoBurner/ArduinoBurner.py"
@@ -45,10 +45,10 @@ alias unison "sudo unison-gtk"
 alias ack "ack-grep"
 
 #camlistore
-set -x PATH $PATH ~/camlistore-0.7/bin
+set -xg PATH $PATH ~/camlistore-0.7/bin
 
 #antares
-set -x ANTARES_INSTALL_DIR ~/code/c/antares
+set -xg ANTARES_INSTALL_DIR ~/code/c/antares
 
 #i3 mute
 function muteToggle
@@ -62,10 +62,10 @@ function muteToggle
 end
 
 #scanner
-set -x SANE_DEFAULT_DEVICE "brother4:bus9;dev1"
+set -xg SANE_DEFAULT_DEVICE "brother4:bus9;dev1"
 
 #ipython notebook
 alias ipyNotebook "ipython notebook --notebook-dir=~/Dropbox/Projects/ipythonNotebooks &"
 
 #racer
-set -x RUST_SRC_PATH ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
+set -xg RUST_SRC_PATH ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
