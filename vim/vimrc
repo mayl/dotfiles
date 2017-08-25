@@ -40,15 +40,15 @@ Plugin 'plasticboy/vim-markdown'     "markdown language
 Plugin 'lambdatoast/elm.vim'         "elm language
 Plugin 'LaTeX-Box-Team/LaTeX-Box'    "latex language
 
-"file navigation
-Plugin 'ctrlpvim/ctrlp.vim'          "fuzzy find
-Plugin 'scrooloose/nerdtree'         "file navigation
-
 "editing
 Plugin 'vim-scripts/YankRing.vim'    "cut and paste
 Plugin 'sjl/gundo.vim'               "undo
 Plugin 'tpope/vim-surround'          "parens and braces
 Plugin 'tpope/vim-commentary'        "comment out lines
+
+"file navigation
+Plugin 'ctrlpvim/ctrlp.vim'          "fuzzy find
+Plugin 'scrooloose/nerdtree'         "file navigation
 
 "integratoins
 Plugin 'tpope/vim-fugitive'          "git TODO
