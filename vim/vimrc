@@ -210,6 +210,9 @@ let g:vim_markdown_folding_disabled = 1
 nnoremap \\\ :Commentary<cr>
 vnoremap \\\ :Commentary<cr>
 
+"folds
+set fdm=syntax
+
 "Tags
 let g:ctrlp_tjump_only_silent=1
 let g:vim_tags_use_vim_dispatch=1
