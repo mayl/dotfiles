@@ -1,9 +1,16 @@
 trash-cli
 git
 git-gui
+mercurial
 vim
 vim-gnome
+lyx
+firefox
+chromium-browser
 latexmk
 htop
 exuberant-ctags
-fish
+vim-syntax-go
+inkscape
+gimp
+xdotool

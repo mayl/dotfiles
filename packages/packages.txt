@@ -1,11 +1,10 @@
+#All packages that have to be manually added
 #linux packages
 trash-cli
 git
 git-gui
-mercurial
 vim
 vim-gnome
-vim-syntax-go
 unison-all-gtk
 dropbox
 firefox
@@ -17,7 +16,7 @@ scribus
 lyx
 latexmk
 keepass
--xdotool
+xdotool
 freemind
 redshift
 terminator
@@ -26,6 +25,13 @@ kicad
 freecad
 exuberant-ctags
 
+#external PPA
+fish
+
 #firefox addons
 vimperator
 clearly
+
+#manual install
+fzf
+rustup
