@@ -212,6 +212,8 @@ vnoremap \\\ :Commentary<cr>
 
 "folds
 set fdm=syntax
+"unfold all folds on entry
+autocmd Syntax * normal zR 
 
 "Tags
 let g:ctrlp_tjump_only_silent=1
