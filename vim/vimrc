@@ -39,6 +39,7 @@ Plugin 'rust-lang/rust.vim'          "rust language
 Plugin 'plasticboy/vim-markdown'     "markdown language
 Plugin 'lambdatoast/elm.vim'         "elm language
 Plugin 'LaTeX-Box-Team/LaTeX-Box'    "latex language
+  Plugin 'stfl/meson.vim'                "meson build system
 
 "editing
 Plugin 'vim-scripts/YankRing.vim'    "cut and paste
