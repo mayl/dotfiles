@@ -202,7 +202,7 @@ nnoremap <F5> :GundoToggle<cr>
 
 "CtrlP
 nnoremap <C-p> :CtrlP<cr>
-nnoremap <leader>b :CtrlPBuffer<cr>
+nnoremap <C-b> :CtrlPBuffer<cr>
 
 "Markdown
 let g:vim_markdown_folding_disabled = 1
