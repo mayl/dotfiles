@@ -12,6 +12,8 @@
     dc = diff --cached
     amend = commit --amend
     aa = add --all
+    ap = add --patch
+    ai = add --interactive
     ff = merge --ff-only
     pullff = pull --ff-only
     noff = merge --no-ff
