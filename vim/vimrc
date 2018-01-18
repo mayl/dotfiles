@@ -31,38 +31,39 @@ Plugin 'VundleVim/Vundle.vim'
 
 "Themes
 Plugin 'sjl/badwolf'                 "theme
-"Languages
-Plugin 'python-mode/python-mode'     "python language
-Plugin 'lukerandall/haskellmode-vim' "haskell language
-Plugin 'torrancew/vim-openscad'      "openscad language
-Plugin 'rust-lang/rust.vim'          "rust language
-Plugin 'plasticboy/vim-markdown'     "markdown language
-Plugin 'lambdatoast/elm.vim'         "elm language
-Plugin 'LaTeX-Box-Team/LaTeX-Box'    "latex language
-Plugin 'stfl/meson.vim'              "meson build system
-Plugin 'lepture/vim-jinja'           "jinja templating
 
-"editing
-Plugin 'vim-scripts/YankRing.vim'    "cut and paste
-Plugin 'sjl/gundo.vim'               "undo
-Plugin 'tpope/vim-surround'          "parens and braces
-Plugin 'tpope/vim-commentary'        "comment out lines
+" Languages
+Plugin 'python-mode/python-mode'      " python language
+Plugin 'lukerandall/haskellmode-vim'  " haskell language
+Plugin 'torrancew/vim-openscad'       " openscad language
+Plugin 'rust-lang/rust.vim'           " rust language
+Plugin 'phildawes/racer'              " use racer completions TODO
+Plugin 'plasticboy/vim-markdown'      " markdown language
+Plugin 'lambdatoast/elm.vim'          " elm language
+Plugin 'LaTeX-Box-Team/LaTeX-Box'     " latex language
+Plugin 'stfl/meson.vim'               " meson build system
+Plugin 'lepture/vim-jinja'            " jinja templating
 
-"file navigation
-Plugin 'ctrlpvim/ctrlp.vim'          "fuzzy find
-Plugin 'scrooloose/nerdtree'         "file navigation
+" editing
+Plugin 'vim-scripts/YankRing.vim'     " cut and paste
+Plugin 'sjl/gundo.vim'                " undo
+Plugin 'tpope/vim-surround'           " parens and braces
+Plugin 'tpope/vim-commentary'         " comment out lines
+Plugin 'godlygeek/tabular'            " alignment TODO: learn bindings - http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
 
-"integratoins
-Plugin 'tpope/vim-fugitive'          "git TODO
-Plugin 'tpope/vim-unimpaired'        "TODO
+" file navigation
+Plugin 'ctrlpvim/ctrlp.vim'           " fuzzy find
+Plugin 'ivalkeen/vim-ctrlp-tjump'     " jump to definition, or fuzzy narrow
+Plugin 'scrooloose/nerdtree'          " file navigation
+Plugin 'airblade/vim-rooter'          " root-directory
 
-"autocompletion
-Plugin 'SirVer/ultisnips'           "TODO snippet completion
-Plugin 'Valloric/YouCompleteMe'     "Autocompletion engine
-Plugin 'szw/vim-tags'               "generate ctags
-Plugin 'ivalkeen/vim-ctrlp-tjump'   "jump to definition, or fuzzy narrow
-Plugin 'phildawes/racer'            "use racer completions TODO
-Plugin 'tpope/vim-dispatch'         "make asynchronous calls, used by vim-tags
+" integrations
+Plugin 'tpope/vim-fugitive'           " git TODO
+Plugin 'tpope/vim-unimpaired'         " TODO
+
+" autocompletion
+Plugin 'ludovicchabant/vim-gutentags' " auto ctags
+Plugin 'tpope/vim-dispatch'           " make asynchronous calls, used by vim-tags
 
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -112,6 +113,7 @@ set relativenumber
 set number
 set undofile
 set autoread
+set tildeop
 
 "wildmenu
 set wildmenu
@@ -212,14 +214,15 @@ let g:vim_markdown_folding_disabled = 1
 nnoremap \\\ :Commentary<cr>
 vnoremap \\\ :Commentary<cr>
 
-"folds
+"folds enable syntax folding and unfold all on entry
 set fdm=syntax
-"unfold all folds on entry
 autocmd Syntax * normal zR 
 
 "Tags
 let g:ctrlp_tjump_only_silent=1
-let g:vim_tags_use_vim_dispatch=1
 nnoremap <leader>t :CtrlPtjump<cr>
 vnoremap <leader>t :CtrlPtjumpVisual<cr>
 nnoremap <leader>T :CtrlPTag<cr>
+set omnifunc=syntaxcomplete#Complete
+" inoremap <C-space><C-x><C-o>
+inoremap <C-@><C-space>
