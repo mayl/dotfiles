@@ -175,7 +175,7 @@ autocmd Syntax * normal zR
 let g:ctrlp_tjump_only_silent=1
 nnoremap <leader>t :CtrlPtjump<cr>
 vnoremap <leader>t :CtrlPtjumpVisual<cr>
-nnoremap <leader>T :CtrlPTag<cr>
+nnoremap <leader>T :Tags<cr>
 set omnifunc=syntaxcomplete#Complete
 " inoremap <C-space><C-x><C-o>
 inoremap <C-@><C-space>
