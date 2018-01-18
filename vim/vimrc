@@ -3,7 +3,7 @@ filetype off                  " required
 
 set shell=/bin/bash
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.vim/bundle')
 "Themes
 Plug 'sjl/badwolf'                 "theme
 

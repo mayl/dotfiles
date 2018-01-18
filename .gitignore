@@ -5,5 +5,7 @@ vim/.netrwhist
 vim/bundle/*
 /*/.hg/*
 /*/.hg*
+tags
+*.tag
 =======
 doc/tags
