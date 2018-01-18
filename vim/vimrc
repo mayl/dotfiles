@@ -3,85 +3,45 @@ filetype off                  " required
 
 set shell=/bin/bash
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" " alternatively, pass a path where Vundle should install plugins
-" "call vundle#begin('~/some/path/here')
-"
-" " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-"
-" " The following are examples of different formats supported.
-" " Keep Plugin commands between vundle#begin/end.
-" " plugin on GitHub repo
-" Plugin 'tpope/vim-fugitive'
-" " plugin from http://vim-scripts.org/vim/scripts.html
-" " Plugin 'L9'
-" " Git plugin not hosted on GitHub
-" Plugin 'git://git.wincent.com/command-t.git'
-" " git repos on your local machine (i.e. when working on your own plugin)
-" Plugin 'file:///home/gmarik/path/to/plugin'
-" " The sparkup vim script is in a subdirectory of this repo called vim.
-" " Pass the path to set the runtimepath properly.
-" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" " Install L9 and avoid a Naming conflict if you've already installed a
-" " different version somewhere else.
-" " Plugin 'asceNator/L9', {'name': 'newL9'}
-
+call plug#begin('~/.vim/plugged')
 "Themes
-Plugin 'sjl/badwolf'                 "theme
+Plug 'sjl/badwolf'                 "theme
 
 " Languages
-Plugin 'python-mode/python-mode'      " python language
-Plugin 'lukerandall/haskellmode-vim'  " haskell language
-Plugin 'torrancew/vim-openscad'       " openscad language
-Plugin 'rust-lang/rust.vim'           " rust language
-Plugin 'phildawes/racer'              " use racer completions TODO
-Plugin 'plasticboy/vim-markdown'      " markdown language
-Plugin 'lambdatoast/elm.vim'          " elm language
-Plugin 'LaTeX-Box-Team/LaTeX-Box'     " latex language
-Plugin 'stfl/meson.vim'               " meson build system
-Plugin 'lepture/vim-jinja'            " jinja templating
+Plug 'python-mode/python-mode'      " python language
+Plug 'lukerandall/haskellmode-vim'  " haskell language
+Plug 'torrancew/vim-openscad'       " openscad language
+Plug 'rust-lang/rust.vim'           " rust language
+Plug 'phildawes/racer'              " use racer completions TODO
+Plug 'plasticboy/vim-markdown'      " markdown language
+Plug 'lambdatoast/elm.vim'          " elm language
+Plug 'LaTeX-Box-Team/LaTeX-Box'     " latex language
+Plug 'stfl/meson.vim'               " meson build system
+Plug 'lepture/vim-jinja'            " jinja templating
 
 " editing
-Plugin 'vim-scripts/YankRing.vim'     " cut and paste
-Plugin 'sjl/gundo.vim'                " undo
-Plugin 'tpope/vim-surround'           " parens and braces
-Plugin 'tpope/vim-commentary'         " comment out lines
-Plugin 'godlygeek/tabular'            " alignment TODO: learn bindings - http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
+Plug 'tpope/vim-surround'           " parens and braces
+Plug 'tpope/vim-commentary'         " comment out lines
+Plug 'godlygeek/tabular'            " alignment TODO: learn bindings - http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
 
 " file navigation
-Plugin 'ctrlpvim/ctrlp.vim'           " fuzzy find
-Plugin 'ivalkeen/vim-ctrlp-tjump'     " jump to definition, or fuzzy narrow
-Plugin 'scrooloose/nerdtree'          " file navigation
-Plugin 'airblade/vim-rooter'          " root-directory
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'ctrlpvim/ctrlp.vim'           " fuzzy find
+Plug 'ivalkeen/vim-ctrlp-tjump'     " jump to definition, or fuzzy narrow
+Plug 'scrooloose/nerdtree'          " file navigation
+Plug 'airblade/vim-rooter'          " root-directory
 
 " integrations
-Plugin 'tpope/vim-fugitive'           " git TODO
-Plugin 'tpope/vim-unimpaired'         " TODO
+Plug 'tpope/vim-fugitive'           " git TODO
+Plug 'tpope/vim-unimpaired'         " TODO
 
 " autocompletion
-Plugin 'ludovicchabant/vim-gutentags' " auto ctags
-Plugin 'tpope/vim-dispatch'           " make asynchronous calls, used by vim-tags
+Plug 'ludovicchabant/vim-gutentags' " auto ctags
+Plug 'tpope/vim-dispatch'           " make asynchronous calls, used by vim-tags
 
-" " All of your Plugins must be added before the following line
-call vundle#end()            " required
+call plug#end()            " required
 filetype plugin indent on    " required
-" " To ignore plugin indent changes, instead use:
-" "filetype plugin on
-" "
-" " Brief help
-" " :PluginList       - lists configured plugins
-" " :PluginInstall    - installs plugins; append `!` to update or just
-" :PluginUpdate
-" " :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" " :PluginClean      - confirms removal of unused plugins; append `!` to
-" auto-approve removal
-" "
-" " see :h vundle for more details or wiki for FAQ
-" " Put your non-Plugin stuff after this line
-
 
 "colors
 set background=dark
@@ -196,16 +156,9 @@ let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$']
 "let NERDTreeMinimalUI=1
 let NERDTreeDirArrows=1
 
-"YankRing
-nnoremap <silent> <F3> :YRShow<cr>
-inoremap <silent> <F3> <ESC>:YRShow<cr>
-
-"Gundo
-nnoremap <F5> :GundoToggle<cr>
-
-"CtrlP
-nnoremap <C-p> :CtrlP<cr>
-nnoremap <C-b> :CtrlPBuffer<cr>
+"Fzf
+nnoremap <C-p> :Files<cr>
+nnoremap <C-b> :Buffers<cr>
 
 "Markdown
 let g:vim_markdown_folding_disabled = 1
