@@ -27,10 +27,9 @@ Plug 'godlygeek/tabular'            " alignment TODO: learn bindings - http://vi
 " file navigation
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'ctrlpvim/ctrlp.vim'           " fuzzy find
-Plug 'ivalkeen/vim-ctrlp-tjump'     " jump to definition, or fuzzy narrow
 Plug 'scrooloose/nerdtree'          " file navigation
 Plug 'airblade/vim-rooter'          " root-directory
+Plug 'majutsushi/tagbar'            " display tags
 
 " integrations
 Plug 'tpope/vim-fugitive'           " git TODO
@@ -168,14 +167,15 @@ nnoremap \\\ :Commentary<cr>
 vnoremap \\\ :Commentary<cr>
 
 "folds enable syntax folding and unfold all on entry
-set fdm=syntax
+set foldmethod=syntax
 autocmd Syntax * normal zR 
 
 "Tags
 let g:ctrlp_tjump_only_silent=1
-nnoremap <leader>t :CtrlPtjump<cr>
-vnoremap <leader>t :CtrlPtjumpVisual<cr>
 nnoremap <leader>T :Tags<cr>
 set omnifunc=syntaxcomplete#Complete
-" inoremap <C-space><C-x><C-o>
-inoremap <C-@><C-space>
+
+"ripgreg
+nnoremap <leader>f :Find<cr>
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+set grepprg=rg\ --vimgrep
