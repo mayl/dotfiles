@@ -175,6 +175,10 @@ let g:ctrlp_tjump_only_silent=1
 nnoremap <leader>T :Tags<cr>
 set omnifunc=syntaxcomplete#Complete
 
+"Align
+nnoremap <leader>a :Tabularize /
+vnoremap <leader>a :Tabularize /
+
 "ripgreg
 nnoremap <leader>f :Find<cr>
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
