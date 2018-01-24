@@ -74,6 +74,9 @@ set undofile
 set autoread
 set tildeop
 
+"re-open files at last opened position
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
 "wildmenu
 set wildmenu
 set wildmode=list:longest
