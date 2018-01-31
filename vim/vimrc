@@ -8,16 +8,17 @@ call plug#begin('~/.vim/bundle')
 Plug 'sjl/badwolf'                 "theme
 
 " Languages
-Plug 'python-mode/python-mode'      " python language
-Plug 'lukerandall/haskellmode-vim'  " haskell language
-Plug 'torrancew/vim-openscad'       " openscad language
-Plug 'rust-lang/rust.vim'           " rust language
-Plug 'phildawes/racer'              " use racer completions TODO
-Plug 'plasticboy/vim-markdown'      " markdown language
-Plug 'lambdatoast/elm.vim'          " elm language
-Plug 'LaTeX-Box-Team/LaTeX-Box'     " latex language
-Plug 'stfl/meson.vim'               " meson build system
-Plug 'lepture/vim-jinja'            " jinja templating
+Plug 'python-mode/python-mode'     " python language
+Plug 'lukerandall/haskellmode-vim' " haskell language
+Plug 'torrancew/vim-openscad'      " openscad language
+Plug 'rust-lang/rust.vim'          " rust language
+Plug 'phildawes/racer'             " use racer completions TODO
+Plug 'plasticboy/vim-markdown'     " markdown language
+Plug 'lambdatoast/elm.vim'         " elm language
+Plug 'LaTeX-Box-Team/LaTeX-Box'    " latex language
+Plug 'stfl/meson.vim'              " meson build system
+Plug 'lepture/vim-jinja'           " jinja templating
+Plug 'vale1410/vim-minizinc'       " Minizinc
 
 " editing
 Plug 'tpope/vim-surround'           " parens and braces
@@ -180,8 +181,8 @@ set omnifunc=syntaxcomplete#Complete
 nnoremap <F4> :TagbarToggle<cr>
 
 "Align
-nnoremap <leader>a :Tabularize /
-vnoremap <leader>a :Tabularize /
+nnoremap <leader>a :Tabularize
+vnoremap <leader>a :Tabularize
 
 "ripgreg
 nnoremap <leader>f :Find<cr>
