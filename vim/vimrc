@@ -188,3 +188,12 @@ vnoremap <leader>a :Tabularize
 nnoremap <leader>f :Find<cr>
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 set grepprg=rg\ --vimgrep
+
+"do bit twiddling alignment automagically.  TODO: scope this to just c and cpp
+fun! RegAlign() "{{{
+  Tabularize /(/l0l0
+  Tabularize /<</l1r1
+  Tabularize /)/l0
+endfunction "}}}
+
+command! RegAlign call RegAlign()
