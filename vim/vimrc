@@ -181,8 +181,8 @@ set omnifunc=syntaxcomplete#Complete
 nnoremap <F4> :TagbarToggle<cr>
 
 "Align
-nnoremap <leader>a :Tabularize
-vnoremap <leader>a :Tabularize
+nnoremap <leader>a :Tabularize 
+vnoremap <leader>a :Tabularize 
 
 "ripgreg
 nnoremap <leader>f :Find<cr>
