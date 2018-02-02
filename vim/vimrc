@@ -194,7 +194,7 @@ fun! RegAlign() "{{{
   Tabularize /(/l1l0
   Tabularize /<</l1r1
   Tabularize /)/l0
-  Tabularize /\/\//l1
+  Tabularize /\/\//l1l0
 endfunction "}}}
 
 command! RegAlign call RegAlign()
