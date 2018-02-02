@@ -191,9 +191,10 @@ set grepprg=rg\ --vimgrep
 
 "do bit twiddling alignment automagically.  TODO: scope this to just c and cpp
 fun! RegAlign() "{{{
-  Tabularize /(/l0l0
+  Tabularize /(/l1l0
   Tabularize /<</l1r1
   Tabularize /)/l0
+  Tabularize /\/\//l1
 endfunction "}}}
 
 command! RegAlign call RegAlign()
