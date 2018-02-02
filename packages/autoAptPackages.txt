@@ -4,13 +4,15 @@ git-gui
 mercurial
 vim
 vim-gnome
+neovim
 lyx
 firefox
 chromium-browser
 latexmk
 htop
 exuberant-ctags
-vim-syntax-go
 inkscape
 gimp
 xdotool
+python3
+python3-pip
