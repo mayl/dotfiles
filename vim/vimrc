@@ -21,9 +21,10 @@ Plug 'lepture/vim-jinja'           " jinja templating
 Plug 'vale1410/vim-minizinc'       " Minizinc
 
 " editing
-Plug 'tpope/vim-surround'           " parens and braces
-Plug 'tpope/vim-commentary'         " comment out lines
-Plug 'godlygeek/tabular'            " alignment TODO: learn bindings - http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
+Plug 'tpope/vim-surround'              " parens and braces
+Plug 'tpope/vim-commentary'            " comment out lines
+Plug 'godlygeek/tabular'               " alignment TODO: learn bindings - http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
+Plug 'michaeljsmith/vim-indent-object' " select indent objects
 
 " file navigation
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
