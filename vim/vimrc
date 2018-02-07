@@ -19,6 +19,7 @@ Plug 'LaTeX-Box-Team/LaTeX-Box'    " latex language
 Plug 'stfl/meson.vim'              " meson build system
 Plug 'lepture/vim-jinja'           " jinja templating
 Plug 'vale1410/vim-minizinc'       " Minizinc
+Plug 'pearofducks/ansible-vim'     " Ansible
 
 " editing
 Plug 'tpope/vim-surround'              " parens and braces
