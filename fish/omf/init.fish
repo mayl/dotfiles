@@ -50,6 +50,9 @@ set -xg PATH $PATH ~/camlistore-0.7/bin
 #antares
 set -xg ANTARES_INSTALL_DIR ~/code/c/antares
 
+#fuzzy foreground
+alias ffg "fg %(jobs | hs | cut -f1)"
+
 #i3 mute
 function muteToggle
 	if pacmd list-sinks | grep "muted: yes"
