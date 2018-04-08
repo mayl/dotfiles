@@ -80,6 +80,9 @@ set tildeop
 "re-open files at last opened position
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
+"minimum split width is 80
+set winwidth=80
+
 "wildmenu
 set wildmenu
 set wildmode=list:longest
