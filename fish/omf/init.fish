@@ -53,6 +53,9 @@ set -xg ANTARES_INSTALL_DIR ~/code/c/antares
 #fuzzy foreground
 alias ffg "fg %(jobs | hs | cut -f1)"
 
+#fuzzy background
+alias fbg "bg %(jobs | hs | cut -f1)"
+
 #i3 mute
 function muteToggle
 	if pacmd list-sinks | grep "muted: yes"
