@@ -61,5 +61,8 @@ if test -d ~/.cargo/
     set -xg PATH $PATH ~/.cargo/bin
 end
 
+#local (why do I have to do this??)
+set -xg PATH $PATH ~/.local/bin
+
 #racer
 set -xg RUST_SRC_PATH ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
