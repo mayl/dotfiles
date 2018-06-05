@@ -11,7 +11,7 @@
     ~/.fonts: fonts
     ~/.gitconfig: git/gitconfig
     ~/.githelpers: git/githelpers
-    ~/.config/fish/omf: fish/omf
+    ~/.config/omf: fish/omf
 
 - clean: ['~']
 - clean: [~/.config]
