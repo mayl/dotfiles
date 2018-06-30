@@ -38,6 +38,7 @@ Plug 'majutsushi/tagbar'            " display tags
 
 " integrations
 Plug 'tpope/vim-fugitive'           " git TODO
+Plug 'airblade/vim-gitgutter'       " TODO
 Plug 'tpope/vim-unimpaired'         " TODO
 
 " autocompletion
