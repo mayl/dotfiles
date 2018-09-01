@@ -37,8 +37,8 @@ Plug 'airblade/vim-rooter'          " root-directory
 Plug 'majutsushi/tagbar'            " display tags
 
 " integrations
-Plug 'tpope/vim-fugitive'           " git TODO
-Plug 'airblade/vim-gitgutter'       " TODO
+Plug 'tpope/vim-fugitive'           " TODO learn how to add patches, configure Gbrowse
+Plug 'airblade/vim-gitgutter'       " TODO configure and learn keybindings
 Plug 'tpope/vim-unimpaired'         " TODO
 
 " autocompletion
@@ -52,6 +52,7 @@ filetype plugin indent on    " required
 set background=dark
 set t_Co=256
 let g:gruvbox_contrast_dark = 'hard'
+let g:gruvbox_contrast_light = 'medium'
 colorscheme gruvbox
 
 "GUI, remove unneeded elements
