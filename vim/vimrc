@@ -45,6 +45,9 @@ Plug 'tpope/vim-unimpaired'         " TODO
 Plug 'ludovicchabant/vim-gutentags' " auto ctags
 Plug 'tpope/vim-dispatch'           " make asynchronous calls, used by vim-tags
 
+" vimwiki
+Plug 'vimwiki/vimwiki'              " vimwiki
+
 call plug#end()            " required
 filetype plugin indent on    " required
 
@@ -206,5 +209,7 @@ fun! RegAlign() "{{{
   Tabularize /)/l0
   Tabularize /\/\//l1l0
 endfunction "}}}
+
+"rooter
 
 command! RegAlign call RegAlign()
