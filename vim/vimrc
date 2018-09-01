@@ -9,18 +9,19 @@ Plug 'sjl/badwolf'                 "theme
 Plug 'morhetz/gruvbox'             "theme
 
 " Languages
-Plug 'python-mode/python-mode'     " python language
-Plug 'lukerandall/haskellmode-vim' " haskell language
-Plug 'torrancew/vim-openscad'      " openscad language
-Plug 'rust-lang/rust.vim'          " rust language
-Plug 'phildawes/racer'             " use racer completions TODO
-Plug 'plasticboy/vim-markdown'     " markdown language
-Plug 'lambdatoast/elm.vim'         " elm language
-Plug 'LaTeX-Box-Team/LaTeX-Box'    " latex language
-Plug 'stfl/meson.vim'              " meson build system
-Plug 'lepture/vim-jinja'           " jinja templating
-Plug 'vale1410/vim-minizinc'       " Minizinc
-Plug 'pearofducks/ansible-vim'     " Ansible
+Plug 'python-mode/python-mode'                 " python language
+Plug 'lukerandall/haskellmode-vim'             " haskell language
+Plug 'torrancew/vim-openscad'                  " openscad language
+Plug 'rust-lang/rust.vim'                      " rust language
+Plug 'phildawes/racer'                         " use racer completions TODO
+Plug 'plasticboy/vim-markdown'                 " markdown language
+Plug 'lambdatoast/elm.vim'                     " elm language
+Plug 'LaTeX-Box-Team/LaTeX-Box'                " latex language
+Plug 'stfl/meson.vim'                          " meson build system
+Plug 'lepture/vim-jinja'                       " jinja templating
+Plug 'vale1410/vim-minizinc'                   " Minizinc
+Plug 'pearofducks/ansible-vim'                 " Ansible
+Plug 'https://github.com/aklt/plantuml-syntax' " plantuml
 
                                               " editing
 Plug 'tpope/vim-surround'                     " parens and braces
