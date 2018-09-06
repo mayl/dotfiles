@@ -12,6 +12,7 @@
     ~/.gitconfig: git/gitconfig
     ~/.githelpers: git/githelpers
     ~/.config/omf: fish/omf
+    ~/.xmonad: xmonad/
 
 - clean: ['~']
 - clean: [~/.config]
