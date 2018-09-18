@@ -86,6 +86,9 @@ set undofile
 set autoread
 set tildeop
 
+" set listchars for visualizing whitespace
+set listchars=trail:·,precedes:«,extends:»,eol:↲,tab:▸\ 
+
 "re-open files at last opened position
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
