@@ -6,7 +6,8 @@
 
 - link:
     ~/.vim: vim
-    ~/.vimrc: vim/vimrc
+    ~/.local/share/nvim/site: vim
+    ~/.config/nvim/init.vim: vim/vimrc
     ~/.ghc/ghci.conf: haskell/ghci.conf
     ~/.fonts: fonts
     ~/.gitconfig: git/gitconfig
