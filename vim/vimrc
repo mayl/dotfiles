@@ -9,6 +9,10 @@ Plug 'sjl/badwolf'                 "theme
 Plug 'morhetz/gruvbox'             "theme
 
 " Languages
+Plug 'autozimu/LanguageClient-neovim', {
+      \'branch': 'next',
+      \'do': 'bash isntall.sh'
+      \ }                 " language sever client
 Plug 'python-mode/python-mode'                 " python language
 Plug 'lukerandall/haskellmode-vim'             " haskell language
 Plug 'torrancew/vim-openscad'                  " openscad language
@@ -216,4 +220,10 @@ endfunction "}}}
 
 "rooter
 
+"alignment
 command! RegAlign call RegAlign()
+
+"language server
+let g:LanguageClient_serverCommands = {
+      \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+      \}
