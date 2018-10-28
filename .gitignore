@@ -7,5 +7,6 @@ vim/bundle/*
 /*/.hg*
 tags
 *.tag
+fonts/.*
 =======
 doc/tags
