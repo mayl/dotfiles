@@ -3,6 +3,7 @@
 trash-cli
 git
 git-gui
+nvim
 vim
 vim-gnome
 unison-all-gtk
@@ -31,6 +32,10 @@ fish
 #firefox addons
 vimperator
 clearly
+
+#Network
+nmap
+wireshark
 
 #manual install
 fzf
