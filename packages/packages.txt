@@ -40,3 +40,18 @@ wireshark
 #manual install
 fzf
 rustup
+
+#pip install
+pip3 install --user python-language-server[all] #enable language server for python, with all extra tools
+
+#rust
+rustup
+rustup component add rls-preview rust-analysis rust-src #enable the rust language server
+
+#c programming
+pip3 install --user meson
+clang
+build-essential
+cmake
+cquery
+
