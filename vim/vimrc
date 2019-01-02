@@ -47,7 +47,8 @@ Plug 'majutsushi/tagbar'            " display tags
 " integrations
 Plug 'tpope/vim-fugitive'           " TODO learn how to add patches, configure Gbrowse
 Plug 'airblade/vim-gitgutter'       " TODO configure and learn keybindings
-Plug 'tpope/vim-unimpaired'         " TODO
+Plug 'tpope/vim-unimpaired'         " 
+Plug 'tpope/vim-repeat'         " TODO
 
 " autocompletion
 Plug 'ludovicchabant/vim-gutentags' " auto ctags
@@ -133,8 +134,8 @@ set incsearch
 set showmatch
 set hlsearch
 nnoremap <leader><space> :noh<cr>
-nnoremap <tab> %
-vnoremap <tab> %
+" nnoremap <tab> %
+" vnoremap <tab> %
 
 "setup tabs
 set tabstop=4
@@ -227,6 +228,19 @@ endfunction "}}}
 command! RegAlign call RegAlign()
 
 "language server
+if has('nvim')
 let g:LanguageClient_serverCommands = {
       \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+      \ 'python': ['~/.local/bin/pyls'],
       \}
+let g:deoplete#enable_at_startup = 1
+set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+nnoremap <silent> Lh :call LanguageClient#textDocument_hover()<cr>
+nnoremap <silent> Lr :call LanguageClient_textDocument_rename()<cr>
+nnoremap <silent> LR :call LanguageClient_textDocument_references()<cr>
+nnoremap <silent> Ld :call LanguageClient_textDocument_definition()<cr>
+nnoremap <silent> Li :call LanguageClient_textDocument_implementation()<cr>
+nnoremap <silent> Ls :call LanguageClient_textDocument_documentSymbol()<cr>
+nnoremap <silent> La :call LanguageClient_textDocument_codeAction()<cr>
+nnoremap <silent> Le :call LanguageClient#explainErrorAtPoint()<cr>
+endif
