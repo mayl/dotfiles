@@ -40,6 +40,7 @@ wireshark
 #manual install
 fzf
 rustup
+google-ocaml-fuse #access the VT google drive to store by big calibre library
 
 #pip install
 pip3 install --user python-language-server[all] #enable language server for python, with all extra tools
