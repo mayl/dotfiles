@@ -12,7 +12,7 @@ Plug 'morhetz/gruvbox'             "theme
 if has('nvim')
 Plug 'autozimu/LanguageClient-neovim', {
       \'branch': 'next',
-      \'do': 'bash isntall.sh'
+      \'do': 'bash install.sh'
       \ }                                                   " language sever client
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'} " autocompletion
 endif
