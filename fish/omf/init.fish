@@ -29,5 +29,5 @@ if test -d ~/.cargo/
     set -xg PATH $PATH ~/.cargo/bin
 end
 
-#local (why do I have to do this??)
+#get pip install -U binaries into path
 set -xg PATH $PATH ~/.local/bin
