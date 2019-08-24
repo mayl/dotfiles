@@ -36,6 +36,7 @@ Plug 'tpope/vim-commentary'                   " comment out lines
 Plug 'godlygeek/tabular'                      " alignment 
 Plug 'michaeljsmith/vim-indent-object'        " select indent objects
 Plug 'townk/vim-autoclose'                    " select indent objects
+Plug 'easymotion/vim-easymotion'              " quickly navigate to targeted words
 
 " file navigation
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -173,7 +174,6 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-nnoremap <leader><leader> <C-^>
 
 "NERDtree
 nnoremap <F2> :NERDTreeToggle<cr>
@@ -244,3 +244,9 @@ nnoremap <silent> Ls :call LanguageClient_textDocument_documentSymbol()<cr>
 nnoremap <silent> La :call LanguageClient_textDocument_codeAction()<cr>
 nnoremap <silent> Le :call LanguageClient#explainErrorAtPoint()<cr>
 endif
+
+" easymotion
+nmap s <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
+map <leader>j <Plug>(easymotion-j)
+map <leader>k <Plug>(easymotion-k)
