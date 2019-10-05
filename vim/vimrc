@@ -246,7 +246,7 @@ nnoremap <silent> Le :call LanguageClient#explainErrorAtPoint()<cr>
 endif
 
 " easymotion
-nmap s <Plug>(easymotion-overwin-f2)
+nmap S<Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
 map <leader>j <Plug>(easymotion-j)
 map <leader>k <Plug>(easymotion-k)
