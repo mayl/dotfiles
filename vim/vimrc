@@ -173,6 +173,7 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+nnoremap <leader><leader> <C-^>
 
 "NERDtree
 nnoremap <F2> :NERDTreeToggle<cr>
@@ -208,7 +209,7 @@ nnoremap <F4> :TagbarToggle<cr>
 nnoremap <leader>a :Tabularize 
 vnoremap <leader>a :Tabularize 
 
-"ripgreg
+"ripgrep
 nnoremap <leader>f :Find<cr>
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 set grepprg=rg\ --vimgrep
@@ -245,7 +246,7 @@ nnoremap <silent> Le :call LanguageClient#explainErrorAtPoint()<cr>
 endif
 
 " easymotion
-nmap s <Plug>(easymotion-overwin-f2)
+nmap S <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
 map <leader>j <Plug>(easymotion-j)
 map <leader>k <Plug>(easymotion-k)
