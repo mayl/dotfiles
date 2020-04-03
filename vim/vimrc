@@ -28,6 +28,7 @@ Plug 'lepture/vim-jinja'                                    " jinja templating
 Plug 'vale1410/vim-minizinc'                                " Minizinc
 Plug 'pearofducks/ansible-vim'                              " Ansible
 Plug 'https://github.com/aklt/plantuml-syntax'              " plantuml
+Plug 'LnL7/vim-nix'                                         " nix expressions
 
                                               " editing
 Plug 'tpope/vim-surround'                     " parens and braces
