@@ -29,6 +29,7 @@ Plug 'vale1410/vim-minizinc'                                " Minizinc
 Plug 'pearofducks/ansible-vim'                              " Ansible
 Plug 'https://github.com/aklt/plantuml-syntax'              " plantuml
 Plug 'LnL7/vim-nix'                                         " nix expressions
+Plug 'elixir-editors/vim-elixir'                            " elixir
 
                                               " editing
 Plug 'tpope/vim-surround'                     " parens and braces
