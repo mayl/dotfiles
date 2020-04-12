@@ -30,6 +30,7 @@ Plug 'pearofducks/ansible-vim'                              " Ansible
 Plug 'https://github.com/aklt/plantuml-syntax'              " plantuml
 Plug 'LnL7/vim-nix'                                         " nix expressions
 Plug 'elixir-editors/vim-elixir'                            " elixir
+Plug 'pangloss/vim-javascript'                              " javascript
 
                                               " editing
 Plug 'tpope/vim-surround'                     " parens and braces
