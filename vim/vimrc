@@ -194,6 +194,11 @@ nnoremap <C-b> :Buffers<cr>
 "Markdown
 let g:vim_markdown_folding_disabled = 1
 
+"Surround
+autocmd FileType cpp,c let b:surround_45 = "#if0\n\r\n#endif\n"
+autocmd FileType markdown let b:surround_45 = "```\n\r\n```"
+autocmd FileType elixir,python let b:surround_45 = "\"\"\"\n\r\n\"\"\""
+
 "Commentary
 nnoremap \\\ :Commentary<cr>
 vnoremap \\\ :Commentary<cr>
