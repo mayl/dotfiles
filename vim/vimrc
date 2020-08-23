@@ -31,7 +31,7 @@ Plug 'https://github.com/aklt/plantuml-syntax'              " plantuml
 Plug 'LnL7/vim-nix'                                         " nix expressions
 Plug 'elixir-editors/vim-elixir'                            " elixir
 Plug 'pangloss/vim-javascript'                              " javascript
-
+Plug 'JuliaEditorSupport/julia-vim'                         " julia
                                               " editing
 Plug 'tpope/vim-surround'                     " parens and braces
 Plug 'tpope/vim-commentary'                   " comment out lines
